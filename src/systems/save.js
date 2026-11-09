@@ -61,6 +61,19 @@ export function save() {
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { console.warn('[save] zápis zlyhal', e); }
 }
 
+export function addCoins(n) {
+  state.coins += n;
+  save();
+}
+
+// Uloží rekord hviezdičiek trasy, len ak je nový. Vráti true pri rekorde.
+export function setBestStars(route, stars) {
+  if (stars <= (state.bestStars[route] || 0)) return false;
+  state.bestStars[route] = stars;
+  save();
+  return true;
+}
+
 export function get() {
   return state;
 }

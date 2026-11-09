@@ -13,6 +13,7 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `st_boarding.mp3` | Pritiahni schody k lietadlu. |
 | `st_gate.mp3` | Otvor bránu. |
 | `dest_lon.mp3` | Letíme do Londýna. |
+| `land_lon.mp3` | V Londýne prší. |
 
 Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
 

@@ -4,5 +4,6 @@
   "st_boarding": { "file": "voice/sk/st_boarding.mp3", "text": "Pritiahni schody k lietadlu." },
   "st_gate":     { "file": "voice/sk/st_gate.mp3",     "text": "Otvor bránu." },
   "dest_lon":    { "file": "voice/sk/dest_lon.mp3",    "text": "Letíme do Londýna." },
+  "land_lon":    { "file": "voice/sk/land_lon.mp3",    "text": "V Londýne prší." },
   "sfx_bump":    { "file": "sfx/bump.mp3",             "text": "(zvuk) bum-bum, jemný náraz" }
 }

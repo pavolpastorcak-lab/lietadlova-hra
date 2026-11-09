@@ -26,8 +26,13 @@
   - Po `durationSec` → Landing `{ to, passengers, smiles, stars }`. `data.js` má nové `flight(to)`.
   - `voice.json`: `sfx_bump` (`assets/audio/sfx/bump.mp3`, zatiaľ ticho), `docs/AUDIO.md` doplnený. SW: CACHE_VERSION v4.
   - Otestované v Browser paneli: celý 45 s let simulovaný po snímkoch (4 nárazy, zriedenie po 2., zbieranie hviezdičiek, prechod do Landing s argumentmi), ťahanie myšou nastaví cieľ. NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 nie je), SW (v paneli treba odregistrovať starý), pocit z obtiažnosti (rýchlosť 420 px/s, hitbox) treba vyskúšať rukou.
-- [ ] **2d** hangár a ekonomika: výplata, prepitné, upgrade kapacity, uloženie `bestStars`
-- [ ] **2d** hangár a ekonomika: výplata, prepitné, upgrade kapacity
+- **Úloha 2d: Hangár a ekonomika** (2026-11-09)
+  - Landing: počasie (slnko/dážď), vlajka, hlas `land_<id>` (`land_lon` v voice.json, pre bts ticho). Ťuk na vlajku → nová scéna Payout.
+  - `systems/economy.js` (payout, capacityInfo, buyCapacity), `save.js` + `addCoins`, `setBestStars` (len nový rekord, kľúč `bts-lon`).
+  - Payout: kôpka základu a kôpka prepitného (číslo pri minciach), ťuk = mince do počítadla, potom Hangar. Mince a rekord sa uložia hneď pri vstupe (nič sa nestratí ani cez domov). Základ 5/cestujúci, prepitné 1/hviezdička a 1/smajlík.
+  - Hangár: upgrade kapacity +2 za 50 mincí (zašednutý + zatrasenie ak nemáš dosť, po kúpe oslava a návrat na Map), brána na odchod bez kúpy. Kapacita zo save sa prejaví na letisku (otestované: 6 cestujúcich).
+  - `ui/next.js` zmazaná, žiadna dočasná šípka už nezostala. `ui/coins.js` (mince, počítadlo). SW: CACHE_VERSION v5.
+  - Otestované v Browser paneli (simulované snímky): výplata 28 = 20+5+3, bestStars 5, zašednutý upgrade, kúpa, návrat na Map, 6 cestujúcich. NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 chýba), SW na tablete, vizuálny dojem a ladenie cien rukou.
 - [ ] spracovať kresby syna na sprity podľa pipeline (hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 
