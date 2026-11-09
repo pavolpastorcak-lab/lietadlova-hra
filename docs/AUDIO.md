@@ -55,5 +55,6 @@ Alternatíva: nahraj sa sám/sama mobilom (Diktafón) a súbor potom previď na 
 1. Spusti server v priečinku projektu: `npx.cmd serve -l 8080`
 2. Otvor `http://localhost:8080/` v Chrome, stlač **Ctrl+Shift+R** (načíta nanovo).
 3. Ťukni na Londýn. Na každej stanici letiska (check-in, batožina, schody, brána) sa má ozvať hlas. Najprv musíš ťuknúť na obrazovku (Chrome nepustí zvuk bez dotyku, na tablete to nie je problém).
+   Po pristátí sa má ozvať `land_lon` (V Londýne prší) a po ťuku na vlajku ide výplata.
 4. Ak hlas nehrá: v Chrome stlač F12 → záložka Network → pozri, či `st_checkin.mp3` má stav 200 (červený 404 = zlý názov alebo priečinok).
 5. Na tablete: po novom nasadení otvor hru, nechaj ju chvíľu načítať, potom zapni režim lietadlo a overíš, či hlas stále hrá (súbory sa uložia do cache automaticky).

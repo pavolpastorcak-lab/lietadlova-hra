@@ -19,3 +19,4 @@
 8. Všetko musí fungovať offline (režim lietadlo). Pri zmene cachovaných súborov zvýš verziu cache v service workeri.
 9. Git: jedna dokončená úloha = jeden commit.
 10. Komunikuj po slovensky, tykaj, stručne.
+11. Po každej úlohe napíš Paľovi, ako ju otestuje: príkaz na spustenie servera (`npx.cmd serve -l 8080` v priečinku projektu, potom `http://localhost:8080/`, Ctrl+Shift+R), konkrétne kroky v hre a čo má vidieť/počuť, plus ktoré zvuky treba doplniť (tabuľka v docs/AUDIO.md, ak úloha pridala nový voice/sfx kľúč).
