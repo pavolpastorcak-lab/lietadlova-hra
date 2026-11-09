@@ -11,7 +11,8 @@
   - `systems/input.js` (1 pointer, tap/dragStart/drag/dragEnd, hitZone min. 96 px), `systems/data.js` (6 JSON + validácia), `systems/save.js` (saveVersion 1, migrácie, .bak pri poškodení, predvolené hodnoty z dát)
   - `ui/home.js` (ikona domov), `ui/next.js` (DOČASNÁ zelená šípka, v 2b–2d ju nahradia akcie na objektoch)
   - PWA: `manifest.json`, zástupné ikony 192/512, `sw.js` (CACHE_VERSION v1, ručný precache, cache-first)
-  - Otestované: celý tok, ťahanie v Lete, ikona domov, zápis save, poškodený save, beh z podpriečinka. Service worker a offline treba overiť v Chrome (zabudovaný prehliadač SW nepodporuje).
+  - Otestované: celý tok, ťahanie v Lete, ikona domov, zápis save, poškodený save, beh z podpriečinka. Paľo overil v Chrome service worker, cache a offline režim.
+  - Lokálny server: `npx.cmd serve -l 8080` (PowerShell blokuje `npx.ps1`, Python nie je nainštalovaný). Otvárať cez `http://localhost:8080/`, nie dvojklikom na `index.html`.
 
 ## Ďalšie úlohy (každá = samostatná session)
 - [ ] **2b** stanice letiska: check-in, batožina, gate, boarding
