@@ -47,6 +47,10 @@ export function get(key) {
   return store[key];
 }
 
+export function flight(to) {
+  return (store.flights || []).find((f) => f.to === to);
+}
+
 export function destination(id) {
   return (store.destinations || []).find((d) => d.id === id);
 }

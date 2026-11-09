@@ -19,7 +19,14 @@
   - Check-in ťuk na cestujúceho (počet = kapacita lietadla zo save), kufor ťahom na pás (mimo pásu sa vráti), schody ťahom k dverám lietadla, ťuk na bránu → cestujúci nastúpia sami → Flight s `{ passengers, smiles }` (smajlík = kufor na páse, zatiaľ sa nepoužíva, prepitné až 2d).
   - `systems/audio.js` (chýbajúci mp3 = ticho), `voice.json` doplnený o st_bags, st_boarding, st_gate; `docs/AUDIO.md` (tabuľka, prompt, postup nahrania). SW: CACHE_VERSION v2, cachovanie mp3 z voice.json.
   - Otestované v Browser paneli (celý Airport až po nástup cestujúcich; panel kreslí len pri vstupe, preto pomalé). NEOTESTOVANÉ: skutočný prechod do Flight, zvuk (mp3 ešte nie sú), dotyk na tablete, SW (v paneli sa neregistruje).
-- [ ] **2c** let: drag-to-steer, prekážky, hviezdičky, zriedenie po 2 nárazoch
+- **Úloha 2c: Let so zástupnou grafikou** (2026-11-09)
+  - `Flight.js` + `scenes/flight/` (`spawner.js` generuje z `flights.json`, `shapes.js` tvary a HUD). Lietadlo lerp za prstom cez input.js, svet scrolluje 420 px/s.
+  - Náraz: zatrasenie, blikanie 1,2 s (počas neho prekážky prechádzajú), zvuk `sfx_bump`. Po `thinAfterHits` (2) nárazoch sa každá nová prekážka vynechá s pravdepodobnosťou 1 − `thinFactor`. Hviezdičky sa nezriedia a nikdy neubúdajú.
+  - HUD bez textu okrem čísla: počítadlo hviezdičiek + trasa s lietadielkom. `ui/next.js` z Flight odstránená (ostáva v Landing/Hangar). Na začiatku hrá hlas cieľa (`dest_lon`), pre `bts` ticho.
+  - Po `durationSec` → Landing `{ to, passengers, smiles, stars }`. `data.js` má nové `flight(to)`.
+  - `voice.json`: `sfx_bump` (`assets/audio/sfx/bump.mp3`, zatiaľ ticho), `docs/AUDIO.md` doplnený. SW: CACHE_VERSION v4.
+  - Otestované v Browser paneli: celý 45 s let simulovaný po snímkoch (4 nárazy, zriedenie po 2., zbieranie hviezdičiek, prechod do Landing s argumentmi), ťahanie myšou nastaví cieľ. NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 nie je), SW (v paneli treba odregistrovať starý), pocit z obtiažnosti (rýchlosť 420 px/s, hitbox) treba vyskúšať rukou.
+- [ ] **2d** hangár a ekonomika: výplata, prepitné, upgrade kapacity, uloženie `bestStars`
 - [ ] **2d** hangár a ekonomika: výplata, prepitné, upgrade kapacity
 - [ ] spracovať kresby syna na sprity podľa pipeline (hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)

@@ -14,6 +14,8 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `st_gate.mp3` | Otvor bránu. |
 | `dest_lon.mp3` | Letíme do Londýna. |
 
+Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
+
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 
 ## 2. Prompt pre AI generátor hlasu
