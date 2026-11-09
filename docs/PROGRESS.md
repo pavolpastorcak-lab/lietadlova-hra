@@ -46,11 +46,14 @@
   - Rýchlosť dobieha polohu páky plynulo (`accelTauSec`), dráha sa posúva podľa rýchlosti, lietadlo sa mierne rozbehne. Pri plnom výkone a rýchlosti (`fullAt`, `rotateSpeed`) sa nakloní, prekríži sprite `side` → `air`, svet sa posunie dole a lietadlo skončí na štarte Flight (300, 400). Čísla sú v `data/airport.json` (`takeoff`). Pri nečinnosti len pulzuje páka (bez hlasu), žiadne zlyhanie.
   - `audio.js`: nová `loop(key)` (slučka s `setRate`). `voice.json`: `st_takeoff`, `sfx_engine` (slučka, výška tónu rastie s rýchlosťou), `sfx_takeoff`; `AUDIO.md` doplnený. SW: CACHE_VERSION v7.
   - Otestované v Browser paneli (simulované pointer udalosti a snímky): páka na 50 % → rýchlosť stúpa len k 0,5 a lietadlo ostane na dráhe, páka ostane kde je; plný výkon → vzlet pri rýchlosti 0,85, náklon, prekríženie spritov, svet dole, prechod do Flight s `{to, passengers, smiles}` a lietadlom na (300, 400). NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 nie sú), SW na tablete, pocit z tempa (accelTauSec 1,2 s, climbSec 1,8 s) treba vyskúšať rukou.
+- **Úloha 3c: Pristávací manéver** (2026-11-09)
+  - Nová scéna `Touchdown` (Flight → Touchdown → Landing, argumenty sa prenášajú). Zostup (sprite air → side, svet hore, `sfx_touchdown`), brzdenie: páka vpravo začína hore a syn ju ťahá **nadol**, rýchlosť dráhy ju plynulo dobieha; pri nule lietadlo zastane. Potom `touchdown/stands.js`: 3 stojiská s číslami 1–9, hlas povie číslo, syn ťukne na správne (zlý ťuk = len zatrasenie, nečinnosť 8 s = pulz + zopakovanie hlasu). Správne stojisko → lietadlo samo dostaví (po dráhe, potom na stojisko) → Landing.
+  - `lever.js` zovšeobecnený (`opts.start`, `opts.goal` top/bottom, šípka nadol), vzlet nezmenený. Čísla v `data/airport.json` → `landing`. `voice.json`: `st_brake`, `st_stand`, `num_1..9`, `sfx_touchdown`; `AUDIO.md` doplnený. SW: CACHE_VERSION v8.
+  - Kód prešiel syntaktickou kontrolou. NEOTESTOVANÉ za behu: Browser pane odmietol navigáciu na localhost, takže scéna Touchdown ešte nebola spustená (ani v paneli). Treba vyskúšať rukou; tiež dotyk na tablete, zvuk (mp3 nie sú), SW, tempo (`brakeTauSec`, `taxiSec`), prekrytie lietadla so stojiskom.
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 
 ## Ďalšie nápady syna (nerealizované)
-- **3c:** pristávací manéver pred letiskom (spomalenie, pristátie) a animácia dostavenia lietadla k stojisku s náhodným číslom.
 - **v1.5:** počasie počas letu, mraky sa menia z malých bielych na tmavo sivé búrkové (napr. let do Londýna, kde prší).
 
 ## Roadmapa po v1

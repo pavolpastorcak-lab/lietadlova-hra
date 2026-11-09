@@ -4,6 +4,7 @@ import MapScene from './scenes/Map.js';
 import Airport from './scenes/Airport.js';
 import Takeoff from './scenes/Takeoff.js';
 import Flight from './scenes/Flight.js';
+import Touchdown from './scenes/Touchdown.js';
 import Landing from './scenes/Landing.js';
 import Payout from './scenes/Payout.js';
 import Hangar from './scenes/Hangar.js';
@@ -16,7 +17,7 @@ new Phaser.Game({
   backgroundColor: '#1d4f8a',
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
   input: { activePointers: 1 },
-  scene: [Boot, Preload, MapScene, Airport, Takeoff, Flight, Landing, Payout, Hangar],
+  scene: [Boot, Preload, MapScene, Airport, Takeoff, Flight, Touchdown, Landing, Payout, Hangar],
 });
 
 if ('serviceWorker' in navigator) {

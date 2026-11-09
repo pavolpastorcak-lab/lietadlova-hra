@@ -13,12 +13,17 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `st_boarding.mp3` | Pritiahni schody k lietadlu. |
 | `st_gate.mp3` | Otvor bránu. |
 | `st_takeoff.mp3` | Potiahni páku hore. |
+| `st_brake.mp3` | Potiahni páku dole. |
+| `st_stand.mp3` | Nájdi stojisko číslo. |
+| `num_1.mp3` až `num_9.mp3` | Jeden. Dva. Tri. Štyri. Päť. Šesť. Sedem. Osem. Deväť. (každé číslo zvlášť) |
 | `dest_lon.mp3` | Letíme do Londýna. |
 | `land_lon.mp3` | V Londýne prší. |
 
 Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
 
 Ďalšie dva **zvuky** (nie hlas) pre vzlet, tiež do `assets/audio/sfx/`: `engine.mp3` (motor lietadla, plynulá **slučka** ~2 s bez ticha na konci, hra mení jeho výšku podľa rýchlosti) a `takeoff.mp3` (nábeh a odlepenie, ~2 s).
+
+Pre pristátie jeden **zvuk** do `assets/audio/sfx/`: `touchdown.mp3` (dosadnutie kolies na dráhu, ~1 s). Motor sa pri pristátí používa ten istý `engine.mp3`.
 
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 

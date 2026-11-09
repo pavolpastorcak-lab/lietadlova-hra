@@ -13,7 +13,7 @@ const MAKERS = { cloud: makeCloud, bird: makeBird, star: makeStar };
 const PLANE_HIT = { w: 160, h: 50 };   // menší než sprite = zhovievavé
 
 // Let zboku: lietadlo plynulo sleduje výšku prsta, vyhýba sa prekážkam, zbiera hviezdičky.
-// Náraz = zatrasenie + zvuk (žiadna škoda). Po durationSec ide do Landing.
+// Náraz = zatrasenie + zvuk (žiadna škoda). Po durationSec ide do Touchdown.
 export default class Flight extends Phaser.Scene {
   constructor() { super('Flight'); }
 
@@ -97,6 +97,6 @@ export default class Flight extends Phaser.Scene {
   finish() {
     this.ended = true;
     const { to, passengers, smiles } = this.args;
-    this.scene.start('Landing', { ...this.args, to, passengers, smiles, stars: this.stars });
+    this.scene.start('Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars });
   }
 }
