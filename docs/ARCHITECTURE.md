@@ -7,7 +7,7 @@ Herné pravidlá a UX rozhodnutia: `docs/design-notes.md`. Stav a roadmapa: `doc
 Jedna kompletná slučka, 2 destinácie, 1 lietadlo, 1 upgrade.
 
 1. **Mapa (zhora):** 2 špendlíky s vlajkami, Bratislava ☀️ a Londýn 🌧️. Ťuk na cieľ.
-2. **Letisko (zboku):** check-in (ťuk na cestujúceho → letenka) → batožina (ťahaj kufor na pás) → gate → boarding (ťahaj cestujúcich do lietadla).
+2. **Letisko (zboku):** stanice idú po poradí podľa `data/airport.json` (naraz pulzuje len aktuálna): check-in (ťuk na cestujúceho → letenka) → batožina (ťahaj kufor na pás → smajlík) → boarding (ťahaj nástupné schody k lietadlu) → gate (ťuk, brána sa otvorí a cestujúci nastúpia sami). Do Flight ide `{ to, passengers, smiles }`.
 3. **Let (zboku):** lietadlo plynulo sleduje výšku prsta, vyhýba sa mrakom a vtákom, zbiera hviezdičky.
 4. **Pristátie:** počasie v cieli + hlas („V Londýne prší"), vlajka krajiny.
 5. **Výplata:** základ + prepitné (hviezdičky, smajlíky). Pozri design-notes.
@@ -44,11 +44,12 @@ vendor/phaser.min.js
 src/
   main.js             # Phaser config, zoznam scén
   scenes/             # Boot, Preload, Map, Airport, Flight, Landing, Hangar
+    airport/          # flow.js (poradie staníc), checkin, bags, stairs, gate, shapes (zástupná grafika)
   systems/
     input.js          # jediný input modul (1 pointer, ťuk + ťahanie)
     save.js           # localStorage, saveVersion, migrácie
     economy.js        # výpočet výplaty a cien
-    audio.js          # hlas + zvuky podľa voice.json
+    audio.js          # hlas podľa voice.json (fetch + WebAudio, chýbajúci mp3 = ticho); postup nahrávania: docs/AUDIO.md
     data.js           # načítanie a validácia JSON
   ui/                 # ikona domov, mince, hviezdičky (bez textu)
 data/                 # destinations, planes, airport, flights, economy, voice
@@ -123,7 +124,7 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 - **Všetky cesty relatívne** (`./`, nikdy `/`): v HTML, JS, JSON, manifeste aj v service workeri.
 - `manifest.json`: `"start_url": "./"`, `"scope": "./"`, `"display": "fullscreen"`, `"orientation": "landscape"`, ikony 192 a 512 px.
 - `sw.js`: registrovaný ako `./sw.js` (scope = podpriečinok). Najprv cache, pri chybe sieť. `CACHE_VERSION` sa zvyšuje pri **každej** zmene cachovaného súboru, staré cache sa mažú v `activate`.
-- Precache zoznam je ručný v `sw.js` (bez build kroku). Pri pridaní assetu ho treba doplniť.
+- Precache zoznam je ručný v `sw.js` (bez build kroku). Pri pridaní assetu ho treba doplniť. Hlasové mp3 z `voice.json` sa cachujú automaticky jednotlivo (chýbajúci súbor inštaláciu nezhodí), nepridávajú sa do zoznamu.
 - **Test:** nainštalovať cez „Pridať na plochu", zapnúť režim lietadlo, spustiť a prejsť celú slučku.
 
 ## 5. Pipeline z kresieb syna

@@ -1,4 +1,7 @@
 {
-  "st_checkin": { "file": "voice/sk/st_checkin.mp3", "text": "Ukáž letenku." },
-  "dest_lon":   { "file": "voice/sk/dest_lon.mp3",   "text": "Letíme do Londýna." }
+  "st_checkin":  { "file": "voice/sk/st_checkin.mp3",  "text": "Ukáž letenku." },
+  "st_bags":     { "file": "voice/sk/st_bags.mp3",     "text": "Daj kufre na pás." },
+  "st_boarding": { "file": "voice/sk/st_boarding.mp3", "text": "Pritiahni schody k lietadlu." },
+  "st_gate":     { "file": "voice/sk/st_gate.mp3",     "text": "Otvor bránu." },
+  "dest_lon":    { "file": "voice/sk/dest_lon.mp3",    "text": "Letíme do Londýna." }
 }

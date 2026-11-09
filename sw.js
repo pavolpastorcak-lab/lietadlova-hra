@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -15,6 +15,13 @@ const PRECACHE = [
   './src/systems/input.js',
   './src/systems/data.js',
   './src/systems/save.js',
+  './src/systems/audio.js',
+  './src/scenes/airport/flow.js',
+  './src/scenes/airport/shapes.js',
+  './src/scenes/airport/checkin.js',
+  './src/scenes/airport/bags.js',
+  './src/scenes/airport/stairs.js',
+  './src/scenes/airport/gate.js',
   './src/ui/home.js',
   './src/ui/next.js',
   './src/scenes/Boot.js',
@@ -32,10 +39,20 @@ const PRECACHE = [
   './data/voice.json',
 ];
 
+// Hlasové mp3 z voice.json sa cachujú jednotlivo: chýbajúci súbor inštaláciu nezhodí.
+function cacheVoice(c) {
+  return c.match('./data/voice.json')
+    .then((r) => r.json())
+    .then((v) => Promise.allSettled(
+      Object.values(v).map((x) => c.add(`./assets/audio/${x.file}`))
+    ))
+    .catch(() => {});
+}
+
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
-      .then((c) => c.addAll(PRECACHE))
+      .then((c) => c.addAll(PRECACHE).then(() => cacheVoice(c)))
       .then(() => self.skipWaiting())
   );
 });
