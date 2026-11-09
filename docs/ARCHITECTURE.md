@@ -7,7 +7,7 @@ Herné pravidlá a UX rozhodnutia: `docs/design-notes.md`. Stav a roadmapa: `doc
 Jedna kompletná slučka, 2 destinácie, 1 lietadlo, 1 upgrade.
 
 1. **Mapa (zhora):** 2 špendlíky s vlajkami, Bratislava ☀️ a Londýn 🌧️. Ťuk na cieľ.
-2. **Letisko (zboku):** stanice idú po poradí podľa `data/airport.json` (naraz pulzuje len aktuálna): check-in (ťuk na cestujúceho → letenka) → batožina (ťahaj kufor na pás → smajlík) → boarding (ťahaj nástupné schody k lietadlu) → gate (ťuk, brána sa otvorí a cestujúci nastúpia sami). Do Flight ide `{ to, passengers, smiles }`.
+2. **Letisko (zboku):** stanice idú po poradí podľa `data/airport.json` (naraz pulzuje len aktuálna): check-in (ťuk na cestujúceho → letenka) → batožina (ťahaj kufor na pás → smajlík) → boarding (ťahaj nástupné schody k lietadlu) → gate (ťuk, brána sa otvorí a cestujúci nastúpia sami). Potom **vzlet** (scéna `Takeoff`, `scenes/takeoff/lever.js`): syn ťahá páku plynu nahor, pri plnom výkone lietadlo vzlietne. Parametre v `airport.json` → `takeoff`. Do Flight ide `{ to, passengers, smiles }`.
 3. **Let (zboku):** lietadlo plynulo sleduje výšku prsta, vyhýba sa mrakom a vtákom, zbiera hviezdičky.
 4. **Pristátie:** počasie v cieli + hlas („V Londýne prší"), vlajka krajiny.
 5. **Výplata:** základ + prepitné (hviezdičky, smajlíky). Pozri design-notes.
@@ -43,7 +43,7 @@ sw.js                 # service worker (CACHE_VERSION, precache zoznam)
 vendor/phaser.min.js
 src/
   main.js             # Phaser config, zoznam scén
-  scenes/             # Boot, Preload, Map, Airport, Flight, Landing, Hangar
+  scenes/             # Boot, Preload, Map, Airport, Takeoff, Flight, Landing, Hangar
     airport/          # flow.js (poradie staníc), checkin, bags, stairs, gate, shapes (zástupná grafika)
   systems/
     input.js          # jediný input modul (1 pointer, ťuk + ťahanie)

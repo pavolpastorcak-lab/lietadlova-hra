@@ -41,8 +41,17 @@
   - SW: sprity + `sprites.js` v precache, CACHE_VERSION v6.
   - Otestované v Browser paneli: všetky 3 textúry sa načítajú, sprite v Airport, Hangar aj Flight, záložný tvar pri chýbajúcom sprite. NEOTESTOVANÉ: dotyk na tablete, SW na tablete, celkový vizuálny dojem (veľkosti lietadla vs. schody/dvere v Airport a sedadlá v Hangári treba posúdiť okom).
   - Pozor: tiene/priehľadnosť okien sú z čistej verzie (okná biele, nie priehľadné). Ďalšie kresby: hrubá čierna fixka, jeden objekt na papier.
+- **Úloha 3b: Vzlet lietadla** (2026-11-09)
+  - Nová scéna `Takeoff` (Airport → Takeoff → Flight, argumenty `{ to, passengers, smiles }` sa prenášajú). `scenes/takeoff/lever.js`: veľká páka plynu vpravo, ťahom nahor (zásahová plocha 180 px), po pustení ostáva kde je, pulzuje kým ju syn nechytí. Zelená značka hore = plný výkon.
+  - Rýchlosť dobieha polohu páky plynulo (`accelTauSec`), dráha sa posúva podľa rýchlosti, lietadlo sa mierne rozbehne. Pri plnom výkone a rýchlosti (`fullAt`, `rotateSpeed`) sa nakloní, prekríži sprite `side` → `air`, svet sa posunie dole a lietadlo skončí na štarte Flight (300, 400). Čísla sú v `data/airport.json` (`takeoff`). Pri nečinnosti len pulzuje páka (bez hlasu), žiadne zlyhanie.
+  - `audio.js`: nová `loop(key)` (slučka s `setRate`). `voice.json`: `st_takeoff`, `sfx_engine` (slučka, výška tónu rastie s rýchlosťou), `sfx_takeoff`; `AUDIO.md` doplnený. SW: CACHE_VERSION v7.
+  - Otestované v Browser paneli (simulované pointer udalosti a snímky): páka na 50 % → rýchlosť stúpa len k 0,5 a lietadlo ostane na dráhe, páka ostane kde je; plný výkon → vzlet pri rýchlosti 0,85, náklon, prekríženie spritov, svet dole, prechod do Flight s `{to, passengers, smiles}` a lietadlom na (300, 400). NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 nie sú), SW na tablete, pocit z tempa (accelTauSec 1,2 s, climbSec 1,8 s) treba vyskúšať rukou.
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
+
+## Ďalšie nápady syna (nerealizované)
+- **3c:** pristávací manéver pred letiskom (spomalenie, pristátie) a animácia dostavenia lietadla k stojisku s náhodným číslom.
+- **v1.5:** počasie počas letu, mraky sa menia z malých bielych na tmavo sivé búrkové (napr. let do Londýna, kde prší).
 
 ## Roadmapa po v1
 v1.1 dolet + nové destinácie · v1.2 bezpečnostná kontrola · v1.3 hádanka Arrows · v1.4 kvíz s vlajkami · v1.5 počasie počas letu · v1.6 ďalšie lietadlá · v1.7 budovanie letiska

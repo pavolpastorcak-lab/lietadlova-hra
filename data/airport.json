@@ -3,4 +3,5 @@
   { "id": "bags",     "x": 480,  "sprite": "bld_belt",          "voice": "st_bags" },
   { "id": "boarding", "x": 1040, "sprite": "plane_zelene_side", "voice": "st_boarding" },
   { "id": "gate",     "x": 760,  "sprite": "bld_gate",          "voice": "st_gate" }
-] }
+],
+  "takeoff": { "accelTauSec": 1.2, "fullAt": 0.92, "rotateSpeed": 0.85, "climbSec": 1.8, "hintVoice": "st_takeoff" } }

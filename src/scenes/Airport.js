@@ -60,7 +60,7 @@ export default class Airport extends Phaser.Scene {
     audio.preload(stations.map((s) => s.voice));
 
     runFlow(ctx, stations, RUNNERS, () => {
-      this.scene.start('Flight', { ...args, passengers: n, smiles: ctx.smiles });
+      this.scene.start('Takeoff', { ...args, passengers: n, smiles: ctx.smiles });
     });
   }
 }

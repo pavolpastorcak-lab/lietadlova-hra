@@ -42,3 +42,22 @@ export function play(key) {
     current = src;
   });
 }
+
+// Slučka (napr. motor): vráti { setRate(r), stop() }. Chýbajúci súbor = ticho, volania sú bezpečné.
+export function loop(key) {
+  let src = null, stopped = false, rate = 1;
+  buffer(key).then((buf) => {
+    if (!buf || !ctx || stopped) return;
+    if (ctx.state === "suspended") ctx.resume();
+    src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    src.playbackRate.value = rate;
+    src.connect(ctx.destination);
+    src.start();
+  });
+  return {
+    setRate(r) { rate = r; if (src) src.playbackRate.value = r; },
+    stop() { stopped = true; if (src) { try { src.stop(); } catch (_) { /* nič */ } src = null; } },
+  };
+}

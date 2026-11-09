@@ -5,5 +5,8 @@
   "st_gate":     { "file": "voice/sk/st_gate.mp3",     "text": "Otvor bránu." },
   "dest_lon":    { "file": "voice/sk/dest_lon.mp3",    "text": "Letíme do Londýna." },
   "land_lon":    { "file": "voice/sk/land_lon.mp3",    "text": "V Londýne prší." },
-  "sfx_bump":    { "file": "sfx/bump.mp3",             "text": "(zvuk) bum-bum, jemný náraz" }
+  "sfx_bump":    { "file": "sfx/bump.mp3",             "text": "(zvuk) bum-bum, jemný náraz" },
+  "st_takeoff":  { "file": "voice/sk/st_takeoff.mp3",  "text": "Potiahni páku hore." },
+  "sfx_engine":  { "file": "sfx/engine.mp3",           "text": "(zvuk) motor lietadla, slučka bez ticha, ~2 s" },
+  "sfx_takeoff": { "file": "sfx/takeoff.mp3",          "text": "(zvuk) vzlet, nábeh a odlepenie, ~2 s" }
 }
