@@ -1,5 +1,6 @@
 import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
+import { queuePlaneSprites } from '../systems/sprites.js';
 
 // Načíta JSON dáta, overí ich a načíta save (predvolené hodnoty berie z dát).
 export default class Preload extends Phaser.Scene {
@@ -20,6 +21,11 @@ export default class Preload extends Phaser.Scene {
       economy: data.get('economy'),
       destinations: data.get('destinations'),
     });
-    this.scene.start('Map');
+    // Sprity lietadiel: mená až z načítaných dát. Chýbajúci súbor hru nezhodí (záložný tvar).
+    const go = () => this.scene.start('Map');
+    queuePlaneSprites(this, data.get('planes'));
+    if (!this.load.list.size) { go(); return; }
+    this.load.once('complete', go);
+    this.load.start();
   }
 }

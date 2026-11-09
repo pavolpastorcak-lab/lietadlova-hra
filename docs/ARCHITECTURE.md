@@ -51,6 +51,7 @@ src/
     economy.js        # výpočet výplaty a cien
     audio.js          # hlas podľa voice.json (fetch + WebAudio, chýbajúci mp3 = ticho); postup nahrávania: docs/AUDIO.md
     data.js           # načítanie a validácia JSON
+    sprites.js        # načítanie a vloženie spritov lietadla (mená z planes.json, záložný tvar ak chýba)
   ui/                 # ikona domov, mince, hviezdičky (bez textu)
 data/                 # destinations, planes, airport, flights, economy, voice
 assets/

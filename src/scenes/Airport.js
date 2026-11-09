@@ -8,6 +8,7 @@ import { checkin } from './airport/checkin.js';
 import { bags } from './airport/bags.js';
 import { stairs } from './airport/stairs.js';
 import { gate } from './airport/gate.js';
+import { addPlane } from '../systems/sprites.js';
 import { makePerson, PERSON_COLORS } from './airport/shapes.js';
 
 const COLORS = { checkin: 0xf0ad4e, bags: 0x5bc0de, gate: 0x9b59b6 };
@@ -25,7 +26,8 @@ export default class Airport extends Phaser.Scene {
 
     stations.forEach((s) => {
       if (s.id === 'boarding') {
-        ctx.buildings[s.id] = this.add.rectangle(s.x, 470, 380, 120, 0xeeeeee).setStrokeStyle(6, 0x555555);
+        ctx.buildings[s.id] = addPlane(this, 'side', s.x + 10, 450, 380)
+          || this.add.rectangle(s.x, 470, 380, 120, 0xeeeeee).setStrokeStyle(6, 0x555555);
         ctx.plane = {
           door: { x: s.x - 120, y: 540 },
           stairsStart: { x: s.x - 280, y: 700 },

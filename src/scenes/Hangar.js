@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
+import { addPlane } from '../systems/sprites.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
@@ -19,8 +20,10 @@ export default class Hangar extends Phaser.Scene {
     const info = economy.capacityInfo(plane);
 
     // Lietadlo, sedadlá = bodky (nové sú zvýraznené).
-    this.add.rectangle(480, 440, 520, 160, 0xffffff).setStrokeStyle(8, 0x2e7d32);
-    this.add.triangle(250, 360, 0, 80, 80, 80, 0, 0, 0x2e7d32);
+    if (!addPlane(this, 'side', 480, 420, 560)) {
+      this.add.rectangle(480, 440, 520, 160, 0xffffff).setStrokeStyle(8, 0x2e7d32);
+      this.add.triangle(250, 360, 0, 80, 80, 80, 0, 0, 0x2e7d32);
+    }
     const total = info.next || info.current;
     const seats = [];
     for (let i = 0; i < total; i++) {
@@ -34,9 +37,10 @@ export default class Hangar extends Phaser.Scene {
     if (!info.maxed) {
       const ux = 480, uy = 640;
       const up = this.add.container(ux, uy);
+      const icon = addPlane(this, 'side', -110, 0, 70);
       up.add([
         this.add.rectangle(0, 0, 300, 120, 0xffffff).setStrokeStyle(6, 0x2e7d32),
-        this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32),
+        icon || this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32),
         this.add.circle(-40, 0, 18, 0x3498db),
         this.add.text(-10, 0, '+' + (info.next - info.current), {
           fontFamily: 'Arial', fontSize: '40px', fontStyle: 'bold', color: '#333333' }).setOrigin(0, 0.5),

@@ -1,9 +1,13 @@
 // Zástupná grafika letu (tvary + HUD bez textu). Neskôr ju nahradia sprity z kresieb syna.
 
+import { addPlane } from '../../systems/sprites.js';
+
 export const PLANE_W = 200, PLANE_H = 70;
 
 export function makePlane(scene, x, y) {
   const c = scene.add.container(x, y).setDepth(20);
+  const spr = addPlane(scene, 'air', 0, 0, 230);   // sprite z kresby; hitbox ostáva PLANE_W × PLANE_H
+  if (spr) { c.add(spr); return c; }
   c.add([
     scene.add.rectangle(0, 0, PLANE_W, PLANE_H, 0xffffff).setStrokeStyle(6, 0x2e7d32),
     scene.add.rectangle(40, -8, 40, 24, 0x87ceeb).setStrokeStyle(3, 0x2e7d32),     // okno

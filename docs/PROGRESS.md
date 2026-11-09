@@ -33,7 +33,15 @@
   - Hangár: upgrade kapacity +2 za 50 mincí (zašednutý + zatrasenie ak nemáš dosť, po kúpe oslava a návrat na Map), brána na odchod bez kúpy. Kapacita zo save sa prejaví na letisku (otestované: 6 cestujúcich).
   - `ui/next.js` zmazaná, žiadna dočasná šípka už nezostala. `ui/coins.js` (mince, počítadlo). SW: CACHE_VERSION v5.
   - Otestované v Browser paneli (simulované snímky): výplata 28 = 20+5+3, bestStars 5, zašednutý upgrade, kúpa, návrat na Map, 6 cestujúcich. NEOTESTOVANÉ: dotyk na tablete, zvuk (mp3 chýba), SW na tablete, vizuálny dojem a ladenie cien rukou.
-- [ ] spracovať kresby syna na sprity podľa pipeline (hrubá fixka, 1 objekt na papier)
+- **Úloha 3a: Sprity zeleného lietadla z kresieb** (2026-11-09)
+  - Zdroj: `assets-raw/lietadlo na zemi - vo vzduchu - zhora raw.jpg` (3 lietadlá). Kresba je tenká ceruzka, krídla sú len čiary, preto sme zvolili čistú verziu cez Magnific (obrázok z kresby, rovnaký tvar a farby, hrubší obrys) + `remove_background`. Je to teda vyčistená AI verzia kresby, nie pixel-verný výrez. Orez a mierka 512 px šírka (PNG-32).
+  - `assets/sprites/plane/`: `plane_zelene_side.png` (so zemou, s podvozkom; letisko a hangár), `plane_zelene_air.png` (vo vzduchu, bez podvozku; Flight), `plane_zelene_top.png` (zhora; zatiaľ nepoužitý, na neskôr, špendlík na mape ostáva). Veľkosti 220–285 KB (mierne nad ~200 KB).
+  - `data/planes.json`: pribudol `sprites.air`. Nový `systems/sprites.js` (`queuePlaneSprites`, `addPlane`): mená berie z dát, chýbajúci sprite = `null` → scéna nakreslí pôvodný záložný tvar. Preload načíta sprity po načítaní JSON.
+  - Flight (`makePlane`, 230 px šírka, hitbox ostáva 200×70), Airport (boarding, 380 px), Hangár (lietadlo 560 px + ikona upgradu).
+  - SW: sprity + `sprites.js` v precache, CACHE_VERSION v6.
+  - Otestované v Browser paneli: všetky 3 textúry sa načítajú, sprite v Airport, Hangar aj Flight, záložný tvar pri chýbajúcom sprite. NEOTESTOVANÉ: dotyk na tablete, SW na tablete, celkový vizuálny dojem (veľkosti lietadla vs. schody/dvere v Airport a sedadlá v Hangári treba posúdiť okom).
+  - Pozor: tiene/priehľadnosť okien sú z čistej verzie (okná biele, nie priehľadné). Ďalšie kresby: hrubá čierna fixka, jeden objekt na papier.
+- [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 
 ## Roadmapa po v1
