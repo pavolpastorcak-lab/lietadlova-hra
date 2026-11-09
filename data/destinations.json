@@ -1,0 +1,8 @@
+[
+  { "id": "bts", "name": "Bratislava", "country": "sk", "flag": "flag_sk",
+    "map": { "x": 640, "y": 420 }, "weather": "sun", "distance": 0,
+    "unlockCost": 0, "voice": "dest_bts" },
+  { "id": "lon", "name": "Londýn", "country": "gb", "flag": "flag_gb",
+    "map": { "x": 420, "y": 300 }, "weather": "rain", "distance": 1300,
+    "unlockCost": 0, "voice": "dest_lon" }
+]

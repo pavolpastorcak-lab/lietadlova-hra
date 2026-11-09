@@ -1,0 +1,4 @@
+{
+  "st_checkin": { "file": "voice/sk/st_checkin.mp3", "text": "Ukáž letenku." },
+  "dest_lon":   { "file": "voice/sk/dest_lon.mp3",   "text": "Letíme do Londýna." }
+}

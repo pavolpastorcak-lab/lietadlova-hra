@@ -1,0 +1,6 @@
+{ "stations": [
+  { "id": "checkin",  "x": 200,  "sprite": "bld_checkin",       "voice": "st_checkin" },
+  { "id": "bags",     "x": 480,  "sprite": "bld_belt",          "voice": "st_bags" },
+  { "id": "gate",     "x": 760,  "sprite": "bld_gate",          "voice": "st_gate" },
+  { "id": "boarding", "x": 1040, "sprite": "plane_zelene_side", "voice": "st_boarding" }
+] }

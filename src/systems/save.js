@@ -1,0 +1,66 @@
+// Uloženie hry v localStorage so saveVersion a migráciami.
+// Poškodený save sa nemaže: odloží sa do lietadla.save.bak a hra začne odznova.
+
+const KEY = 'lietadla.save';
+const BAK = KEY + '.bak';
+export const SAVE_VERSION = 1;
+
+// migrations[n] prevedie save z verzie n na n+1. Zatiaľ žiadne.
+const migrations = [];
+
+let state = null;
+
+// Predvolený save podľa dát (štart mincí, lietadlá, odomknuté destinácie).
+function defaults(data) {
+  const planes = {};
+  data.planes.forEach((p) => { planes[p.id] = { capacity: 0, range: 0 }; });
+  const bestStars = {};
+  data.flights.forEach((f) => { bestStars[`${f.from}-${f.to}`] = 0; });
+  return {
+    saveVersion: SAVE_VERSION,
+    coins: data.economy.startCoins,
+    planes,
+    unlocked: data.destinations.filter((d) => d.unlockCost === 0).map((d) => d.id),
+    bestStars,
+  };
+}
+
+function migrate(s) {
+  while (s.saveVersion < SAVE_VERSION) {
+    const m = migrations[s.saveVersion];
+    if (!m) throw new Error(`chýba migrácia z verzie ${s.saveVersion}`);
+    s = m(s);
+    s.saveVersion += 1;
+  }
+  return s;
+}
+
+export function load(data) {
+  let raw = null;
+  try { raw = localStorage.getItem(KEY); } catch (e) { console.warn('[save] localStorage nedostupný', e); }
+
+  if (raw) {
+    try {
+      const s = JSON.parse(raw);
+      if (!s || typeof s.saveVersion !== 'number') throw new Error('chýba saveVersion');
+      state = { ...defaults(data), ...migrate(s) };
+    } catch (e) {
+      console.warn('[save] poškodený save, odkladám do .bak', e);
+      try { localStorage.setItem(BAK, raw); } catch (_) { /* nič */ }
+      state = defaults(data);
+    }
+  } else {
+    state = defaults(data);
+  }
+  save();
+  return state;
+}
+
+export function save() {
+  if (!state) return;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { console.warn('[save] zápis zlyhal', e); }
+}
+
+export function get() {
+  return state;
+}
