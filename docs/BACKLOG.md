@@ -119,7 +119,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 4a: Upgrade doletu v hangári (v1.1)
+## [x] 4a: Upgrade doletu v hangári (v1.1)
 **Cieľ:** V hangári sa dá za mince kúpiť väčšia nádrž (dolet). Zatiaľ nič neodomyká, na to nadviaže 4b.
 
 **Súbory:** `data/planes.json`, `src/systems/economy.js`, `src/scenes/Hangar.js` (+ nový `src/scenes/hangar/upgradePanel.js`), `sw.js`, docs.

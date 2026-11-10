@@ -1,5 +1,5 @@
 [
   { "id": "zelene", "sprites": { "side": "plane_zelene_side", "air": "plane_zelene_air", "top": "plane_zelene_top" },
     "capacity": [{ "value": 4, "cost": 0 }, { "value": 6, "cost": 50 }],
-    "range": [{ "value": 1500, "cost": 0 }] }
+    "range": [{ "value": 1500, "cost": 0 }, { "value": 2000, "cost": 150 }, { "value": 2600, "cost": 300 }] }
 ]

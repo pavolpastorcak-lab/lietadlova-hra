@@ -3,7 +3,7 @@
   "scale": { "person": 0.7, "bag": 0.6 },
   "roles": {
     "home": "ui_domov", "coin": "ui_minca", "star": "ui_hviezda", "smile": "ui_smajlik",
-    "ticket": "ui_letenka", "pin": "ui_pin", "seat": "item_sedadlo",
+    "ticket": "ui_letenka", "pin": "ui_pin", "seat": "item_sedadlo", "tank": "item_nadrz",
     "bgAirport": "bg_letisko_den", "bgLanding": "bg_pristatie_den", "bgHangar": "bld_hangar",
     "leverBase": "ui_paka_podstavec", "leverKnob": "ui_paka_gombik",
     "tower": "bld_veza", "stairs": "bld_schody",
@@ -15,6 +15,10 @@
             "airport": { "saturation": -0.5, "color": "#cfe6f7", "alpha": 0.25, "depth": -5 },
             "airportBackdrop": { "saturation": -0.6 },
             "hangarUi": { "saturation": -1, "text": "#666666", "border": "#9e9e9e" } },
+  "hangarPanels": {
+    "capacity": { "x": 315, "y": 385, "w": 300, "h": 100 },
+    "range": { "x": 645, "y": 385, "w": 300, "h": 100 }
+  },
   "fx": {
     "farClouds": { "layers": [
         { "speed": 0.25, "alpha": 0.35, "width": 110, "count": 4, "minY": 150, "maxY": 600, "depth": 2 },

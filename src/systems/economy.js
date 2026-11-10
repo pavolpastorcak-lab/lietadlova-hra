@@ -10,11 +10,11 @@ export function payout(passengers, smiles, stars) {
   return { base, tip, total: base + tip };
 }
 
-// Stav upgradu kapacity: aktuálna hodnota, ďalšia hodnota, cena, či sa dá kúpiť.
-export function capacityInfo(plane) {
-  const idx = save.get().planes[plane.id].capacity;
-  const cur = plane.capacity[idx];
-  const next = plane.capacity[idx + 1];
+// Stav upgradu (kind = 'capacity' | 'range'): aktuálna hodnota, ďalšia hodnota, cena, či sa dá kúpiť.
+export function upgradeInfo(plane, kind) {
+  const idx = save.get().planes[plane.id][kind];
+  const cur = plane[kind][idx];
+  const next = plane[kind][idx + 1];
   return {
     current: cur.value,
     next: next ? next.value : null,
@@ -24,12 +24,15 @@ export function capacityInfo(plane) {
   };
 }
 
-// Kúpi ďalšiu úroveň kapacity za mince. Vráti true pri úspechu.
-export function buyCapacity(plane) {
-  const info = capacityInfo(plane);
+// Kúpi ďalšiu úroveň upgradu za mince. Vráti true pri úspechu.
+export function buyUpgrade(plane, kind) {
+  const info = upgradeInfo(plane, kind);
   if (info.maxed || !info.affordable) return false;
   save.addCoins(-info.cost);
-  save.get().planes[plane.id].capacity += 1;
+  save.get().planes[plane.id][kind] += 1;
   save.save();
   return true;
 }
+
+export const capacityInfo = (plane) => upgradeInfo(plane, 'capacity');
+export const buyCapacity = (plane) => buyUpgrade(plane, 'capacity');

@@ -5,9 +5,8 @@ import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { addPlane, addSprite, role } from '../systems/sprites.js';
-import { makeCoin, addCoinCounter } from '../ui/coins.js';
-import { confetti } from '../ui/fx-particles.js';
-import { desaturate, haze } from '../ui/haze.js';
+import { addCoinCounter } from '../ui/coins.js';
+import { addUpgradePanel } from './hangar/upgradePanel.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
 export default class Hangar extends Phaser.Scene {
@@ -39,41 +38,21 @@ export default class Hangar extends Phaser.Scene {
     }
 
     // Upgrade: ikona + sedadlá, cena s mincou. Bez mincí zašednutý.
-    let busy = false;
-    if (!info.maxed) {
-      // Panel nad lietadlom, v sivých tónoch (haze.hangarUi v data/sprites.json).
-      const ux = 480, uy = 385, g = haze('hangarUi') || {};
-      const gray = (o) => { desaturate(o, 'hangarUi'); return o; };
-      const txt = (x, s, ox) => this.add.text(x, 0, s, { fontFamily: 'Arial', fontSize: '38px',
-        fontStyle: 'bold', color: g.text || '#666666' }).setOrigin(ox, 0.5);
-      const up = this.add.container(ux, uy);
-      const icon = addPlane(this, 'side', -110, 0, 70);
-      up.add([
-        this.add.rectangle(0, 0, 300, 100, 0xffffff).setStrokeStyle(6, Phaser.Display.Color.HexStringToColor(g.border || '#9e9e9e').color),
-        gray(icon || this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32)),
-        gray(addSprite(this, role('seat'), -40, 0, { w: 44 }) || this.add.circle(-40, 0, 16, 0x3498db)),
-        txt(-12, '+' + (info.next - info.current), 0),
-        gray(makeCoin(this, 70, 0, 18)),
-        txt(130, String(info.cost), 1),
-      ]);
-      if (!info.affordable) up.setAlpha(0.4);
-      input.onTapIn(input.hitZone(ux, uy, 300, 100), () => {
-        if (busy) return;
-        if (!info.affordable) {
-          this.tweens.add({ targets: up, x: ux + 12, duration: 60, yoyo: true, repeat: 3, onComplete: () => up.setX(ux) });
-          return;
-        }
-        busy = true;
-        economy.buyCapacity(plane);
-        counter.set(save.get().coins);
-        counter.tick();
-        confetti(this, ux, uy);
-        up.destroy();
-        seats.forEach((s) => s.setAlpha(1).setFillStyle(0x3498db));
-        seats.slice(info.current).forEach((s) => this.tweens.add({ targets: s, scale: 1.6, duration: 250, yoyo: true, repeat: 2 }));
-        this.time.delayedCall(1600, () => fx.go(this, 'Map'));
-      });
-    }
+    const state = { busy: false };
+    const leave = () => this.time.delayedCall(1600, () => fx.go(this, 'Map'));
+    const pulse = (o) => this.tweens.add({ targets: o, scale: o.scale * 1.6, duration: 250, yoyo: true, repeat: 2 });
+    // Dva panely vedľa seba nad lietadlom (polohy v data/sprites.json → hangarPanels).
+    addUpgradePanel(this, input, { kind: 'capacity', plane, counter, state, onBought: (inf, up) => {
+      up.destroy();
+      seats.forEach((s) => s.setAlpha(1).setFillStyle(0x3498db));
+      seats.slice(inf.current).forEach((s) => this.tweens.add({ targets: s, scale: 1.6, duration: 250, yoyo: true, repeat: 2 }));
+      leave();
+    } });
+    addUpgradePanel(this, input, { kind: 'range', plane, counter, state, onBought: (inf, up, symbol) => {
+      pulse(symbol);  // zväčšená nádrž v paneli, panel ostáva do odchodu
+      leave();
+    } });
+    const busy = () => state.busy;
 
     // Brána hangára: odchod na mapu bez kúpy.
     const gx = 1020, gy = 520;
@@ -81,7 +60,7 @@ export default class Hangar extends Phaser.Scene {
     this.add.triangle(gx, gy, -50, -60, -50, 60, 60, 0, 0xffffff);
     this.tweens.add({ targets: door, scale: 1.04, duration: 800, yoyo: true, repeat: -1 });
     input.onTapIn(input.hitZone(gx, gy, 260, 340), () => {
-      if (!busy) fx.go(this, 'Map');
+      if (!busy()) fx.go(this, 'Map');
     });
   }
 }

@@ -46,6 +46,12 @@ export function collect(scene) {
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
   if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
   if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
+  const hp = store.sprites && store.sprites.hangarPanels;
+  ['capacity', 'range'].forEach((k) => {
+    ['x', 'y', 'w', 'h'].forEach((f) => {
+      if (!hp || !hp[k] || hp[k][f] === undefined) errors.push(`sprites.hangarPanels.${k}: chýba "${f}"`);
+    });
+  });
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   errors.forEach((e) => console.error('[data]', e));
   return errors;
