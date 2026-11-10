@@ -1,14 +1,20 @@
+import { addSprite, role } from '../../systems/sprites.js';
+
 // Boarding: potiahni nástupné schody k dverám lietadla. Pustené inde sa vrátia na štart.
 export function stairs(ctx, done) {
   const { scene, input, plane } = ctx;
   const st = scene.add.container(plane.stairsStart.x, plane.stairsStart.y);
-  st.add(scene.add.rectangle(0, 0, 130, 110, 0xa0522d).setStrokeStyle(4, 0x5a2d0c));
-  [-30, 0, 30].forEach((y) => st.add(scene.add.rectangle(0, y, 110, 8, 0x5a2d0c)));
+  const spr = addSprite(scene, role('stairs'), 0, 0, { w: 210 });
+  if (spr) st.add(spr);
+  else {
+    st.add(scene.add.rectangle(0, 0, 130, 110, 0xa0522d).setStrokeStyle(4, 0x5a2d0c));
+    [-30, 0, 30].forEach((y) => st.add(scene.add.rectangle(0, y, 110, 8, 0x5a2d0c)));
+  }
   ctx.stairs = st;
 
   const mark = scene.add.circle(plane.door.x, plane.door.y, 60).setStrokeStyle(6, 0xffffff);
   const pulse = scene.tweens.add({ targets: mark, alpha: 0.2, duration: 500, yoyo: true, repeat: -1 });
-  const grab = input.hitZone(st.x, st.y, 150, 130);
+  const grab = input.hitZone(st.x, st.y, 200, 170);
   let held = null;
 
   ctx.on('dragStart', (pt) => {

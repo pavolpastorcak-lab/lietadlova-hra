@@ -5,6 +5,7 @@ import { addHome } from '../ui/home.js';
 import { addPlane } from '../systems/sprites.js';
 import { makeLever } from './takeoff/lever.js';
 import { makeStands } from './touchdown/stands.js';
+import { addScenery } from './touchdown/scenery.js';
 
 const RUNWAY_Y = 540;                         // horný okraj dráhy
 const STAND_Y = 735;                          // stred stojísk pod dráhou
@@ -31,6 +32,8 @@ export default class Touchdown extends Phaser.Scene {
       this.add.rectangle(640, 760, 1280, 560, 0x6aa84f),
       this.add.rectangle(640, RUNWAY_Y + 50, 1280, 100, 0x5f6b73),
     ]);
+    const dest = data.destination(this.args.to);
+    this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8);
     this.marks = [];
     for (let i = 0; i < 8; i++) {
       const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, 0xffffff);
@@ -86,9 +89,9 @@ export default class Touchdown extends Phaser.Scene {
       const target = this.state === 'descend' ? 1 : this.brake;
       this.speed += (target - this.speed) * (1 - Math.exp(-dt / this.cfg.brakeTauSec));
       this.engine.setRate(0.7 + this.speed * 0.9);
-      this.marks.forEach((m) => {
+      [...this.marks, ...this.scenery.lights].forEach((m) => {
         m.x -= this.speed * MARK_SPEED * dt;
-        if (m.x < -80) m.x += this.marks.length * MARK_GAP;
+        if (m.x < -80) m.x += 8 * MARK_GAP;
       });
     }
     if (this.state !== 'brake') return;
@@ -101,6 +104,7 @@ export default class Touchdown extends Phaser.Scene {
     this.state = 'stand';
     this.lever.lock();
     this.engine.stop();
+    this.scenery.setLit(true);
     this.plane.setPosition(ROLL_X, this.groundY);
     this.tweens.add({ targets: this.lever.root, alpha: 0, duration: 500 });
     this.stands.enable((pad) => this.taxi(pad));
@@ -113,7 +117,7 @@ export default class Touchdown extends Phaser.Scene {
     this.tweens.add({
       targets: this.plane, x: pad.x, duration: ms * 0.55, ease: 'Sine.inOut',
       onComplete: () => {
-        this.tweens.add({ targets: this.plane, y: pad.y - 40, scale: 0.85, duration: ms * 0.45, ease: 'Sine.inOut',
+        this.tweens.add({ targets: this.plane, y: pad.y - 100, scale: 0.8, duration: ms * 0.45, ease: 'Sine.inOut',
           onComplete: () => {
             this.tweens.add({ targets: pad.root, scale: 1.15, duration: 250, yoyo: true });
             this.time.delayedCall(900, () => this.scene.start('Landing', this.args));

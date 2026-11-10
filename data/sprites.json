@@ -1,0 +1,15 @@
+{ "dir": "./assets/sprites/",
+  "ext": { "map": "jpg" },
+  "scale": { "person": 0.7, "bag": 0.6 },
+  "roles": {
+    "home": "ui_domov", "coin": "ui_minca", "star": "ui_hviezda", "smile": "ui_smajlik",
+    "ticket": "ui_letenka", "pin": "ui_pin", "seat": "item_sedadlo",
+    "bgAirport": "bg_letisko_den", "bgLanding": "bg_pristatie_den", "bgHangar": "bld_hangar",
+    "tower": "bld_veza", "stairs": "bld_schody",
+    "cloud": ["obs_oblak_biely_01", "obs_oblak_biely_02"], "stormCloud": "obs_oblak_tmavy_01",
+    "bird": ["obs_vtak_a", "obs_vtak_b"], "flightStar": "obs_hviezda"
+  },
+  "people": ["person_muz_01", "person_zena_01", "person_dieta_01", "person_muz_02", "person_zena_02",
+            "person_dieta_02", "person_muz_03", "person_zena_03", "person_dieta_03"],
+  "bags": { "sizes": ["maly", "stredny", "velky"], "colors": ["cerveny", "modry", "zeleny", "zlty", "fialovy"] }
+}

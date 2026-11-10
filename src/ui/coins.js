@@ -1,5 +1,9 @@
-// Mince: ikona a počítadlo (číslo). Zástupná grafika.
+// Mince: ikona a počítadlo (číslo). Sprite ui_minca, záložne tvary.
+import { addSprite, role } from '../systems/sprites.js';
+
 export function makeCoin(scene, x, y, r = 22) {
+  const spr = addSprite(scene, role('coin'), x, y, { w: r * 2.2 });
+  if (spr) return spr;
   const c = scene.add.container(x, y);
   c.add([scene.add.circle(0, 0, r, 0xf5c518).setStrokeStyle(4, 0xb8860b),
     scene.add.circle(0, 0, r * 0.55, 0xffe066)]);

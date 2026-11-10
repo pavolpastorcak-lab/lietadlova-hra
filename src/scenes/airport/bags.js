@@ -1,4 +1,5 @@
 import { makeBag, addSmile } from './shapes.js';
+import { bagKey } from '../../systems/sprites.js';
 
 const BAG_COLORS = [0x27ae60, 0xc0392b, 0x2980b9, 0xf1c40f, 0x8e44ad, 0xd35400, 0x16a085, 0x7f8c8d];
 
@@ -10,7 +11,7 @@ export function bags(ctx, done) {
   let held = null;
 
   people.forEach((p, i) => {
-    p.bag = makeBag(scene, p.x + 45, p.y + 25, BAG_COLORS[i % BAG_COLORS.length]);
+    p.bag = makeBag(scene, p.x + 45, p.y + 25, BAG_COLORS[i % BAG_COLORS.length], bagKey(i));
     p.bag.home = { x: p.bag.x, y: p.bag.y };
   });
 

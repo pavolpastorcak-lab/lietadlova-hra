@@ -1,8 +1,12 @@
 [
   { "id": "bts", "name": "Bratislava", "country": "sk", "flag": "flag_sk",
-    "map": { "x": 640, "y": 420 }, "weather": "sun", "distance": 0,
+    "map": { "x": 665, "y": 495 }, "mapLayer": "map_01_europa", "weather": "sun", "distance": 0,
+    "scenery": { "skyline": "env_skyline_historicke",
+                 "trees": [{ "sprite": "env_strom_listnaty", "x": 110 }, { "sprite": "env_strom_listnaty", "x": 930 }, { "sprite": "env_strom_ihlicnaty", "x": 1190 }] },
     "unlockCost": 0, "voice": "dest_bts" },
   { "id": "lon", "name": "Londýn", "country": "gb", "flag": "flag_gb",
-    "map": { "x": 420, "y": 300 }, "weather": "rain", "distance": 1300,
+    "map": { "x": 335, "y": 365 }, "mapLayer": "map_01_europa", "weather": "rain", "distance": 1300,
+    "scenery": { "skyline": "env_skyline_historicke",
+                 "trees": [{ "sprite": "env_strom_ihlicnaty", "x": 120 }, { "sprite": "env_strom_listnaty", "x": 940 }, { "sprite": "env_strom_ihlicnaty", "x": 1170 }] },
     "unlockCost": 0, "voice": "dest_lon" }
 ]

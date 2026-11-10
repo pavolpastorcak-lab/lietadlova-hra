@@ -15,14 +15,15 @@ export function runFlow(ctx, stations, runners, onDone) {
     const st = stations[i++];
     const b = ctx.buildings[st.id];
     b.setAlpha(1);
+    const bx = b.scaleX, by = b.scaleY;     // pôvodná mierka (sprity majú vlastnú)
     const pulse = ctx.scene.tweens.add({
-      targets: b, scaleX: 1.04, scaleY: 1.04, duration: 500, yoyo: true, repeat: -1,
+      targets: b, scaleX: bx * 1.04, scaleY: by * 1.04, duration: 500, yoyo: true, repeat: -1,
     });
     audio.play(st.voice);
     runners[st.id](ctx, () => {
       clear();
       pulse.stop();
-      b.setScale(1);
+      b.setScale(bx, by);
       next();
     });
   };

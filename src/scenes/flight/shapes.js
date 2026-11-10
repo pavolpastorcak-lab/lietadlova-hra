@@ -1,6 +1,6 @@
 // Zástupná grafika letu (tvary + HUD bez textu). Neskôr ju nahradia sprity z kresieb syna.
 
-import { addPlane } from '../../systems/sprites.js';
+import { addPlane, addSprite, role } from '../../systems/sprites.js';
 
 export const PLANE_W = 200, PLANE_H = 70;
 
@@ -18,6 +18,9 @@ export function makePlane(scene, x, y) {
 
 export function makeCloud(scene) {
   const c = scene.add.container(0, 0).setDepth(10);
+  c.hit = { w: 150, h: 90 };
+  const spr = addSprite(scene, Phaser.Utils.Array.GetRandom(role('cloud') || []), 0, 0, { w: 200 });
+  if (spr) { c.add(spr); return c; }
   c.add([scene.add.circle(-40, 8, 34, 0xffffff), scene.add.circle(0, -8, 44, 0xffffff),
     scene.add.circle(42, 8, 32, 0xffffff), scene.add.rectangle(0, 20, 120, 30, 0xffffff)]);
   c.hit = { w: 150, h: 90 };
@@ -25,6 +28,16 @@ export function makeCloud(scene) {
 }
 
 export function makeBird(scene) {
+  const frames = (role('bird') || []).map((k) => addSprite(scene, k, 0, 0, { w: 110 })).filter(Boolean);
+  if (frames.length) {                        // mávanie: striedanie dvoch spritov
+    const c = scene.add.container(0, 0, frames).setDepth(10);
+    c.hit = { w: 90, h: 50 };
+    frames.forEach((f, i) => f.setVisible(i === 0));
+    let k = 0;
+    const t = scene.time.addEvent({ delay: 180, loop: true, callback: () => { k = (k + 1) % frames.length; frames.forEach((f, i) => f.setVisible(i === k)); } });
+    c.once('destroy', () => t.remove());
+    return c;
+  }
   const g = scene.add.graphics().setDepth(10);
   g.lineStyle(8, 0x333333).beginPath().arc(-22, 0, 24, Math.PI, Math.PI * 2).strokePath();
   g.beginPath().arc(22, 0, 24, Math.PI, Math.PI * 2).strokePath();
@@ -42,6 +55,8 @@ export function drawStar(g, x, y, r, color = 0xffd23f) {
 }
 
 export function makeStar(scene) {
+  const spr = addSprite(scene, role('flightStar'), 0, 0, { w: 76 });
+  if (spr) { const c = scene.add.container(0, 0, [spr]).setDepth(10); c.hit = { w: 60, h: 60 }; return c; }
   const g = scene.add.graphics().setDepth(10);
   drawStar(g, 0, 0, 26);
   g.hit = { w: 60, h: 60 };
@@ -52,7 +67,8 @@ export function makeStar(scene) {
 export function makeHud(scene) {
   const g = scene.add.graphics().setDepth(100);
   g.fillStyle(0xffffff, 0.85).fillRoundedRect(150, 34, 130, 72, 20);
-  drawStar(g, 190, 70, 26);
+  const starIcon = addSprite(scene, role('star'), 190, 70, { w: 56 });
+  if (starIcon) starIcon.setDepth(101); else drawStar(g, 190, 70, 26);
   const txt = scene.add.text(228, 70, '0', { fontSize: '44px', fontStyle: 'bold', color: '#333' })
     .setOrigin(0, 0.5).setDepth(101);
 
@@ -60,7 +76,9 @@ export function makeHud(scene) {
   const track = scene.add.graphics().setDepth(100);
   track.lineStyle(8, 0xffffff, 0.9).lineBetween(x0, y, x1, y);
   track.fillStyle(0xffffff).fillCircle(x0, y, 10).fillCircle(x1, y, 10);
-  const marker = scene.add.rectangle(x0, y, 44, 18, 0xffffff).setStrokeStyle(4, 0x2e7d32).setDepth(101);
+  const marker = addPlane(scene, 'air', x0, y, 70)
+    || scene.add.rectangle(x0, y, 44, 18, 0xffffff).setStrokeStyle(4, 0x2e7d32);
+  marker.setDepth(101);
 
   return {
     setStars: (n) => txt.setText(String(n)),

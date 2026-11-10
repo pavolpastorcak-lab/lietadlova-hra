@@ -51,9 +51,9 @@ src/
     economy.js        # výpočet výplaty a cien
     audio.js          # hlas podľa voice.json (fetch + WebAudio, chýbajúci mp3 = ticho); postup nahrávania: docs/AUDIO.md
     data.js           # načítanie a validácia JSON
-    sprites.js        # načítanie a vloženie spritov lietadla (mená z planes.json, záložný tvar ak chýba)
+    sprites.js        # sprity z dát: queueSprites/addSprite/role (mená z data/sprites.json, airport.json, destinations.json, planes.json); chýbajúci sprite = null → scéna nakreslí záložný tvar
   ui/                 # ikona domov, mince, hviezdičky (bez textu)
-data/                 # destinations, planes, airport, flights, economy, voice
+data/                 # destinations, planes, airport, flights, economy, voice, sprites
 assets/
   sprites/<kategoria>/
   audio/voice/sk/     # Paľove mp3 (TTS len zástupka)
@@ -120,6 +120,12 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 - `save.js` drží pole migrácií `migrations[n]` (n → n+1). Pri načítaní sa postupne aplikujú, kým nie je `saveVersion` aktuálna.
 - Poškodený save sa nezmaže, odloží sa do `lietadla.save.bak` a hra začne odznova.
 
+### Sprity v dátach (úloha 3d)
+- `data/sprites.json`: `dir`, `ext` (mapy `jpg`), `scale` (postavy, kufre), `roles` (ikony a pozadia podľa úlohy, napr. `home`, `coin`, `cloud[]`), `people[]`, `bags` (veľkosti × farby). Kód pýta `role('home')`, nie názov súboru.
+- `airport.json`: staniciam pribudlo `y`, `w`, `spriteOpen`; `backdrop[]` (terminál, veža); `landing.lights` (svetlá dráhy).
+- `destinations.json`: `mapLayer` (vrstva mapy), `scenery` (skyline, stromy s polohou), `flag`.
+- Preload načíta všetky mená z dát (`allKeys`). Do `sw.js` PRECACHE sa sprity dopisujú ručne (zoznam sa dá vygenerovať z týchto dát).
+
 ## 4. PWA, offline a nasadenie
 - **Hosting:** GitHub Pages ako projektová stránka v podpriečinku (`https://<user>.github.io/<repo>/`).
 - **Všetky cesty relatívne** (`./`, nikdy `/`): v HTML, JS, JSON, manifeste aj v service workeri.
@@ -144,6 +150,9 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 | prekážka | `obs_` | 160 px |
 | UI ikona | `ui_` | 128 px |
 | pozadie | `bg_` | 1280×800 |
+| mapa (JPG, ~200 KB) | `map_` | 1280×800 |
+| prostredie (skyline pás, strom 256 výška, svetlo) | `env_` | pás ~950×300, strom 256, svetlo 128 |
+| vec na upgrade | `item_` | 128 |
 
 5. **Názvy:** `kategoria_nazov_variant.png`, malé písmená, ASCII bez diakritiky, `_` ako oddeľovač. Napr. `plane_zelene_side.png`, `plane_zelene_top.png`, `person_mama_01.png`, `bag_zeleny.png`, `flag_sk.png`.
 6. **Smer:** lietadlá kreslené smerom doprava (inak flip v kóde podľa dát). Veľkosť do ~200 KB na sprite.

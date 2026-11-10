@@ -3,7 +3,7 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
-import { addPlane } from '../systems/sprites.js';
+import { addPlane, addSprite, role } from '../systems/sprites.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
@@ -12,7 +12,9 @@ export default class Hangar extends Phaser.Scene {
 
   create() {
     this.cameras.main.setBackgroundColor('#8d6e63');
-    this.add.rectangle(640, 680, 1280, 240, 0x5d4037);  // podlaha
+    const bg = addSprite(this, role('bgHangar'), 640, 400, { w: 1280 });
+    if (bg) bg.setDepth(-10);
+    else this.add.rectangle(640, 680, 1280, 240, 0x5d4037);  // podlaha
     const plane = data.get('planes')[0];
     const input = createInput(this);
     addHome(this, input);
@@ -41,7 +43,7 @@ export default class Hangar extends Phaser.Scene {
       up.add([
         this.add.rectangle(0, 0, 300, 120, 0xffffff).setStrokeStyle(6, 0x2e7d32),
         icon || this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32),
-        this.add.circle(-40, 0, 18, 0x3498db),
+        addSprite(this, role('seat'), -40, 0, { w: 48 }) || this.add.circle(-40, 0, 18, 0x3498db),
         this.add.text(-10, 0, '+' + (info.next - info.current), {
           fontFamily: 'Arial', fontSize: '40px', fontStyle: 'bold', color: '#333333' }).setOrigin(0, 0.5),
         makeCoin(this, 70, 0, 20),

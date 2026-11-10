@@ -1,6 +1,6 @@
 // Načítanie a validácia JSON dát z data/. Obsah hry je len tu, nie v kóde.
 
-const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice'];
+const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice', 'sprites'];
 
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
