@@ -58,6 +58,14 @@
   - Airport: pozadie, terminál, veža, stanice (brána sa otvorí výmenou textúry), ľudia (9 postáv), kufre (15 variantov), letenka/smajlík, schody. `flow.js` pulzuje relatívne k mierke spritu (oprava). Touchdown: skyline, stromy, veža, svetlá dráhy (rozsvietia sa pri zastavení; nový `touchdown/scenery.js`). Landing: pozadie, vlajka, tmavé mraky pri daždi. Flight: mraky, vtáky (mávajú), hviezdičky, HUD. Map: mapa Európy + špendlíky s vlajkami (Bratislava 665,495, Londýn 335,365). Domov, mince, Hangár (pozadie, ikona sedadla).
   - SW: CACHE_VERSION v10, 55 spritov v precache (~3,9 MB). Páka plynu ostáva na tvaroch (`ui_paka_podstavec` treba prerobiť bez páky).
   - Otestované v Browser paneli: Map, celý Airport (check-in, kufre, schody, brána, nástup), Touchdown (svetlá), Landing, Flight, Hangár, Payout bez chýb v konzole. NEOTESTOVANÉ: dotyk na tablete, SW na tablete, `person_*`/`bag_*` mierka okom, Takeoff, pozícia špendlíkov.
+- **Úloha 3e: dotiahnutie po teste na tablete** (2026-11-10)
+  - Test na tablete: mierka postáv a kufrov OK; problém s farebnosťou (mapa príliš výrazná, pristátie príliš farebné), špendlík Slovenska.
+  - Mapa: `data/sprites.json` → `haze.map` (saturácia −0,4 + svetlý modrastý závoj), nová `ui/haze.js` (`desaturate`, `addVeil`). Nedostupné destinácie (nie v `save.unlocked`) majú špendlík na 45 % a nejdú ťuknúť (dnes sú obe odomknuté). Bratislava presunutá na (698, 490), stred zelenej plochy Slovenska. POZOR: pôvodná poloha (665, 495) bola na západnom okraji Slovenska, hrot špendlíka je teraz vo vnútri štátu, nie na hranici.
+  - Pristátie (`haze.landing`): modrastý závoj v Touchdown a Landing, v Landing zosadená sýtosť, starý dažďový odtieň zrušený (tri vrstvy stmavovali).
+  - Páka plynu: nový `ui_paka_podstavec.png` bez páky (Magnific, orez na stredný pás 256×933, ~330 KB), zapojený spolu s `ui_paka_gombik` do `lever.js` (Takeoff aj Touchdown); roly `leverBase`, `leverKnob` a rozmery `lever` v `sprites.json`. Zástupné tvary ostali ako záloha. Magnific: 2 varianty + vyrezanie pozadia (133 kreditov).
+  - SW: CACHE_VERSION v11, podstavec, gombík a `haze.js` v precache.
+  - Otestované v Browser paneli: mapa (zosadenie, špendlík), páka vo Takeoff aj Touchdown, závoj v Touchdown. Landing po odstránení tmavého odtieňa NEprekontrolovaný. NEOTESTOVANÉ: tablet, tempo, zvuk.
+  - Nedodané (P2, nezapájam): pilot, personál, `bg_letisko_top`, nové lietadlá. Farebnosť letiska a letu sa nemenila.
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

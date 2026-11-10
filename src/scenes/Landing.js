@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
 import { addSprite, role } from '../systems/sprites.js';
+import { desaturate, addVeil } from '../ui/haze.js';
 
 const WEATHER_BG = { sun: '#ffd54f', rain: '#7f9cb3' };
 const FLAG_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };
@@ -17,7 +18,8 @@ export default class Landing extends Phaser.Scene {
     const weather = dest && dest.weather;
     this.cameras.main.setBackgroundColor(WEATHER_BG[weather] || '#cccccc');
     const bg = addSprite(this, role('bgLanding'), 640, 400, { w: 1280 });
-    if (bg && weather === 'rain') bg.setTint(0x8296a8);
+    desaturate(bg, 'landing');
+    addVeil(this, 'landing', 1);
     if (!bg) this.add.rectangle(640, 700, 1280, 200, 0x6e7b82);   // dráha
 
     if (weather === 'sun') {

@@ -1,3 +1,6 @@
+import * as data from '../../systems/data.js';
+import { addSprite, role } from '../../systems/sprites.js';
+
 // Páka plynu: zvislá drážka, rúčka sa ťahá nahor. Po pustení ostane, kde je (nič sa nevracia).
 // Hodnota 0..1. Hore je zelená značka „plný výkon". Bez textu.
 
@@ -9,12 +12,17 @@ export function makeLever(scene, input, x, topY, botY, onChange, opts = {}) {
   const root = scene.add.container(0, 0).setDepth(50);
   const mid = (topY + botY) / 2;
 
-  const slot = scene.add.rectangle(x, mid, 64, botY - topY + 80, 0x2c3e50).setStrokeStyle(6, 0xffffff);
+  // Sprite podstavca (ui_paka_podstavec) a rúčky (ui_paka_gombik); bez nich zástupné tvary.
+  const lv = (data.get('sprites') || {}).lever || { slotFrac: 0.675, centerFrac: 0.477 };
+  const baseH = (botY - topY + 60) / lv.slotFrac;
+  const baseImg = addSprite(scene, role('leverBase'), x, mid, { h: baseH, origin: [0.5, lv.centerFrac] });
+  const knobImg = addSprite(scene, role('leverKnob'), 0, 0, { w: 130 });
+  const slot = baseImg || scene.add.rectangle(x, mid, 64, botY - topY + 80, 0x2c3e50).setStrokeStyle(6, 0xffffff);
   const full = scene.add.rectangle(x, gy, 120, 56, 0x5cb85c).setStrokeStyle(6, 0xffffff);
   const star = scene.add.star(x, gy, 5, 8, 20, 0xffffff);
   const handle = scene.add.container(x, botY - start * (botY - topY));
   handle.add([
-    scene.add.circle(0, 0, 58, 0xd9534f).setStrokeStyle(8, 0xffffff),
+    knobImg || scene.add.circle(0, 0, 58, 0xd9534f).setStrokeStyle(8, 0xffffff),
     goalTop
       ? scene.add.triangle(0, 0, -26, 16, 26, 16, 0, -22, 0xffffff)   // šípka nahor
       : scene.add.triangle(0, 0, -26, -16, 26, -16, 0, 22, 0xffffff), // šípka nadol

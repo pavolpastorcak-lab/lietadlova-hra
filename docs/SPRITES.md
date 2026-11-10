@@ -130,11 +130,11 @@ P1 spolu ≈ 70 súborov (budovy 8, ľudia 9, kufre 15, pozadia a prostredie 9, 
 
 ## Stav dodania (2026-11-10, import z Magnific projektu „Detská hra – sprity")
 Stiahnuté a uložené do `assets/sprites/<kategoria>/`: **88 súborov** (bag 15, bg 2, bld 10, env 9, flag 19, item 4, map 4, obs 6, person 9, ui 8, plane 3 už existujúce).
-- **Zapojené (3d):** všetko z P1 okrem `ui_paka_*` (čaká na nový podstavec), `ui_pin`/mapa Európa, vlajky sk/gb, `obs_*`, `env_*` (okrem `env_palma`, `env_skyline_mrakodrapy|pustatina`, ktoré sa použijú pri nových destináciách), `item_sedadlo`. Ostatné `item_*`, `bld_rukav`, `bld_stojisko_top`, `map_02..04`, ďalšie vlajky sú v repozitári, ale zatiaľ mimo precache.
+- **Zapojené (3d):** všetko z P1 vrátane `ui_paka_*` (3e), `ui_pin`/mapa Európa, vlajky sk/gb, `obs_*`, `env_*` (okrem `env_palma`, `env_skyline_mrakodrapy|pustatina`, ktoré sa použijú pri nových destináciách), `item_sedadlo`. Ostatné `item_*`, `bld_rukav`, `bld_stojisko_top`, `map_02..04`, ďalšie vlajky sú v repozitári, ale zatiaľ mimo precache.
 - **Chýba:** `person_pilot_01`, `person_personal_01`, `bg_letisko_top`, lietadlá `plane_modre|cervene|zlate` × `side|air|top` (9 súborov). Všetko P2.
 - **Dvojité verzie v Magnifice:** `item_kridla_v2` a `ui_letenka_v2` uložené pod kanonickými menami (`item_kridla`, `ui_letenka`), pôvodné verzie nepoužité.
 - **Na prerobenie / úpravu:**
-  - `ui_paka_podstavec` má už nakreslenú oranžovú páku v drážke, takže sa zdvojí s `ui_paka_gombik`. Prerobiť podstavec bez páky.
+  - ✔ (3e) `ui_paka_podstavec` prerobený bez páky a zapojený so `ui_paka_gombik`.
   - `map_01..04`: ✔ prevedené na JPG q50 (`map_0X_*.jpg`, 209–231 KB), PNG zmazané.
   - `env_skyline_*` (pás 1280×300) majú veľké priehľadné okraje (obsah len ~75 % šírky a spodná tretina výšky). Pri zapojení orezať na obsah.
   - `bag_*`: všetky veľkosti sú na plátne 128×128 (relatívna veľkosť je v obsahu, malý ≈ 60 px), OK; veľké sú ťažšie na zásahovú plochu, ladí sa v scéne.

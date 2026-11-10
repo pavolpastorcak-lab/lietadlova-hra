@@ -6,6 +6,7 @@ import { addPlane } from '../systems/sprites.js';
 import { makeLever } from './takeoff/lever.js';
 import { makeStands } from './touchdown/stands.js';
 import { addScenery } from './touchdown/scenery.js';
+import { addVeil } from '../ui/haze.js';
 
 const RUNWAY_Y = 540;                         // horný okraj dráhy
 const STAND_Y = 735;                          // stred stojísk pod dráhou
@@ -34,6 +35,7 @@ export default class Touchdown extends Phaser.Scene {
     ]);
     const dest = data.destination(this.args.to);
     this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8);
+    addVeil(this, 'landing', 2);                  // modrastý závoj: pôsobí to vzdialene
     this.marks = [];
     for (let i = 0; i < 8; i++) {
       const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, 0xffffff);

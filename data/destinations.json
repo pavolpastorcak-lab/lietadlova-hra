@@ -1,6 +1,6 @@
 [
   { "id": "bts", "name": "Bratislava", "country": "sk", "flag": "flag_sk",
-    "map": { "x": 665, "y": 495 }, "mapLayer": "map_01_europa", "weather": "sun", "distance": 0,
+    "map": { "x": 698, "y": 490 }, "mapLayer": "map_01_europa", "weather": "sun", "distance": 0,
     "scenery": { "skyline": "env_skyline_historicke",
                  "trees": [{ "sprite": "env_strom_listnaty", "x": 110 }, { "sprite": "env_strom_listnaty", "x": 930 }, { "sprite": "env_strom_ihlicnaty", "x": 1190 }] },
     "unlockCost": 0, "voice": "dest_bts" },
