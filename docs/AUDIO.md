@@ -78,3 +78,9 @@ Alternatíva: nahraj sa sám/sama mobilom (Diktafón) a súbor potom previď na 
    Po pristátí sa má ozvať `land_lon` (V Londýne prší) a po ťuku na vlajku ide výplata.
 4. Ak hlas nehrá: v Chrome stlač F12 → záložka Network → pozri, či `st_checkin.mp3` má stav 200 (červený 404 = zlý názov alebo priečinok).
 5. Na tablete: po novom nasadení otvor hru, nechaj ju chvíľu načítať, potom zapni režim lietadlo a overíš, či hlas stále hrá (súbory sa uložia do cache automaticky).
+
+## 6. Zástupky z Magnificu (stav 2026-11-10)
+Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, kým ich Paľo nenahradí vlastnými nahrávkami (rovnaký názov súboru, potom zvýšiť `CACHE_VERSION`).
+- **Hlas:** Magnific → Voiceover, hlas „Katarína Horváthová" (ElevenLabs), model `eleven_v3`, rýchlosť 0,9, stabilita 0,5. Ďalšie hlasy generuj s tým istým nastavením.
+- **Zvuky:** Magnific → Sound effects: `bump` (1 s), `engine` (slučka 2 s), `takeoff` (2 s), `touchdown` (1 s).
+- **Na vypočutie:** čísla `num_1`–`num_9` sú jednoslovné a model pri nich občas pridá ticho alebo ruch (dĺžky 0,7 až 3,9 s). Ktoré neznejú čisto, treba vygenerovať znova alebo nahrať.

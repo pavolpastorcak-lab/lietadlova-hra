@@ -114,3 +114,6 @@ v1.1 dolet + nové destinácie · v1.2 bezpečnostná kontrola · v1.3 hádanka 
 
 ## Poznámky
 - Raw kresby (`assets-raw/`): letisko s vežou, lietadlá zboku aj zhora, ľudia s batožinou. Kreslené tenkou ceruzkou, ďalšie kresby treba robiť hrubou fixkou.
+- **Zvuky z Magnificu (dávka 1, architekt)** (2026-11-10)
+  - 25 hlasových TTS zástupiek (`dest_*`, `land_*` pre 6 nových miest, `land_lon`, `st_takeoff`, `st_brake`, `st_stand`, `num_1`–`num_9`) a 4 zvuky (`sfx/bump`, `engine`, `takeoff`, `touchdown`). Nastavenie hlasu je v `docs/AUDIO.md` §6. 120 kreditov. Každý kľúč z `voice.json` má teraz súbor. SW: CACHE_VERSION v18.
+  - NEVYPOČUTÉ: architekt zvuk prehrať nevie. Paľo overí výslovnosť, dĺžky čísel a slučku motora.
