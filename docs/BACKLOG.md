@@ -93,7 +93,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 3i: Animácie v ostatných scénach (v1.0)
+## [x] 3i: Animácie v ostatných scénach (v1.0)
 **Cieľ:** To isté pre mapu, letisko, výplatu a hangár.
 
 **Súbory:** `src/ui/fx.js` (z 3h; nad 300 riadkov rozdeľ na `fx.js` a `fx-particles.js`), `Map.js`, `Airport.js` + `scenes/airport/*`, `Payout.js`, `Hangar.js`, všetky scény kvôli prechodom, `data/sprites.json` → `fx`, `sw.js`, docs. Viac ako 3 súbory → najprv plán architektovi.

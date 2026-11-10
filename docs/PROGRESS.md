@@ -83,6 +83,11 @@
   - `data.js` validuje blok `sprites.fx`. `Flight.js` 150 riadkov; `makeHud` vracia aj `counter`.
   - SW: CACHE_VERSION v14, `fx.js` v precache.
   - Otestované v Browser paneli (port 8090, kroky ručne cez `__g.step`, dočasné `window.__g` vrátené): celý let → Touchdown, konzola bez chýb, max 54 objektov v scéne (aj s HUD a prekážkami), po lete 0 objektov, rozfúknutie mraku vidno. NEOTESTOVANÉ: plynulosť a vzhľad na tablete, screenshot (panel bol skrytý), ostatné scény (nemenené).
+- **Úloha 3i: animácie v ostatných scénach** (2026-11-10)
+  - `fx.js` rozšírený (180 r.): `go` (jediná cesta pre scene.start, zatmenie 200 ms, ochrana proti dvojitému spusteniu, `{ fade: false }` pre Takeoff → Flight → Touchdown), `press`, `sway`, `hop`, `breathe`, `belt`, `dropPins`, `mapShadows`. Nový `fx-particles.js`: `coinFly` (max 12 mincí po oblúku, zvyšok číslom), `confetti` (40, 1,2 s). Všetky čísla v `sprites.json` → `fx`; chýbajúci blok = efekt ticho nič nerobí.
+  - Letisko: cestujúci sa pohupujú (iná fáza), pruhy na páse počas stanice batožiny, poskočenie po smajlíku, lietadlo dýcha ±1 % (flow.js ho počas pulzu stanice zastaví a vráti mierku). Mapa: špendlíky sa zapichnú (odraz, 80 ms), 2 tiene mrakov (alfa 0,1). Payout: mince letia po jednej, počítadlo tiká, výsledné číslo sa dorovná; Hangár: konfety + tik. Ikona domov a špendlík stlačia (`press`); stanice, vlajka a brána hangára majú vlastný pulz, tam `press` nie je.
+  - SW: CACHE_VERSION v15, `fx-particles.js` v precache.
+  - Otestované v Browser paneli (port 8090, kroky ručne, dočasné `window.__g` vrátené): celá slučka Map → Airport → Takeoff → Flight → Touchdown → Landing → Payout → Hangar → Map, konzola bez chýb, druhý ťuk počas zatmenia ignorovaný, mince uložené raz (30), mierka lietadla po boardingu v rozsahu dýchania, konfety 40 objektov, polohy špendlíkov presne podľa dát. NEOTESTOVANÉ: tablet (plynulosť), vzhľad na screenshote (pane skrytý), tiene mrakov okom, zvuky.
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

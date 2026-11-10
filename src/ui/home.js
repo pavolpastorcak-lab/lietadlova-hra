@@ -1,4 +1,5 @@
 import { addSprite, role } from '../systems/sprites.js';
+import * as fx from './fx.js';
 
 // Ikona domov vľavo hore (jediné stále tlačidlo v hre). Ťuk → mapa.
 export function addHome(scene, input) {
@@ -12,5 +13,5 @@ export function addHome(scene, input) {
     g.fillStyle(0x8a5a2b).fillRect(x - 22, y - 2, 44, 30);                      // dom
     g.fillStyle(0xffffff).fillRect(x - 7, y + 10, 14, 18);                       // dvere
   }
-  input.onTapIn(input.hitZone(x, y, 110, 110), () => scene.scene.start('Map'));
+  input.onTapIn(input.hitZone(x, y, 110, 110), () => { if (spr) fx.press(scene, spr); fx.go(scene, 'Map'); });
 }

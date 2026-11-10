@@ -3,6 +3,8 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
+import { coinFly } from '../ui/fx-particles.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
 
 // Výplata: kôpka za cestujúcich (základ) a kôpka prepitného. Ťuk = mince do počítadla.
@@ -27,7 +29,7 @@ export default class Payout extends Phaser.Scene {
     let shown = before;
     const piles = [{ x: 420, amount: pay.base }, { x: 860, amount: pay.tip }].filter((p) => p.amount > 0);
     let left = piles.length;
-    const finish = () => this.time.delayedCall(700, () => this.scene.start('Hangar'));
+    const finish = () => this.time.delayedCall(700, () => fx.go(this, 'Hangar'));
     if (left === 0) finish();
 
     piles.forEach((p) => {
@@ -46,15 +48,17 @@ export default class Payout extends Phaser.Scene {
         if (taken) return;
         taken = true;
         this.tweens.killTweensOf(c);
-        c.setScale(1);
-        this.tweens.add({
-          targets: c, x: counter.icon.x, y: counter.icon.y, scale: 0.2, alpha: 0.2, duration: 600,
-          onComplete: () => {
-            c.destroy();
-            shown += p.amount;
-            counter.set(shown);
-            if (--left === 0) finish();
-          },
+        c.destroy();
+        // mince letia po jednej (max 12), zvyšok sa pripočíta číslom; súčet = p.amount presne
+        coinFly(this, p.x, y + 40, counter.icon, p.amount, (i, n) => {
+          const per = Math.floor(p.amount / n);
+          shown += i === n - 1 ? p.amount - per * (n - 1) : per;
+          counter.set(shown);
+          counter.tick();
+        }, () => {
+          if (--left > 0) return;
+          counter.set(before + piles.reduce((a, q) => a + q.amount, 0));   // záruka presného čísla
+          finish();
         });
       });
     });

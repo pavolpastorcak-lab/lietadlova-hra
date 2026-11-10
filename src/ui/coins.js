@@ -1,5 +1,6 @@
 // Mince: ikona a počítadlo (číslo). Sprite ui_minca, záložne tvary.
 import { addSprite, role } from '../systems/sprites.js';
+import { counterBounce, fxCfg } from './fx.js';
 
 export function makeCoin(scene, x, y, r = 22) {
   const spr = addSprite(scene, role('coin'), x, y, { w: r * 2.2 });
@@ -18,5 +19,5 @@ export function addCoinCounter(scene, value) {
   const txt = scene.add.text(x + 90, y, String(value), {
     fontFamily: 'Arial', fontSize: '44px', fontStyle: 'bold', color: '#333333',
   }).setOrigin(1, 0.5).setDepth(101);
-  return { icon, set: (n) => txt.setText(String(n)) };
+  return { icon, set: (n) => txt.setText(String(n)), tick: () => counterBounce(scene, txt, fxCfg().tick) };
 }

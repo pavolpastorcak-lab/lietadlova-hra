@@ -15,6 +15,8 @@ export function runFlow(ctx, stations, runners, onDone) {
     const st = stations[i++];
     const b = ctx.buildings[st.id];
     b.setAlpha(1);
+    const br = ctx.breath && ctx.breath.obj === b ? ctx.breath : null;   // dýchanie nesmie bojovať s pulzom
+    if (br) br.stop();
     const bx = b.scaleX, by = b.scaleY;     // pôvodná mierka (sprity majú vlastnú)
     const pulse = ctx.scene.tweens.add({
       targets: b, scaleX: bx * 1.04, scaleY: by * 1.04, duration: 500, yoyo: true, repeat: -1,
@@ -24,6 +26,7 @@ export function runFlow(ctx, stations, runners, onDone) {
       clear();
       pulse.stop();
       b.setScale(bx, by);
+      if (br) br.start();
       next();
     });
   };

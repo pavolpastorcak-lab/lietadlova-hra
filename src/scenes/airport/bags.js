@@ -1,4 +1,5 @@
 import { makeBag, addSmile } from './shapes.js';
+import * as fx from '../../ui/fx.js';
 import { bagKey } from '../../systems/sprites.js';
 
 const BAG_COLORS = [0x27ae60, 0xc0392b, 0x2980b9, 0xf1c40f, 0x8e44ad, 0xd35400, 0x16a085, 0x7f8c8d];
@@ -9,6 +10,7 @@ export function bags(ctx, done) {
   const beltZone = input.hitZone(belt.x, belt.y, belt.w, 120);
   let left = people.length;
   let held = null;
+  const stripes = fx.belt(scene, belt);
 
   people.forEach((p, i) => {
     p.bag = makeBag(scene, p.x + 45, p.y + 25, BAG_COLORS[i % BAG_COLORS.length], bagKey(i));
@@ -50,7 +52,8 @@ export function bags(ctx, done) {
           bag.destroy();
           addSmile(scene, p.c);
           ctx.smiles += 1;
-          if (--left === 0) scene.time.delayedCall(500, done);
+          fx.hop(scene, p.c, p.y);
+          if (--left === 0) scene.time.delayedCall(500, () => { stripes.destroy(); done(); });
         },
       }),
     });

@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 import { runFlow } from './airport/flow.js';
 import { checkin } from './airport/checkin.js';
@@ -64,8 +65,12 @@ export default class Airport extends Phaser.Scene {
     for (let i = 0; i < n; i++) {
       const x = 80 + (i % cols) * 100;
       const y = i < cols ? 610 : 715;
-      ctx.people.push({ x, y, c: makePerson(this, x, y, PERSON_COLORS[i % PERSON_COLORS.length], personKey(i)).setDepth(10) });
+      const c = makePerson(this, x, y, PERSON_COLORS[i % PERSON_COLORS.length], personKey(i)).setDepth(10);
+      ctx.people.push({ x, y, c });
+      fx.sway(this, c, i);
     }
+    const boarding = ctx.buildings.boarding;
+    if (boarding) ctx.breath = fx.breathe(this, boarding);   // flow.js ho pozastaví počas pulzu stanice
 
     ctx.input = createInput(this);
     addHome(this, ctx.input);
@@ -73,7 +78,7 @@ export default class Airport extends Phaser.Scene {
     audio.preload(stations.map((s) => s.voice));
 
     runFlow(ctx, stations, RUNNERS, () => {
-      this.scene.start('Takeoff', { ...args, passengers: n, smiles: ctx.smiles });
+      fx.go(this, 'Takeoff', { ...args, passengers: n, smiles: ctx.smiles });
     });
   }
 }

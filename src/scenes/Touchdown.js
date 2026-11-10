@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { addPlane } from '../systems/sprites.js';
 import { makeLever } from './takeoff/lever.js';
 import { makeStands } from './touchdown/stands.js';
@@ -122,7 +123,7 @@ export default class Touchdown extends Phaser.Scene {
         this.tweens.add({ targets: this.plane, y: pad.y - 100, scale: 0.8, duration: ms * 0.45, ease: 'Sine.inOut',
           onComplete: () => {
             this.tweens.add({ targets: pad.root, scale: 1.15, duration: 250, yoyo: true });
-            this.time.delayedCall(900, () => this.scene.start('Landing', this.args));
+            this.time.delayedCall(900, () => fx.go(this, 'Landing', this.args));
           } });
       },
     });

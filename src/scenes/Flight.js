@@ -145,6 +145,6 @@ export default class Flight extends Phaser.Scene {
     this.ended = true;
     this.plane.angle = 0;
     const { to, passengers, smiles } = this.args;
-    this.scene.start('Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars });
+    fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars }, { fade: false });
   }
 }

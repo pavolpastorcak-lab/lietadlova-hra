@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { addPlane } from '../systems/sprites.js';
 import { makeLever } from './takeoff/lever.js';
 
@@ -90,6 +91,6 @@ export default class Takeoff extends Phaser.Scene {
       tw({ targets: this.sideImg, alpha: 0, duration: 500, delay: 300 });
       tw({ targets: this.airImg, alpha: 1, duration: 500, delay: 300 });
     }
-    this.time.delayedCall(climbMs + 100, () => this.scene.start('Flight', this.args));
+    this.time.delayedCall(climbMs + 100, () => fx.go(this, 'Flight', this.args, { fade: false }));
   }
 }

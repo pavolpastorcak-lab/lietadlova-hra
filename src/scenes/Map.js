@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import { addSprite, role } from '../systems/sprites.js';
 import * as save from '../systems/save.js';
 import { desaturate, addVeil } from '../ui/haze.js';
+import * as fx from '../ui/fx.js';
 
 const HOME = 'bts';                                      // odtiaľ sa letí
 const PIN_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };       // zástupka za vlajku
@@ -22,6 +23,8 @@ export default class MapScene extends Phaser.Scene {
     const unlocked = save.get().unlocked || [];
     const input = createInput(this);
 
+    fx.mapShadows(this, 4);
+    const drops = [];
     dests.forEach((d) => {
       const pin = this.add.container(d.map.x, d.map.y);
       const pinSpr = addSprite(this, role('pin'), 0, 0, { h: 100, origin: [0.5, 1] });   // hrot na súradnici
@@ -37,14 +40,17 @@ export default class MapScene extends Phaser.Scene {
       const open = d.id === HOME || unlocked.includes(d.id);
       if (!open) pin.setAlpha(0.45);              // zatiaľ nedostupná destinácia
       pin.setDepth(5);
+      if (open) drops.push({ obj: pin, y: d.map.y });
 
       if (open) input.onTapIn(input.hitZone(d.map.x, d.map.y - (pinSpr ? 70 : 0), 150, pinSpr ? 200 : 120), () => {
         if (d.id === HOME) {
           this.tweens.add({ targets: pin, scale: 1.2, duration: 120, yoyo: true });
           return;
         }
-        this.scene.start('Airport', { to: d.id });
+        fx.press(this, pin);
+        fx.go(this, 'Airport', { to: d.id });
       });
     });
+    fx.dropPins(this, drops);
   }
 }

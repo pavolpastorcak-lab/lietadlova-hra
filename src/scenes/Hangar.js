@@ -3,8 +3,10 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { addPlane, addSprite, role } from '../systems/sprites.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
+import { confetti } from '../ui/fx-particles.js';
 import { desaturate, haze } from '../ui/haze.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
@@ -64,10 +66,12 @@ export default class Hangar extends Phaser.Scene {
         busy = true;
         economy.buyCapacity(plane);
         counter.set(save.get().coins);
+        counter.tick();
+        confetti(this, ux, uy);
         up.destroy();
         seats.forEach((s) => s.setAlpha(1).setFillStyle(0x3498db));
         seats.slice(info.current).forEach((s) => this.tweens.add({ targets: s, scale: 1.6, duration: 250, yoyo: true, repeat: 2 }));
-        this.time.delayedCall(1600, () => this.scene.start('Map'));
+        this.time.delayedCall(1600, () => fx.go(this, 'Map'));
       });
     }
 
@@ -77,7 +81,7 @@ export default class Hangar extends Phaser.Scene {
     this.add.triangle(gx, gy, -50, -60, -50, 60, 60, 0, 0xffffff);
     this.tweens.add({ targets: door, scale: 1.04, duration: 800, yoyo: true, repeat: -1 });
     input.onTapIn(input.hitZone(gx, gy, 260, 340), () => {
-      if (!busy) this.scene.start('Map');
+      if (!busy) fx.go(this, 'Map');
     });
   }
 }

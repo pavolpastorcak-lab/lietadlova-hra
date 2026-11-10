@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { addSprite, role } from '../systems/sprites.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 
@@ -43,7 +44,7 @@ export default class Landing extends Phaser.Scene {
 
     const input = createInput(this);
     addHome(this, input);
-    input.onTapIn(input.hitZone(640, 380, 256, 192), () => this.scene.start('Payout', args));
+    input.onTapIn(input.hitZone(640, 380, 256, 192), () => fx.go(this, 'Payout', args));
 
     audio.init(data.get('voice'));
     if (dest) audio.play(`land_${dest.id}`);

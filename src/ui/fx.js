@@ -81,3 +81,100 @@ export function puff(scene, obj, cfg = fxCfg().puff) {
   if (!cfg || !obj || !obj.scene) return;
   scene.tweens.add({ targets: obj, scale: cfg.scale, alpha: cfg.alpha, duration: cfg.ms });
 }
+
+// ---- 3i: prechody, stlačenie, scény ----
+
+// Prechod scény: jediná cesta pre scene.start. Druhé volanie počas prechodu sa ignoruje.
+// opts.fade=false = plynulé pokračovanie bez zatmenia (Takeoff → Flight → Touchdown).
+export function go(scene, key, args, opts = {}) {
+  if (scene.__going) return;
+  scene.__going = true;
+  scene.events.once('shutdown', () => { scene.__going = false; });
+  const cfg = fxCfg().transition;
+  if (opts.fade === false || !cfg) { scene.scene.start(key, args); return; }
+  const [r, g, b] = cfg.color;
+  const target = scene.scene.get(key);
+  if (target) target.events.once('create', () => target.cameras.main.fadeIn(cfg.ms, r, g, b));
+  scene.cameras.main.once('camerafadeoutcomplete', () => scene.scene.start(key, args));
+  scene.cameras.main.fadeOut(cfg.ms, r, g, b);
+}
+
+// Krátke stlačenie (mierka z aktuálnej mierky objektu). Nie na objekt, ktorý už má vlastný pulz.
+export function press(scene, obj, cfg = fxCfg().press) {
+  if (!cfg || !obj || !obj.scene || obj.__pressing) return;
+  obj.__pressing = true;
+  const bx = obj.scaleX, by = obj.scaleY;
+  scene.tweens.add({ targets: obj, scaleX: bx * cfg.scale, scaleY: by * cfg.scale, duration: cfg.ms / 2, yoyo: true,
+    onComplete: () => { obj.setScale(bx, by); obj.__pressing = false; } });
+}
+
+// Jemné pohupovanie (náklon), každý objekt s inou fázou (index i). Vráti tween (uloží aj do obj.__sway).
+export function sway(scene, obj, i = 0, cfg = fxCfg().sway) {
+  if (!cfg || !obj) return null;
+  obj.__sway = scene.tweens.add({ targets: obj, angle: cfg.angle, duration: cfg.ms, yoyo: true, repeat: -1,
+    ease: 'Sine.inOut', delay: (i % 6) * cfg.phaseMs });
+  return obj.__sway;
+}
+export function stopSway(obj) {
+  if (obj && obj.__sway) { obj.__sway.stop(); obj.__sway = null; obj.setAngle(0); }
+}
+
+// Poskočenie o px a návrat presne na y.
+export function hop(scene, obj, y, cfg = fxCfg().hop) {
+  if (!cfg || !obj || !obj.scene) return;
+  scene.tweens.add({ targets: obj, y: y - cfg.px, duration: cfg.ms, yoyo: true, onComplete: () => obj.setY(y) });
+}
+
+// „Dýchanie" ±scale. Vráti { obj, start(), stop() }; stop vráti pôvodnú mierku (kvôli pulzu staníc).
+export function breathe(scene, obj, cfg = fxCfg().breathe) {
+  const h = { obj, tw: null, start() {}, stop() {} };
+  if (!cfg || !obj) return h;
+  let bx = 0, by = 0;
+  h.start = () => {
+    if (h.tw) return;
+    bx = obj.scaleX; by = obj.scaleY;
+    h.tw = scene.tweens.add({ targets: obj, scaleX: bx * (1 + cfg.scale), scaleY: by * (1 + cfg.scale),
+      duration: cfg.ms, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+  };
+  h.stop = () => { if (!h.tw) return; h.tw.stop(); h.tw = null; obj.setScale(bx, by); };
+  h.start();
+  return h;
+}
+
+// Pás s kuframi: tmavé pruhy sa posúvajú v ohraničenom páse. Vráti { destroy() }.
+export function belt(scene, b, cfg = fxCfg().belt) {
+  if (!cfg) return { destroy() {} };
+  const maskG = scene.make.graphics({ x: 0, y: 0, add: false });
+  maskG.fillRect(b.x - b.w / 2, b.y - cfg.h / 2, b.w, cfg.h);
+  const mask = maskG.createGeometryMask();
+  const cont = scene.add.container(0, 0).setDepth(2).setMask(mask);
+  for (let x = b.x - b.w / 2 - cfg.period; x < b.x + b.w / 2 + cfg.period; x += cfg.period) {
+    cont.add(scene.add.rectangle(x, b.y, cfg.stripeW, cfg.h, 0x222222, cfg.alpha));
+  }
+  const tw = scene.tweens.add({ targets: cont, x: cfg.period, duration: cfg.ms, repeat: -1 });
+  return { destroy() { tw.stop(); cont.clearMask(); cont.destroy(); mask.destroy(); maskG.destroy(); } };
+}
+
+// Špendlíky „zapichnú" zhora s odrazom; pins = [{ obj, y }] (y = cieľová poloha z dát).
+export function dropPins(scene, pins, cfg = fxCfg().pins) {
+  if (!cfg) return;
+  pins.forEach(({ obj, y }, i) => {
+    obj.setY(y - cfg.dropPx).setVisible(false);
+    scene.tweens.add({ targets: obj, y, duration: cfg.ms, ease: 'Bounce.easeOut', delay: cfg.startMs + i * cfg.gapMs,
+      onStart: () => obj.setVisible(true), onComplete: () => obj.setY(y) });
+  });
+}
+
+// Dva jemné tiene mrakov pomaly prechádzajú cez mapu (pod špendlíkmi).
+export function mapShadows(scene, depth, cfg = fxCfg().mapShadows) {
+  if (!cfg) return;
+  cfg.ys.forEach((y, i) => {
+    const spr = addSprite(scene, (role('cloud') || [])[0], 0, y, { w: cfg.w });
+    let s = spr;
+    if (spr && spr.setTint) spr.setTint(0x1d3557);
+    else { if (spr) spr.destroy(); s = scene.add.ellipse(0, y, cfg.w, cfg.h, 0x1d3557); }
+    s.setAlpha(cfg.alpha).setDepth(depth);
+    s.x = -cfg.w;
+    scene.tweens.add({ targets: s, x: 1280 + cfg.w, duration: cfg.ms, repeat: -1, delay: i * cfg.phaseMs });
+  });
+}

@@ -1,3 +1,4 @@
+import * as fx from '../../ui/fx.js';
 // Gate: ťuk na bránu → otvorí sa a cestujúci po schodoch nastúpia do lietadla sami.
 export function gate(ctx, done) {
   const { scene, input, plane, people } = ctx;
@@ -15,6 +16,7 @@ export function gate(ctx, done) {
     }
 
     people.forEach((p, i) => {
+      fx.stopSway(p.c);
       const t = (props, cb) => scene.tweens.add({ targets: p.c, duration: 600, ...props, onComplete: cb });
       scene.time.delayedCall(400 + i * 450, () => {
         t({ x: g.x, y: 590 }, () => t({ x: plane.door.x, y: plane.door.y + 40 }, () => t({
