@@ -78,6 +78,11 @@
   - Koniec letu: lietadlo sa za 800 ms plynulo vráti na (300, 400) (Touchdown začína tam, nemenený); počas návratu sa ešte zbierajú hviezdičky, nárazy ani nové prekážky nie.
   - SW: CACHE_VERSION v13 (žiadny nový súbor).
   - Otestované v Browser paneli (kroky ručne cez `window.__g`, dočasne, vrátené): rohy pásma, náklon ±, ťah z domova, spawner (arc, pásmo), celý let → návrat → Touchdown na (300, 400), konzola bez chýb. NEOTESTOVANÉ: dotyk na tablete, pocit z ovládania (rýchlosť `followXMs`, odstup `fingerOffsetX`), zakrývanie ikony domov okom, zvuky.
+- **Úloha 3h: efekty v lete** (2026-11-10)
+  - Nový `src/ui/fx.js`: malé samostatné funkcie `farClouds`, `trail`, `sparks`, `counterBounce`, `puff` (scéna + čísla z `sprites.json` → `fx`, upratujú po sebe; 3i ich rozšíri). Let: 2 vrstvy vzdialených mrakov (25 %/50 % rýchlosti, alfa 0,35/0,55), biela stopa za lietadlom, 6 iskier a poskočenie počítadla pri hviezdičke, mrak sa po náraze rozfúkne (zväčší, zbledne; nárazová plocha, invuln ani počet nárazov sa nemenia).
+  - `data.js` validuje blok `sprites.fx`. `Flight.js` 150 riadkov; `makeHud` vracia aj `counter`.
+  - SW: CACHE_VERSION v14, `fx.js` v precache.
+  - Otestované v Browser paneli (port 8090, kroky ručne cez `__g.step`, dočasné `window.__g` vrátené): celý let → Touchdown, konzola bez chýb, max 54 objektov v scéne (aj s HUD a prekážkami), po lete 0 objektov, rozfúknutie mraku vidno. NEOTESTOVANÉ: plynulosť a vzhľad na tablete, screenshot (panel bol skrytý), ostatné scény (nemenené).
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

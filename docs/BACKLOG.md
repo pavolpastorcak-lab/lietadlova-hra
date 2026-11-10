@@ -80,7 +80,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 3h: Efekty v lete (v1.0)
+## [x] 3h: Efekty v lete (v1.0)
 **Cieľ:** Let prestane pôsobiť plocho. Len kód a existujúce sprity, žiadne nové obrázky, žiadna zmena pravidiel.
 
 **Súbory:** nový `src/ui/fx.js` (spoločné efekty), `src/scenes/Flight.js`, `src/scenes/flight/shapes.js`, `data/sprites.json` (blok `fx` s číslami), `sw.js`, docs.

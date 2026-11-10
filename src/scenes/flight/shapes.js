@@ -81,6 +81,7 @@ export function makeHud(scene) {
   marker.setDepth(101);
 
   return {
+    counter: txt,
     setStars: (n) => txt.setText(String(n)),
     setProgress: (p) => { marker.x = x0 + (x1 - x0) * Math.min(1, p); },
   };

@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import * as fx from '../ui/fx.js';
 import { createSpawner } from './flight/spawner.js';
 import { makePlane, makeCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
@@ -35,6 +36,9 @@ export default class Flight extends Phaser.Scene {
     this.ended = false;
     this.spawner = createSpawner(this.flight, { minY: cfg.minY, maxY: cfg.maxY });
     this.hud = makeHud(this);
+    this.far = fx.farClouds(this);
+    this.trail = fx.trail(this);
+    this.events.once('shutdown', () => { this.far.destroy(); this.trail.destroy(); });
 
     const input = createInput(this);
     const steer = (p) => {
@@ -63,6 +67,8 @@ export default class Flight extends Phaser.Scene {
     if (this.elapsed >= this.flight.durationSec && !this.returning) this.startReturn();
     if (this.returning) this.stepReturn(delta); else this.stepFollow(delta);
     this.tilt(this.plane.y - prevY, dt, delta);
+    this.far.update(dt, cfg.speed);
+    this.trail.update(dt, this.plane.x, this.plane.y);
 
     if (!this.returning) {
       this.spawner.tick(dt).forEach((s) => {
@@ -79,7 +85,7 @@ export default class Flight extends Phaser.Scene {
       if (o.x < -200) { o.destroy(); return false; }
       if (!this.overlaps(o, o.kind === 'star' ? { w: 200, h: 70 } : PLANE_HIT)) return true;
       if (o.kind === 'star') { this.collect(o); return false; }
-      if (this.invuln <= 0 && !this.returning) this.bump();
+      if (this.invuln <= 0 && !this.returning) this.bump(o);
       return true;
     });
   }
@@ -121,10 +127,13 @@ export default class Flight extends Phaser.Scene {
   collect(o) {
     this.stars += 1;                       // hviezdičky sa nikdy neodpočítavajú
     this.hud.setStars(this.stars);
+    fx.sparks(this, o.x, o.y);
+    fx.counterBounce(this, this.hud.counter);
     this.tweens.add({ targets: o, scale: 1.8, alpha: 0, y: o.y - 40, duration: 250, onComplete: () => o.destroy() });
   }
 
-  bump() {
+  bump(o) {
+    if (o.kind === 'cloud') fx.puff(this, o);
     this.spawner.hit();
     this.invuln = this.cfg.invulnMs;
     audio.play('sfx_bump');

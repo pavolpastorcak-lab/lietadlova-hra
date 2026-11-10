@@ -45,6 +45,7 @@ export function collect(scene) {
   checkItems('flights', store.flights, REQUIRED.flights, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
   if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
+  if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   errors.forEach((e) => console.error('[data]', e));
   return errors;
