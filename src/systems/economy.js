@@ -3,9 +3,10 @@ import * as data from './data.js';
 import * as save from './save.js';
 
 // Základ sa vypláca vždy; hviezdičky a smajlíky dávajú len prepitné.
-export function payout(passengers, smiles, stars) {
+// mult = payMult trasy (chýba = 1): násobí len základ, nie prepitné; zaokrúhľuje sa nahor.
+export function payout(passengers, smiles, stars, mult = 1) {
   const e = data.get('economy');
-  const base = passengers * e.basePerPassenger;
+  const base = Math.ceil(passengers * e.basePerPassenger * (mult || 1) - 1e-9);
   const tip = stars * e.tipPerStar + smiles * e.tipPerSmile;
   return { base, tip, total: base + tip };
 }
@@ -33,6 +34,13 @@ export function buyUpgrade(plane, kind) {
   save.save();
   return true;
 }
+
+// Dolet lietadla (km) podľa kúpeného stupňa a či tam lietadlo dolieta.
+export function planeRange(plane) {
+  return plane.range[save.get().planes[plane.id].range].value;
+}
+
+export const inRange = (dest, plane) => dest.distance <= planeRange(plane);
 
 export const capacityInfo = (plane) => upgradeInfo(plane, 'capacity');
 export const buyCapacity = (plane) => buyUpgrade(plane, 'capacity');

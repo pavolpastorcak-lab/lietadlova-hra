@@ -17,32 +17,38 @@ export function addUpgradePanel(scene, input, { kind, plane, counter, state, onB
   const g = haze('hangarUi') || {};
   const gray = (o) => { desaturate(o, 'hangarUi'); return o; };
   const col = g.text || '#666666';
-  const colNum = Phaser.Display.Color.HexStringToColor(col).color;
   const txt = (x, s, ox) => scene.add.text(x, 0, s, { fontFamily: 'Arial', fontSize: '38px',
     fontStyle: 'bold', color: col }).setOrigin(ox, 0.5);
 
   // Symbol: sedadlo (kapacita) alebo nádrž (dolet), šírka 44 a výška najviac 60 px.
+  const range = kind === 'range';
+  const sx = range ? -105 : -40;                  // dolet: bez ikony lietadla, miesto má 3 vlajky
   let symbol;
-  if (kind === 'range') {
-    symbol = addSprite(scene, role('tank'), -40, 0, { w: 44 });
+  if (range) {
+    symbol = addSprite(scene, role('tank'), sx, 0, { w: 44 });
     if (symbol && symbol.displayHeight > 60) symbol.setScale(60 / symbol.height);
-    symbol = symbol || scene.add.rectangle(-40, 0, 30, 36, 0x3498db);
+    symbol = symbol || scene.add.rectangle(sx, 0, 30, 36, 0x3498db);
   } else {
-    symbol = addSprite(scene, role('seat'), -40, 0, { w: 44 }) || scene.add.circle(-40, 0, 16, 0x3498db);
+    symbol = addSprite(scene, role('seat'), sx, 0, { w: 44 }) || scene.add.circle(sx, 0, 16, 0x3498db);
   }
-  const icon = addPlane(scene, 'side', -110, 0, 70);
-  // Hodnota: "+N" pri kapacite, šípka nahor (tvar, nie znak) pri dolete.
-  const value = kind === 'range'
-    ? [scene.add.rectangle(10, 8, 12, 24, colNum), scene.add.triangle(10, -14, -16, 14, 16, 14, 0, -14, colNum)]
-    : [txt(-12, '+' + (info.next - info.current), 0)];
+  const icon = range ? null : addPlane(scene, 'side', -110, 0, 70);
+  // Hodnota: "+N" pri kapacite, pri dolete vlajky (max 3, ~34 px) destinácií, ktoré ďalší stupeň otvorí.
+  let value;
+  if (range) {
+    const opens = data.get('destinations').filter((d) => d.distance > info.current && d.distance <= info.next).slice(0, 3);
+    value = opens.map((d, i) => addSprite(scene, d.flag, -58 + i * 40, 0, { w: 34 })
+      || scene.add.rectangle(-58 + i * 40, 0, 34, 24, 0x3498db));
+  } else {
+    value = [txt(-12, '+' + (info.next - info.current), 0)];
+  }
   const up = scene.add.container(ux, uy);
   up.add([
     scene.add.rectangle(0, 0, w, h, 0xffffff).setStrokeStyle(6, Phaser.Display.Color.HexStringToColor(g.border || '#9e9e9e').color),
-    gray(icon || scene.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32)),
+    ...(range ? [] : [gray(icon || scene.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32))]),
     gray(symbol),
     ...value.map(gray),
-    gray(makeCoin(scene, 70, 0, 18)),
-    txt(130, String(info.cost), 1),
+    gray(makeCoin(scene, 54, 0, 18)),
+    txt(140, String(info.cost), 1),
   ]);
   if (!info.affordable) up.setAlpha(0.4);
 

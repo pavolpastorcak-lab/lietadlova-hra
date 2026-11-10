@@ -16,8 +16,8 @@ export default class Payout extends Phaser.Scene {
   create(args) {
     const { to, passengers = 0, smiles = 0, stars = 0 } = args || {};
     this.cameras.main.setBackgroundColor('#fff3d6');
-    const pay = economy.payout(passengers, smiles, stars);
     const f = data.flight(to);
+    const pay = economy.payout(passengers, smiles, stars, f && f.payMult);
     if (f) save.setBestStars(`${f.from}-${f.to}`, stars);
     const before = save.get().coins;
     save.addCoins(pay.total);

@@ -142,7 +142,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 4b: 6 nových destinácií + ťažšie lety (v1.1)
+## [x] 4b: 6 nových destinácií + ťažšie lety (v1.1)
 **Cieľ:** Na mape pribudne 6 miest. Ktoré sú v dolete, sú hneď hrateľné; ostatné sú zašednuté, kým syn nekúpi nádrž. Lety sú ťažšie než dnes.
 
 **Súbory:** `data/destinations.json`, `data/flights.json`, `data/voice.json`, `src/scenes/Map.js`, `src/systems/economy.js`, `src/scenes/Flight.js` (len voliteľná rýchlosť), `src/scenes/Hangar.js`/`upgradePanel.js` (vlajky v paneli), `sw.js`, docs.

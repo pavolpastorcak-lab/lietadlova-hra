@@ -21,6 +21,7 @@ export default class Flight extends Phaser.Scene {
     this.flight = data.flight(this.args.to) || flights[0];
     this.cameras.main.setBackgroundColor('#87ceeb');
     const cfg = this.cfg = data.flightCfg();
+    this.speed = this.flight.speed || cfg.speed;       // rýchlosť trasy (px/s), inak predvolená z airport.flight
     this.home = new Phaser.Geom.Rectangle(cfg.homeZone.x - cfg.homeZone.w / 2, cfg.homeZone.y - cfg.homeZone.h / 2,
       cfg.homeZone.w, cfg.homeZone.h);
 
@@ -67,7 +68,7 @@ export default class Flight extends Phaser.Scene {
     if (this.elapsed >= this.flight.durationSec && !this.returning) this.startReturn();
     if (this.returning) this.stepReturn(delta); else this.stepFollow(delta);
     this.tilt(this.plane.y - prevY, dt, delta);
-    this.far.update(dt, cfg.speed);
+    this.far.update(dt, this.speed);
     this.trail.update(dt, this.plane.x, this.plane.y);
 
     if (!this.returning) {
@@ -81,7 +82,7 @@ export default class Flight extends Phaser.Scene {
     }
 
     this.items = this.items.filter((o) => {
-      o.x -= cfg.speed * dt;
+      o.x -= this.speed * dt;
       if (o.x < -200) { o.destroy(); return false; }
       if (!this.overlaps(o, o.kind === 'star' ? { w: 200, h: 70 } : PLANE_HIT)) return true;
       if (o.kind === 'star') { this.collect(o); return false; }

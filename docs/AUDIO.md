@@ -18,6 +18,18 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `num_1.mp3` až `num_9.mp3` | Jeden. Dva. Tri. Štyri. Päť. Šesť. Sedem. Osem. Deväť. (každé číslo zvlášť) |
 | `dest_lon.mp3` | Letíme do Londýna. |
 | `land_lon.mp3` | V Londýne prší. |
+| `dest_ber.mp3` | Letíme do Berlína. |
+| `land_ber.mp3` | V Berlíne svieti slnko. |
+| `dest_rim.mp3` | Letíme do Ríma. |
+| `land_rim.mp3` | V Ríme svieti slnko. |
+| `dest_par.mp3` | Letíme do Paríža. |
+| `land_par.mp3` | V Paríži prší. |
+| `dest_dub.mp3` | Letíme do Dublinu. |
+| `land_dub.mp3` | V Dubline prší. |
+| `dest_mad.mp3` | Letíme do Madridu. |
+| `land_mad.mp3` | V Madride svieti slnko. |
+| `dest_lis.mp3` | Letíme do Lisabonu. |
+| `land_lis.mp3` | V Lisabone svieti slnko. |
 
 Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
 
