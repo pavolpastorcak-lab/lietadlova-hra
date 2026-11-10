@@ -56,7 +56,7 @@ Povinné pri každej úlohe:
 7. Nový hlas/zvuk: kľúč do `data/voice.json` + riadok do tabuľky v `docs/AUDIO.md`. Chýbajúci mp3 = ticho, nesmie nič zhodiť.
 8. Zmena tvaru save: zvýš `SAVE_VERSION` a pridaj migráciu do `migrations[]` v `src/systems/save.js`. Starý save nesmie prísť o mince, upgrady ani rekordy.
 9. Všetky cesty relatívne (`./`).
-10. Test v Browser paneli (server `hra` z `.claude/launch.json`): prejdi celú slučku Map → … → Hangar → Map, konzola bez chýb. Napíš, čo si NEotestoval.
+10. Test v Browser paneli (server `hra-worktree` z `.claude/launch.json`, port 8090; **nie** `hra` na 8080, tam môže bežať Paľov server z hlavného priečinka so starým kódom; over, že `./sw.js` vracia tvoju `CACHE_VERSION`): prejdi celú slučku Map → … → Hangar → Map, konzola bez chýb. Napíš, čo si NEotestoval.
 11. Na konci: aktualizuj `docs/PROGRESS.md` (hotové + neotestované), v `docs/BACKLOG.md` označ úlohu `[x]`, **jeden commit** (`Uloha <č>: …, CACHE_VERSION vN`), a záverečná správa s návodom na test podľa `CLAUDE.md` pravidla 11.
 
 ---
