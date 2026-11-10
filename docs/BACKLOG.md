@@ -26,6 +26,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 3i | Animácie v ostatných scénach | v1.0 | **PO: tablet** (pocit z letu, plynulosť efektov) |
 | 4a | Upgrade doletu v hangári | v1.1 | – |
 | 4b | 6 nových destinácií + ťažšie lety | v1.1 | **PO: tablet** (polohy špendlíkov, obtiažnosť), mp3 `dest_*`, `land_*` |
+| 4c | Zvuky v hre (let, hviezdy, mince, hangár, letisko) | v1.1 | **PO: tablet** (hlasitosti) |
 | 5a | Bezpečnostná kontrola (záložné tvary) | v1.2 | **PO: tablet**; dávka Magnific (7 spritov) na jedno schválenie |
 | 6a | Hádanka Arrows: engine + 2 levely | v1.3 | – |
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
@@ -191,6 +192,33 @@ Povinné pri každej úlohe:
 **Nesmie sa zmeniť:** letisko, vzlet, brzdenie a stojiská, výpočet prepitného, pravidlo zriedenia prekážok (len čísla v dátach), poloha Bratislavy (698, 490) a Londýna.
 
 **Paľo overí na tablete (STOP po 4b):** polohy 8 špendlíkov na mape; či sú lety primerane ťažké (hlavne rýchlosť Londýna 500 a Lisabonu 600); či syn pochopí zašednutý špendlík → nádrž v hangári; ceny 150/300 voči zárobku. Hlas `dest_*`, `land_*` (12 ks): TTS zástupky cez Magnific v dávke po schválení, vlastné nahrávky neskôr.
+
+---
+
+## [ ] 4c: Zvuky v hre (v1.1, pripomienky Paľa po teste)
+**Cieľ:** Hra nie je nikde ticho. Zvuky sú už vygenerované v `assets/audio/sfx/`, úloha ich len zapojí.
+
+**Súbory:** `src/systems/audio.js`, `data/voice.json`, nový blok `audio` v `data/airport.json`, `src/scenes/Flight.js`, `src/scenes/Airport.js`, `src/scenes/airport/bags.js`, `src/scenes/airport/gate.js`, `src/scenes/Payout.js`, `src/scenes/hangar/upgradePanel.js`, `docs/AUDIO.md`, `sw.js`. Viac ako 3 súbory → najprv plán architektovi.
+
+**Zadanie:**
+- **`audio.js`, kanály:** dnes `play()` vždy zastaví predošlý zvuk, takže efekt by prerušil hlas. Rozdeľ: hlas (kľúče bez `sfx_`) má jeden kanál ako dnes (nový hlas preruší starý hlas); efekty `sfx_*` hrajú cez seba a hlas neprerušia. `play(key, { volume })` a `loop(key, { volume })` cez GainNode; `loop` vráti aj `setVolume(v)`. Predvolená hlasitosť kľúča je voliteľné pole `volume` vo `voice.json` (chýba = 1). Chýbajúci súbor = ticho, ako dnes.
+- **Nové kľúče vo `voice.json`** (súbory existujú): `sfx_cruise` (`sfx/cruise.mp3`, slučka, motory veľkého lietadla), `sfx_star` (`sfx/star.mp3`), `sfx_coins` (`sfx/coins.mp3`), `sfx_upgrade` (`sfx/upgrade.mp3`, pneumatický uťahovák), `sfx_airport` (`sfx/airport.mp3`, slučka, šum haly), `sfx_belt` (`sfx/belt.mp3`, slučka), `sfx_gate` (`sfx/gate.mp3`). Východiskové hlasitosti: cruise 0,35, star 0,6, coins 0,8, upgrade 0,8, airport 0,25, belt 0,4, gate 0,8.
+- **Let:** `sfx_cruise` hrá v slučke celý let a zastaví sa pri odchode zo scény (aj cez ikonu domov). Výška tónu sleduje vodorovný pohyb lietadla: letí doprava = vyššie (zrýchlenie), doľava = nižšie (spomalenie), stojí = 1. Plynulo (vyhladené), rozsah a citlivosť v `airport.json` → `audio.cruise: { "rateMin": 0.85, "rateMax": 1.25, "vxForMax": 500, "smoothMs": 250 }`. Zber hviezdičky = `sfx_star` (rad troch za sebou znie trikrát, nesmie prerušiť hlas „Letíme do…").
+- **Výplata:** ťuk na kôpku mincí = `sfx_coins` (raz na kôpku).
+- **Hangár:** úspešná kúpa upgradu = `sfx_upgrade` (spolu s konfetami). Zašednutý panel bez zvuku.
+- **Letisko:** `sfx_airport` potichu v slučke počas celej scény Airport, zastaví sa pri odchode. `sfx_belt` hrá v slučke, kým je aktívna stanica batožiny (rovnaký začiatok a koniec ako pohyb pruhov pásu z 3i). Otvorenie brány = `sfx_gate`.
+- Všetky slučky zastav v `shutdown` scény. Žiadny zvuk nesmie hrať ďalej v nasledujúcej scéne.
+- `docs/AUDIO.md`: doplň 7 nových zvukov do zoznamu (názov, kde hrá).
+
+**Akceptačné kritériá:**
+- Hlas stanice alebo cieľa dohrá celý, aj keď medzitým zaznie hviezdička, náraz alebo mince.
+- Po odchode z letu, letiska a hangára (vrátane ikony domov) nehrá žiadna slučka; v `AudioContext` neostávajú bežiace zdroje (over počítadlom aktívnych slučiek v `audio.js`).
+- Zmazanie ktoréhokoľvek mp3 hru nezhodí.
+- Vzlet a pristátie znejú ako predtým (`sfx_engine` so zmenou výšky).
+
+**Nesmie sa zmeniť:** texty a kľúče existujúcich hlasov, herné pravidlá, efekty z 3h/3i.
+
+**Paľo overí na tablete:** hlasitosti (šum letiska má byť sotva počuteľný, motor v lete nesmie rušiť hlas), či zmena tónu pri pohybe do strán znie prirodzene, šev v slučkách.
 
 ---
 

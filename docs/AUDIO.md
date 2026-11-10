@@ -84,3 +84,4 @@ Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, k
 - **Hlas:** Magnific → Voiceover, hlas „Katarína Horváthová" (ElevenLabs), model `eleven_v3`, rýchlosť 0,9, stabilita 0,5. Ďalšie hlasy generuj s tým istým nastavením.
 - **Zvuky:** Magnific → Sound effects: `bump` (1 s), `engine` (slučka 2 s), `takeoff` (2 s), `touchdown` (1 s).
 - **Na vypočutie:** čísla `num_1`–`num_9` sú jednoslovné a model pri nich občas pridá ticho alebo ruch (dĺžky 0,7 až 3,9 s). Ktoré neznejú čisto, treba vygenerovať znova alebo nahrať.
+- **Dávka 2 (2026-11-10):** `st_checkin.mp3` nahradený Paľovou novou verziou (model `eleven_v4`, znie prirodzenejšie; **ďalšie hlasy generuj modelom `eleven_v4`**, hlas a ostatné nastavenie rovnaké). Nové zvuky v `assets/audio/sfx/`: `cruise` (slučka, motory v lete), `star`, `coins`, `upgrade` (pneumatický uťahovák), `airport` (slučka, šum haly), `belt` (slučka, pás), `gate`. Do hry ich zapojí úloha 4c.
