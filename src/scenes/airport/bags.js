@@ -1,5 +1,6 @@
 import { makeBag, addSmile } from './shapes.js';
 import * as fx from '../../ui/fx.js';
+import * as audio from '../../systems/audio.js';
 import { bagKey } from '../../systems/sprites.js';
 
 const BAG_COLORS = [0x27ae60, 0xc0392b, 0x2980b9, 0xf1c40f, 0x8e44ad, 0xd35400, 0x16a085, 0x7f8c8d];
@@ -11,6 +12,8 @@ export function bags(ctx, done) {
   let left = people.length;
   let held = null;
   const stripes = fx.belt(scene, belt);
+  const beltSnd = audio.loop('sfx_belt');                 // hrá, kým je stanica aktívna (ako pruhy pásu)
+  scene.events.once('shutdown', () => beltSnd.stop());
 
   people.forEach((p, i) => {
     p.bag = makeBag(scene, p.x + 45, p.y + 25, BAG_COLORS[i % BAG_COLORS.length], bagKey(i));
@@ -53,7 +56,7 @@ export function bags(ctx, done) {
           addSmile(scene, p.c);
           ctx.smiles += 1;
           fx.hop(scene, p.c, p.y);
-          if (--left === 0) scene.time.delayedCall(500, () => { stripes.destroy(); done(); });
+          if (--left === 0) scene.time.delayedCall(500, () => { stripes.destroy(); beltSnd.stop(); done(); });
         },
       }),
     });

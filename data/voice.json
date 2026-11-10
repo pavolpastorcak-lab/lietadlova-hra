@@ -32,5 +32,12 @@
   "dest_mad": {"file":"voice/sk/dest_mad.mp3","text":"Letíme do Madridu."},
   "land_mad": {"file":"voice/sk/land_mad.mp3","text":"V Madride svieti slnko."},
   "dest_lis": {"file":"voice/sk/dest_lis.mp3","text":"Letíme do Lisabonu."},
-  "land_lis": {"file":"voice/sk/land_lis.mp3","text":"V Lisabone svieti slnko."}
+  "land_lis": {"file":"voice/sk/land_lis.mp3","text":"V Lisabone svieti slnko."},
+  "sfx_cruise": {"file":"sfx/cruise.mp3","text":"(zvuk) motory veľkého lietadla, slučka počas letu","volume":0.35},
+  "sfx_star": {"file":"sfx/star.mp3","text":"(zvuk) zber hviezdičky","volume":0.6},
+  "sfx_coins": {"file":"sfx/coins.mp3","text":"(zvuk) mince pri výplate","volume":0.8},
+  "sfx_upgrade": {"file":"sfx/upgrade.mp3","text":"(zvuk) pneumatický uťahovák pri kúpe upgradu","volume":0.8},
+  "sfx_airport": {"file":"sfx/airport.mp3","text":"(zvuk) šum letiskovej haly, slučka","volume":0.25},
+  "sfx_belt": {"file":"sfx/belt.mp3","text":"(zvuk) pás s batožinou, slučka","volume":0.4},
+  "sfx_gate": {"file":"sfx/gate.mp3","text":"(zvuk) otvorenie brány","volume":0.8}
 }

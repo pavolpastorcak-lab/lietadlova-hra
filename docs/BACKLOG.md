@@ -195,7 +195,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 4c: Zvuky v hre (v1.1, pripomienky Paľa po teste)
+## [x] 4c: Zvuky v hre (v1.1, pripomienky Paľa po teste)
 **Cieľ:** Hra nie je nikde ticho. Zvuky sú už vygenerované v `assets/audio/sfx/`, úloha ich len zapojí.
 
 **Súbory:** `src/systems/audio.js`, `data/voice.json`, nový blok `audio` v `data/airport.json`, `src/scenes/Flight.js`, `src/scenes/Airport.js`, `src/scenes/airport/bags.js`, `src/scenes/airport/gate.js`, `src/scenes/Payout.js`, `src/scenes/hangar/upgradePanel.js`, `docs/AUDIO.md`, `sw.js`. Viac ako 3 súbory → najprv plán architektovi.

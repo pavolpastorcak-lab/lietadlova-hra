@@ -37,6 +37,18 @@ Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné �
 
 Pre pristátie jeden **zvuk** do `assets/audio/sfx/`: `touchdown.mp3` (dosadnutie kolies na dráhu, ~1 s). Motor sa pri pristátí používa ten istý `engine.mp3`.
 
+Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.json` (pole `volume`):
+
+| Súbor | Kde hrá |
+|---|---|
+| `cruise.mp3` | slučka počas celého letu (motory veľkého lietadla), výška tónu sleduje pohyb do strán |
+| `star.mp3` | zber hviezdičky v lete |
+| `coins.mp3` | ťuk na kôpku mincí pri výplate |
+| `upgrade.mp3` | úspešná kúpa upgradu v hangári (pneumatický uťahovák) |
+| `airport.mp3` | slučka, šum haly počas celej scény Letisko (potichu) |
+| `belt.mp3` | slučka, kým je aktívna stanica batožiny (pás) |
+| `gate.mp3` | otvorenie brány na letisku |
+
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 
 ## 2. Prompt pre AI generátor hlasu

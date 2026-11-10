@@ -17,6 +17,8 @@ const FLIGHT_DEFAULTS = {
   tiltMaxDeg: 12, tiltVy: 400, tiltSmoothMs: 80, homeZone: { x: 70, y: 70, w: 130, h: 130 },
 };
 
+const CRUISE_DEFAULTS = { rateMin: 0.85, rateMax: 1.25, vxForMax: 500, smoothMs: 250 };
+
 const store = {};
 
 export function queueLoad(scene) {
@@ -45,6 +47,10 @@ export function collect(scene) {
   checkItems('flights', store.flights, REQUIRED.flights, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
   if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
+  const cr = store.airport && store.airport.audio && store.airport.audio.cruise;
+  ['rateMin', 'rateMax', 'vxForMax', 'smoothMs'].forEach((f) => {
+    if (!cr || typeof cr[f] !== 'number') errors.push(`airport.audio.cruise: chýba "${f}"`);
+  });
   if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
   const hp = store.sprites && store.sprites.hangarPanels;
   ['capacity', 'range'].forEach((k) => {
@@ -68,6 +74,11 @@ export function flight(to) {
 // Nastavenia letu: airport.flight doplnené o predvolené hodnoty.
 export function flightCfg() {
   return { ...FLIGHT_DEFAULTS, ...((store.airport && store.airport.flight) || {}) };
+}
+
+// Nastavenia zvuku motora v lete (výška tónu podľa pohybu do strán).
+export function cruiseCfg() {
+  return { ...CRUISE_DEFAULTS, ...((store.airport && store.airport.audio && store.airport.audio.cruise) || {}) };
 }
 
 export function destination(id) {

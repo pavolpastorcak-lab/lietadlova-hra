@@ -11,6 +11,7 @@
   "flight": { "minX": 160, "maxX": 900, "minY": 140, "maxY": 700, "followMs": 120, "followXMs": 220, "speed": 420,
               "invulnMs": 1200, "fingerOffsetX": -140, "returnMs": 800, "returnX": 300, "returnY": 400,
               "tiltMaxDeg": 12, "tiltVy": 400, "tiltSmoothMs": 80, "homeZone": { "x": 70, "y": 70, "w": 130, "h": 130 } },
+  "audio": { "cruise": { "rateMin": 0.85, "rateMax": 1.25, "vxForMax": 500, "smoothMs": 250 } },
   "takeoff": { "accelTauSec": 1.2, "fullAt": 0.92, "rotateSpeed": 0.85, "climbSec": 1.8, "hintVoice": "st_takeoff" },
   "landing": { "descendSec": 2.2, "brakeTauSec": 1.0, "stopSpeed": 0.04, "standCount": 3, "numberRange": [1, 9],
                "taxiSec": 2.4, "numberDelaySec": 1.6, "idleHintSec": 8, "brakeVoice": "st_brake", "standVoice": "st_stand",

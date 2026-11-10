@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
+import * as audio from '../systems/audio.js';
 import * as fx from '../ui/fx.js';
 import { coinFly } from '../ui/fx-particles.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
@@ -16,6 +17,8 @@ export default class Payout extends Phaser.Scene {
   create(args) {
     const { to, passengers = 0, smiles = 0, stars = 0 } = args || {};
     this.cameras.main.setBackgroundColor('#fff3d6');
+    audio.init(data.get('voice'));
+    audio.preload(['sfx_coins']);
     const f = data.flight(to);
     const pay = economy.payout(passengers, smiles, stars, f && f.payMult);
     if (f) save.setBestStars(`${f.from}-${f.to}`, stars);
@@ -47,6 +50,7 @@ export default class Payout extends Phaser.Scene {
       input.onTapIn(input.hitZone(p.x, y + 40, 260, 300), () => {
         if (taken) return;
         taken = true;
+        audio.play('sfx_coins');
         this.tweens.killTweensOf(c);
         c.destroy();
         // mince letia po jednej (max 12), zvyšok sa pripočíta číslom; súčet = p.amount presne

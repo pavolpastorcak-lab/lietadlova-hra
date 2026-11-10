@@ -1,4 +1,5 @@
 import * as fx from '../../ui/fx.js';
+import * as audio from '../../systems/audio.js';
 // Gate: ťuk na bránu → otvorí sa a cestujúci po schodoch nastúpia do lietadla sami.
 export function gate(ctx, done) {
   const { scene, input, plane, people } = ctx;
@@ -8,6 +9,7 @@ export function gate(ctx, done) {
   ctx.on('tap', (pt) => {
     if (!zone.contains(pt.x, pt.y) || g.opened) return;
     g.opened = true;
+    audio.play('sfx_gate');
     if (g.sprite && g.openKey && scene.textures.exists(g.openKey)) {
       g.sprite.setTexture(g.openKey);                       // otvorená brána (sprite)
     } else if (g.door) {

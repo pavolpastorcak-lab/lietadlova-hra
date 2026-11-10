@@ -1,15 +1,25 @@
-// Hlas podľa data/voice.json. Chýbajúci mp3 súbor = ticho (hra nespadne).
+// Zvuk podľa data/voice.json. Chýbajúci mp3 súbor = ticho (hra nespadne).
 // Používa fetch + WebAudio (bez Range požiadaviek), takže funguje aj z cache service workera.
+// Kanály: hlas (kľúče bez "sfx_") má jeden kanál, nový hlas preruší starý; efekty "sfx_*" hrajú
+// cez seba a hlas neprerušia. Hlasitosť kľúča: voice.json "volume" (chýba = 1) alebo { volume }.
 
 let voice = {};
 let ctx = null;
-let current = null;
+let currentVoice = null;
+let unlockSet = false;
 const bufs = {};
+const sources = new Set();   // všetky bežiace zdroje (na kontrolu, že nič nehrá po odchode zo scény)
+let loops = 0;               // počet aktívnych slučiek
 
 function ac() {
   if (!ctx) {
     const A = window.AudioContext || window.webkitAudioContext;
     if (A) ctx = new A();
+  }
+  if (ctx && !unlockSet) {   // AudioContext je do prvého dotyku "suspended": po dotyku ho rozbehni
+    unlockSet = true;
+    const un = () => { if (ctx.state === 'suspended') ctx.resume(); };
+    ['pointerdown', 'touchstart', 'keydown'].forEach((e) => window.addEventListener(e, un, { passive: true }));
   }
   return ctx;
 }
@@ -26,38 +36,66 @@ function buffer(key) {
   return bufs[key];
 }
 
+function vol(key, opts) {
+  if (opts && typeof opts.volume === 'number') return opts.volume;
+  const v = voice[key];
+  return v && typeof v.volume === 'number' ? v.volume : 1;
+}
+
+// Vytvorí zdroj napojený cez GainNode; vráti { src, gain } alebo null.
+function make(buf, volume, loopIt) {
+  if (ctx.state === 'suspended') ctx.resume();
+  const src = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  src.buffer = buf;
+  src.loop = !!loopIt;
+  gain.gain.value = volume;
+  src.connect(gain);
+  gain.connect(ctx.destination);
+  sources.add(src);
+  src.onended = () => { sources.delete(src); try { gain.disconnect(); } catch (_) { /* nič */ } };
+  return { src, gain };
+}
+
 export function init(voiceData) { voice = voiceData || {}; }
 
 export function preload(keys) { keys.forEach(buffer); }
 
-export function play(key) {
+export function play(key, opts) {
   buffer(key).then((buf) => {
     if (!buf || !ctx) return;
-    if (ctx.state === 'suspended') ctx.resume();
-    if (current) { try { current.stop(); } catch (_) { /* nič */ } }
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.connect(ctx.destination);
+    const isSfx = key.startsWith('sfx_');
+    if (!isSfx && currentVoice) { try { currentVoice.stop(); } catch (_) { /* nič */ } }
+    const { src } = make(buf, vol(key, opts), false);
     src.start();
-    current = src;
+    if (!isSfx) currentVoice = src;
   });
 }
 
-// Slučka (napr. motor): vráti { setRate(r), stop() }. Chýbajúci súbor = ticho, volania sú bezpečné.
-export function loop(key) {
-  let src = null, stopped = false, rate = 1;
+// Slučka (napr. motor): vráti { setRate(r), setVolume(v), stop() }. Chýbajúci súbor = ticho, volania sú bezpečné.
+export function loop(key, opts) {
+  let src = null, gain = null, stopped = false, rate = 1, volume = vol(key, opts);
   buffer(key).then((buf) => {
     if (!buf || !ctx || stopped) return;
-    if (ctx.state === "suspended") ctx.resume();
-    src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
+    ({ src, gain } = make(buf, volume, true));
     src.playbackRate.value = rate;
-    src.connect(ctx.destination);
+    loops += 1;
     src.start();
   });
   return {
     setRate(r) { rate = r; if (src) src.playbackRate.value = r; },
-    stop() { stopped = true; if (src) { try { src.stop(); } catch (_) { /* nič */ } src = null; } },
+    setVolume(v) { volume = v; if (gain) gain.gain.value = v; },
+    stop() {
+      stopped = true;
+      if (!src) return;
+      loops -= 1;
+      try { src.stop(); } catch (_) { /* nič */ }
+      sources.delete(src);
+      src = null;
+    },
   };
 }
+
+// Kontrola pre testy: počet aktívnych slučiek a všetkých bežiacich zdrojov.
+export function activeLoops() { return loops; }
+export function activeSources() { return sources.size; }

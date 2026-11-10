@@ -1,6 +1,7 @@
 import * as data from '../../systems/data.js';
 import * as save from '../../systems/save.js';
 import * as economy from '../../systems/economy.js';
+import * as audio from '../../systems/audio.js';
 import * as fx from '../../ui/fx.js';
 import { addPlane, addSprite, role } from '../../systems/sprites.js';
 import { makeCoin } from '../../ui/coins.js';
@@ -13,6 +14,8 @@ import { desaturate, haze } from '../../ui/haze.js';
 export function addUpgradePanel(scene, input, { kind, plane, counter, state, onBought }) {
   const info = economy.upgradeInfo(plane, kind);
   if (info.maxed) return null;
+  audio.init(data.get('voice'));
+  audio.preload(['sfx_upgrade']);
   const { x: ux, y: uy, w, h } = data.get('sprites').hangarPanels[kind];
   const g = haze('hangarUi') || {};
   const gray = (o) => { desaturate(o, 'hangarUi'); return o; };
@@ -64,6 +67,7 @@ export function addUpgradePanel(scene, input, { kind, plane, counter, state, onB
     counter.set(save.get().coins);
     counter.tick();
     confetti(scene, ux, uy);
+    audio.play('sfx_upgrade');
     onBought(info, up, symbol);
   });
   return up;

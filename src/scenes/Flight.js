@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
+import { createCruise } from './flight/cruise.js';
 import { createSpawner } from './flight/spawner.js';
 import { makePlane, makeCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
@@ -53,7 +54,8 @@ export default class Flight extends Phaser.Scene {
     addHome(this, input);
 
     audio.init(data.get('voice'));
-    audio.preload(['sfx_bump']);
+    audio.preload(['sfx_bump', 'sfx_star', 'sfx_cruise']);
+    this.cruise = createCruise(this);
     const dest = data.destination(this.args.to);
     if (dest) audio.play(dest.voice);
   }
@@ -68,6 +70,7 @@ export default class Flight extends Phaser.Scene {
     if (this.elapsed >= this.flight.durationSec && !this.returning) this.startReturn();
     if (this.returning) this.stepReturn(delta); else this.stepFollow(delta);
     this.tilt(this.plane.y - prevY, dt, delta);
+    this.cruise.update(this.plane.x, delta);
     this.far.update(dt, this.speed);
     this.trail.update(dt, this.plane.x, this.plane.y);
 
@@ -128,6 +131,7 @@ export default class Flight extends Phaser.Scene {
   collect(o) {
     this.stars += 1;                       // hviezdičky sa nikdy neodpočítavajú
     this.hud.setStars(this.stars);
+    audio.play('sfx_star');
     fx.sparks(this, o.x, o.y);
     fx.counterBounce(this, this.hud.counter);
     this.tweens.add({ targets: o, scale: 1.8, alpha: 0, y: o.y - 40, duration: 250, onComplete: () => o.destroy() });
@@ -144,6 +148,7 @@ export default class Flight extends Phaser.Scene {
 
   finish() {
     this.ended = true;
+    this.cruise.stop();
     this.plane.angle = 0;
     const { to, passengers, smiles } = this.args;
     fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars }, { fade: false });
