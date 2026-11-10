@@ -3,6 +3,7 @@ import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
+import { desaturate, addVeil } from '../ui/haze.js';
 import { runFlow } from './airport/flow.js';
 import { checkin } from './airport/checkin.js';
 import { bags } from './airport/bags.js';
@@ -22,13 +23,14 @@ export default class Airport extends Phaser.Scene {
   create(args) {
     this.cameras.main.setBackgroundColor('#b8c4cc');
     const bg = addSprite(this, role('bgAirport'), 640, 400, { w: 1280 });
-    if (bg) bg.setDepth(-20);
+    if (bg) { bg.setDepth(-20); desaturate(bg, 'airport'); }
     else this.add.rectangle(640, 680, 1280, 240, 0x7f8c8d);  // podlaha
+    addVeil(this, 'airport', -5);  // závoj len nad pozadím a budovami, pod stanicami a ľuďmi
     const ap = data.get('airport');
     const stations = ap.stations;
     (ap.backdrop || []).forEach((b) => {
       const s = addSprite(this, b.sprite, b.x, b.y, { w: b.w, h: b.h, origin: [0.5, 1] });
-      if (s) s.setDepth(b.depth || -10);
+      if (s) { s.setDepth(b.depth || -10); desaturate(s, 'airportBackdrop'); }
     });
     const ctx = { scene: this, buildings: {}, smiles: 0 };
 

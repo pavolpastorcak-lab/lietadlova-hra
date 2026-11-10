@@ -13,5 +13,5 @@ export function addVeil(scene, name, depth = 0) {
   const h = haze(name);
   if (!h) return null;
   const c = Phaser.Display.Color.HexStringToColor(h.color).color;
-  return scene.add.rectangle(640, 400, 1280, 800, c, h.alpha).setDepth(depth);
+  return scene.add.rectangle(640, 400, 1280, 800, c, h.alpha).setDepth(h.depth ?? depth);
 }

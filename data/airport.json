@@ -5,8 +5,8 @@
   { "id": "gate",     "x": 760,  "y": 610, "w": 230, "sprite": "bld_gate_zatvorena", "spriteOpen": "bld_gate_otvorena", "voice": "st_gate" }
 ],
   "backdrop": [
-    { "sprite": "bld_letisko_terminal", "x": 560, "y": 455, "w": 640, "depth": -10 },
-    { "sprite": "bld_veza", "x": 1235, "y": 470, "h": 340, "depth": -12 }
+    { "sprite": "bld_letisko_terminal", "x": 560, "y": 545, "w": 640, "depth": -10 },
+    { "sprite": "bld_veza", "x": 1235, "y": 545, "h": 340, "depth": -12 }
   ],
   "takeoff": { "accelTauSec": 1.2, "fullAt": 0.92, "rotateSpeed": 0.85, "climbSec": 1.8, "hintVoice": "st_takeoff" },
   "landing": { "descendSec": 2.2, "brakeTauSec": 1.0, "stopSpeed": 0.04, "standCount": 3, "numberRange": [1, 9],

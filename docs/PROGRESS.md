@@ -66,6 +66,11 @@
   - SW: CACHE_VERSION v11, podstavec, gombík a `haze.js` v precache.
   - Otestované v Browser paneli: mapa (zosadenie, špendlík), páka vo Takeoff aj Touchdown, závoj v Touchdown. Landing po odstránení tmavého odtieňa NEprekontrolovaný. NEOTESTOVANÉ: tablet, tempo, zvuk.
   - Nedodané (P2, nezapájam): pilot, personál, `bg_letisko_top`, nové lietadlá. Farebnosť letiska a letu sa nemenila.
+- **Úloha 3f: farebnosť a poloha na letisku a v hangári** (2026-11-10)
+  - Letisko: terminál aj veža posunuté na zem (`airport.json` → backdrop y 545, predtým 455 a 470). Pozadie zosadené (`sprites.json` → `haze.airport`: sýtosť −0,5, modrastý závoj alfa 0,25, depth −5) a terminál s vežou (`haze.airportBackdrop`: −0,6). Závoj leží nad pozadím a budovami, ale pod stanicami, ľuďmi a kuframi, tie sú bez zmeny. `addVeil` berie `depth` z dát.
+  - Hangár: lietadlo posunuté na podlahu (stred y 618, spodok ≈790), sedadlá s ním. Panel upgradu (ikona lietadla, sedadlo, +N, minca, cena) je nad lietadlom (480, 385), 300×100, v sivých tónoch (`haze.hangarUi`). Bez nového textu.
+  - SW: CACHE_VERSION v12. Mapa, pristátie a let nezmenené.
+  - Otestované v Browser paneli (panel skrytý, scény krokované ručne cez `__g.step`, `__g` vrátené): poloha terminálu a veže, závoj pod stanicami, lietadlo na podlahe, panel nad ním. NEOTESTOVANÉ: tablet, miera sýtosti okom (ladí sa v data), sivý panel pri dostatku mincí (v teste 0 mincí = panel zašednutý).
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

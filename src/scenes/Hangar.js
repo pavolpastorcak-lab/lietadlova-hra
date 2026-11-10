@@ -5,6 +5,7 @@ import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
 import { addPlane, addSprite, role } from '../systems/sprites.js';
 import { makeCoin, addCoinCounter } from '../ui/coins.js';
+import { desaturate, haze } from '../ui/haze.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
 export default class Hangar extends Phaser.Scene {
@@ -22,14 +23,15 @@ export default class Hangar extends Phaser.Scene {
     const info = economy.capacityInfo(plane);
 
     // Lietadlo, sedadlá = bodky (nové sú zvýraznené).
-    if (!addPlane(this, 'side', 480, 420, 560)) {
-      this.add.rectangle(480, 440, 520, 160, 0xffffff).setStrokeStyle(8, 0x2e7d32);
-      this.add.triangle(250, 360, 0, 80, 80, 80, 0, 0, 0x2e7d32);
+    const py = 618;  // stred lietadla, spodok stojí na podlahe hangára (y≈790)
+    if (!addPlane(this, 'side', 480, py, 560)) {
+      this.add.rectangle(480, py + 20, 520, 160, 0xffffff).setStrokeStyle(8, 0x2e7d32);
+      this.add.triangle(250, py - 60, 0, 80, 80, 80, 0, 0, 0x2e7d32);
     }
     const total = info.next || info.current;
     const seats = [];
     for (let i = 0; i < total; i++) {
-      const x = 340 + (i % 4) * 70, y = i < 4 ? 410 : 470;
+      const x = 340 + (i % 4) * 70, y = i < 4 ? py - 10 : py + 50;
       const isNew = i >= info.current;
       seats.push(this.add.circle(x, y, 22, isNew ? 0xbdbdbd : 0x3498db).setAlpha(isNew ? 0.5 : 1));
     }
@@ -37,21 +39,23 @@ export default class Hangar extends Phaser.Scene {
     // Upgrade: ikona + sedadlá, cena s mincou. Bez mincí zašednutý.
     let busy = false;
     if (!info.maxed) {
-      const ux = 480, uy = 640;
+      // Panel nad lietadlom, v sivých tónoch (haze.hangarUi v data/sprites.json).
+      const ux = 480, uy = 385, g = haze('hangarUi') || {};
+      const gray = (o) => { desaturate(o, 'hangarUi'); return o; };
+      const txt = (x, s, ox) => this.add.text(x, 0, s, { fontFamily: 'Arial', fontSize: '38px',
+        fontStyle: 'bold', color: g.text || '#666666' }).setOrigin(ox, 0.5);
       const up = this.add.container(ux, uy);
       const icon = addPlane(this, 'side', -110, 0, 70);
       up.add([
-        this.add.rectangle(0, 0, 300, 120, 0xffffff).setStrokeStyle(6, 0x2e7d32),
-        icon || this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32),
-        addSprite(this, role('seat'), -40, 0, { w: 48 }) || this.add.circle(-40, 0, 18, 0x3498db),
-        this.add.text(-10, 0, '+' + (info.next - info.current), {
-          fontFamily: 'Arial', fontSize: '40px', fontStyle: 'bold', color: '#333333' }).setOrigin(0, 0.5),
-        makeCoin(this, 70, 0, 20),
-        this.add.text(130, 0, String(info.cost), {
-          fontFamily: 'Arial', fontSize: '40px', fontStyle: 'bold', color: '#333333' }).setOrigin(1, 0.5),
+        this.add.rectangle(0, 0, 300, 100, 0xffffff).setStrokeStyle(6, Phaser.Display.Color.HexStringToColor(g.border || '#9e9e9e').color),
+        gray(icon || this.add.triangle(-110, 0, 0, 40, 40, 40, 20, 0, 0x2e7d32)),
+        gray(addSprite(this, role('seat'), -40, 0, { w: 44 }) || this.add.circle(-40, 0, 16, 0x3498db)),
+        txt(-12, '+' + (info.next - info.current), 0),
+        gray(makeCoin(this, 70, 0, 18)),
+        txt(130, String(info.cost), 1),
       ]);
       if (!info.affordable) up.setAlpha(0.4);
-      input.onTapIn(input.hitZone(ux, uy, 300, 120), () => {
+      input.onTapIn(input.hitZone(ux, uy, 300, 100), () => {
         if (busy) return;
         if (!info.affordable) {
           this.tweens.add({ targets: up, x: ux + 12, duration: 60, yoyo: true, repeat: 3, onComplete: () => up.setX(ux) });
