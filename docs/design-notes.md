@@ -8,7 +8,7 @@ Záväzné rozhodnutia. Pred každou úlohou ich skontroluj. Webové referencie 
 - **Hviezdičky** sa počas letu zbierajú **od 0** a dávajú len **prepitné**. Nikdy sa neodpočítavajú.
 - **Smajlíky cestujúcich** (spokojnosť na letisku a počas letu) ovplyvňujú **len prepitné**.
 - **Upgrady závisia len od mincí.** Žiadne hviezdičkové brány, žiadne časovače.
-- **Po 2 nárazoch** sa prekážky v danom lete zriedia (`thinAfterHits`, `thinFactor` v `flights.json`).
+- **Po 3 nárazoch** sa prekážky v danom lete zriedia (`thinAfterHits`, `thinFactor` v `flights.json`).
 - Náraz = zatrasenie lietadla a zvuk „bum-bum" (žiadna škoda, výbuch ani pád).
 - Voliteľné **„zopakuj let na 3 hviezdy"**: rekord sa uloží, výplata za opakovaný let ide normálne.
 
@@ -23,7 +23,7 @@ Záväzné rozhodnutia. Pred každou úlohou ich skontroluj. Webové referencie 
 **Pravidlá**
 - **Žiadne tlačidlá okrem ikony domov.** Postup sa deje priamo na objektoch (ťukni na cestujúceho, potiahni kufor).
 - Jediné gesto: **ťuk a ťahanie**. Žiadny pinch, swipe, dlhé podržanie ani dvojťuk.
-- **Let:** celá obrazovka je ovládacia zóna. Lietadlo **plynulo sleduje výšku prsta** (drag-to-steer, lerp, nie skok).
+- **Let:** celá obrazovka je ovládacia zóna. Lietadlo **plynulo sleduje prst v oboch smeroch** (hore/dole aj dopredu/dozadu, kúsok vľavo od prsta, drag-to-steer, lerp, nie skok; X dobieha pomalšie).
 - **Len jeden aktívny pointer.** Druhý prst (alebo dlaň opretá o tablet) sa ignoruje.
 - **Veľké zásahové plochy** (min. ~96 px pri 1280×800), väčšie ako samotný sprite.
 - Všetok vstup ide cez **samostatný input modul** (`src/systems/input.js`).

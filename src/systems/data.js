@@ -11,6 +11,12 @@ const REQUIRED = {
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
 };
 
+const FLIGHT_DEFAULTS = {
+  minX: 160, maxX: 900, minY: 140, maxY: 700, followMs: 120, followXMs: 220, speed: 420,
+  invulnMs: 1200, fingerOffsetX: -140, returnMs: 800, returnX: 300, returnY: 400,
+  tiltMaxDeg: 12, tiltVy: 400, tiltSmoothMs: 80, homeZone: { x: 70, y: 70, w: 130, h: 130 },
+};
+
 const store = {};
 
 export function queueLoad(scene) {
@@ -38,6 +44,7 @@ export function collect(scene) {
   checkItems('planes', store.planes, REQUIRED.planes, errors);
   checkItems('flights', store.flights, REQUIRED.flights, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
+  if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   errors.forEach((e) => console.error('[data]', e));
   return errors;
@@ -49,6 +56,11 @@ export function get(key) {
 
 export function flight(to) {
   return (store.flights || []).find((f) => f.to === to);
+}
+
+// Nastavenia letu: airport.flight doplnené o predvolené hodnoty.
+export function flightCfg() {
+  return { ...FLIGHT_DEFAULTS, ...((store.airport && store.airport.flight) || {}) };
 }
 
 export function destination(id) {

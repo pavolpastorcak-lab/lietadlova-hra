@@ -8,7 +8,7 @@ Jedna kompletná slučka, 2 destinácie, 1 lietadlo, 1 upgrade.
 
 1. **Mapa (zhora):** 2 špendlíky s vlajkami, Bratislava ☀️ a Londýn 🌧️. Ťuk na cieľ.
 2. **Letisko (zboku):** stanice idú po poradí podľa `data/airport.json` (naraz pulzuje len aktuálna): check-in (ťuk na cestujúceho → letenka) → batožina (ťahaj kufor na pás → smajlík) → boarding (ťahaj nástupné schody k lietadlu) → gate (ťuk, brána sa otvorí a cestujúci nastúpia sami). Potom **vzlet** (scéna `Takeoff`, `scenes/takeoff/lever.js`): syn ťahá páku plynu nahor, pri plnom výkone lietadlo vzlietne. Parametre v `airport.json` → `takeoff`. Do Flight ide `{ to, passengers, smiles }`.
-3. **Let (zboku):** lietadlo plynulo sleduje výšku prsta, vyhýba sa mrakom a vtákom, zbiera hviezdičky.
+3. **Let (zboku):** lietadlo plynulo sleduje prst (X aj Y, čísla v `airport.flight`), vyhýba sa mrakom a vtákom, zbiera hviezdičky.
 4. **Pristátie:** počasie v cieli + hlas („V Londýne prší"), vlajka krajiny.
 5. **Výplata:** základ + prepitné (hviezdičky, smajlíky). Pozri design-notes.
 6. **Hangár:** 1 upgrade (kapacita +2), platí sa len mincami.
@@ -66,7 +66,7 @@ docs/
 - Sleduje len **jeden aktívny pointer** (prvý dotyk), ďalšie prsty ignoruje.
 - Gestá: **ťuk** a **ťahanie**. Iné tlačidlá ako ikona domov nie sú.
 - Zásahové plochy sú väčšie ako sprite (min. ~96 px pri 1280×800).
-- Let: celá obrazovka je ovládacia zóna, lietadlo plynulo (lerp) sleduje Y prsta.
+- Let: celá obrazovka je ovládacia zóna, lietadlo plynulo (lerp) sleduje prst v X aj Y; ťah začatý na ikone domov neriadi.
 - Scény neposlúchajú surové Phaser eventy, ale udalosti z modulu (`tap`, `dragStart`, `drag`, `dragEnd`).
 
 ## 3. JSON formát dát (`data/`)

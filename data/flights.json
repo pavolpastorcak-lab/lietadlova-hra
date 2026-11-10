@@ -1,5 +1,5 @@
 [
   { "from": "bts", "to": "lon", "durationSec": 45,
     "obstacles": [{ "type": "cloud", "every": 3.0 }, { "type": "bird", "every": 6.0 }],
-    "stars": { "every": 2.5 }, "thinAfterHits": 2, "thinFactor": 0.5 }
+    "stars": { "every": 2.5, "arcEvery": 3, "arcDx": 110, "arcRise": 70 }, "thinAfterHits": 3, "thinFactor": 0.5 }
 ]

@@ -71,6 +71,13 @@
   - Hangár: lietadlo posunuté na podlahu (stred y 618, spodok ≈790), sedadlá s ním. Panel upgradu (ikona lietadla, sedadlo, +N, minca, cena) je nad lietadlom (480, 385), 300×100, v sivých tónoch (`haze.hangarUi`). Bez nového textu.
   - SW: CACHE_VERSION v12. Mapa, pristátie a let nezmenené.
   - Otestované v Browser paneli (panel skrytý, scény krokované ručne cez `__g.step`, `__g` vrátené): poloha terminálu a veže, závoj pod stanicami, lietadlo na podlahe, panel nad ním. NEOTESTOVANÉ: tablet, miera sýtosti okom (ladí sa v data), sivý panel pri dostatku mincí (v teste 0 mincí = panel zašednutý).
+- **Úloha 3g: let do všetkých strán** (2026-11-10)
+  - Lietadlo sleduje prst v X aj Y (`airport.json` → nový blok `flight`: pásmo `minX`–`maxX`, `minY`–`maxY`, `followMs` 120, `followXMs` 220, `fingerOffsetX` −140, náklon ±12°, návrat `returnMs` 800). Konštanty z `Flight.js` zmizli; `data.flightCfg()` dopĺňa predvolené hodnoty, chýbajúci blok `flight` je chyba dát.
+  - Náklon podľa vertikálnej rýchlosti (nos hore pri stúpaní). Ťah začatý na ikone domov (zóna `homeZone`) lietadlo neriadi.
+  - Hviezdičky: každá 3. je rad 3 v oblúku (`stars.arcEvery`, `arcDx`, `arcRise`), vždy v pásme. `thinAfterHits` 3 (design-notes upravené).
+  - Koniec letu: lietadlo sa za 800 ms plynulo vráti na (300, 400) (Touchdown začína tam, nemenený); počas návratu sa ešte zbierajú hviezdičky, nárazy ani nové prekážky nie.
+  - SW: CACHE_VERSION v13 (žiadny nový súbor).
+  - Otestované v Browser paneli (kroky ručne cez `window.__g`, dočasne, vrátené): rohy pásma, náklon ±, ťah z domova, spawner (arc, pásmo), celý let → návrat → Touchdown na (300, 400), konzola bez chýb. NEOTESTOVANÉ: dotyk na tablete, pocit z ovládania (rýchlosť `followXMs`, odstup `fingerOffsetX`), zakrývanie ikony domov okom, zvuky.
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

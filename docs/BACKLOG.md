@@ -61,7 +61,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 3g: Let do všetkých strán (v1.0)
+## [x] 3g: Let do všetkých strán (v1.0)
 **Cieľ:** Lietadlo počas letu sleduje prst nielen hore a dole, ale aj doprava a doľava. Let je živší: za hviezdičkou sa dá zaletieť dopredu, pred mrakom cúvnuť.
 
 **Súbory:** `src/scenes/Flight.js`, `src/scenes/flight/spawner.js`, `data/airport.json` (nový blok `flight`), `docs/design-notes.md` (Rozhodnutie 2, veta o lete), `docs/ARCHITECTURE.md` (Input modul, veta o lete), `sw.js`, docs.
