@@ -332,7 +332,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 4d: Viac Európy na mape (v1.4, Paľo schválil 2026-11-11)
+## [x] 4d: Viac Európy na mape (v1.4, Paľo schválil 2026-11-11)
 **Cieľ:** Na dnešnej mape Európy pribudne 6 miest s vlajkami, ktoré už máme. Bez nových obrázkov. Všetky sú v základnom dolete (do 1500 km), takže sú hneď otvorené; vzdialenejšie sú ťažšie rýchlosťou a lepšie platené (`payMult`) ako v 4b.
 
 **Prečo nie Viedeň, Praha, Budapešť:** sú od Bratislavy 55 až 290 km, na mape 1280 px je to 15 až 85 px, špendlíky by sa prekrývali s Bratislavou. Prídu s priblíženou mapou (samostatná úloha neskôr).
@@ -343,12 +343,13 @@ Povinné pri každej úlohe:
 
 | id | mesto | vlajka | km | počasie | skyline / stromy | dur s | speed | payMult | puzzles |
 |---|---|---|---|---|---|---|---|---|---|
-| var | Varšava | `flag_pl` | 530 | sun | domy / listnaté | 35 | 420 | 1.0 | p3, p1 |
+| ~~var~~ | ~~Varšava~~ | | | | | | | | **Nahradené Helsinkami** (Poľsko leží priamo nad Bratislavou, vlajky by sa prekrývali) |
 | zur | Zürich | `flag_ch` | 680 | sun | domy / ihličnaté | 40 | 440 | 1.0 | p1, p3 |
 | ams | Amsterdam | `flag_nl` | 1050 | rain | domy / listnaté | 45 | 480 | 1.2 | p2, p4 |
 | sto | Štokholm | `flag_se` | 1250 | rain | historické / ihličnaté | 45 | 500 | 1.2 | p4, p5 |
 | ath | Atény | `flag_gr` | 1240 | sun | historické / palma | 45 | 500 | 1.2 | p5, p2 |
 | ist | Istanbul | `flag_tr` | 1250 | sun | púšť (`env_skyline_pustatina`, kupola a minarety) / palma | 45 | 500 | 1.2 | p4, p5 |
+| fin | Helsinki | `flag_fi` | 1400 | rain | domy / ihličnaté | 45 | 500 | 1.2 | p4, p5 |
 
 Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.5 s oblúkom, `thinAfterHits` 3).
 

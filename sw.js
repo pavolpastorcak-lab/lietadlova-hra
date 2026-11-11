@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v28';
+const CACHE_VERSION = 'v29';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -52,22 +52,29 @@ const PRECACHE = [
   './assets/sprites/env/env_skyline_domy.png',
   './assets/sprites/env/env_skyline_historicke.png',
   './assets/sprites/env/env_skyline_mrakodrapy.png',
+  './assets/sprites/env/env_skyline_pustatina.png',
   './assets/sprites/env/env_strom_ihlicnaty.png',
   './assets/sprites/env/env_strom_listnaty.png',
   './assets/sprites/env/env_svetlo_drahy_vyp.png',
   './assets/sprites/env/env_svetlo_drahy_zap.png',
   './assets/sprites/flag/flag_at.png',
+  './assets/sprites/flag/flag_ch.png',
   './assets/sprites/flag/flag_cz.png',
   './assets/sprites/flag/flag_de.png',
   './assets/sprites/flag/flag_es.png',
+  './assets/sprites/flag/flag_fi.png',
   './assets/sprites/flag/flag_fr.png',
+  './assets/sprites/flag/flag_gr.png',
   './assets/sprites/flag/flag_gb.png',
   './assets/sprites/flag/flag_hu.png',
   './assets/sprites/flag/flag_ie.png',
   './assets/sprites/flag/flag_it.png',
+  './assets/sprites/flag/flag_nl.png',
   './assets/sprites/flag/flag_pl.png',
   './assets/sprites/flag/flag_pt.png',
+  './assets/sprites/flag/flag_se.png',
   './assets/sprites/flag/flag_sk.png',
+  './assets/sprites/flag/flag_tr.png',
   './assets/sprites/item/item_flasa.png',
   './assets/sprites/item/item_flasa_sport.png',
   './assets/sprites/item/item_kniha.png',
