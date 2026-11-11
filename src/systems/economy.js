@@ -16,7 +16,7 @@ export function payout(passengers, smiles, stars, mult = 1, quizFirstTry = false
 
 // Stav upgradu (kind = 'capacity' | 'range'): aktuálna hodnota, ďalšia hodnota, cena, či sa dá kúpiť.
 export function upgradeInfo(plane, kind) {
-  const idx = save.get().planes[plane.id][kind];
+  const idx = save.get().planes[plane.id][kind] || 0;
   const cur = plane[kind][idx];
   const next = plane[kind][idx + 1];
   return {
@@ -33,10 +33,14 @@ export function buyUpgrade(plane, kind) {
   const info = upgradeInfo(plane, kind);
   if (info.maxed || !info.affordable) return false;
   save.addCoins(-info.cost);
-  save.get().planes[plane.id][kind] += 1;
+  save.get().planes[plane.id][kind] = (save.get().planes[plane.id][kind] || 0) + 1;
   save.save();
   return true;
 }
+
+// Motor: násobič času letu (1 = základ, 0,8 = o 20 % kratší let), pozri routes.flight.
+export const engineValue = (plane) => plane.engine[save.get().planes[plane.id].engine || 0].value;
+export const engineInfo = (plane) => upgradeInfo(plane, 'engine');
 
 // Dolet lietadla (km) podľa kúpeného stupňa a či tam lietadlo dolieta.
 export function planeRange(plane) {

@@ -41,7 +41,7 @@ export default class Hangar extends Phaser.Scene {
     const state = { busy: false };
     const leave = () => this.time.delayedCall(1600, () => fx.go(this, 'Map'));
     const pulse = (o) => this.tweens.add({ targets: o, scale: o.scale * 1.6, duration: 250, yoyo: true, repeat: 2 });
-    // Dva panely vedľa seba nad lietadlom (polohy v data/sprites.json → hangarPanels).
+    // Tri panely nad lietadlom: kapacita a dolet hore, motor pod nimi (polohy v data/sprites.json → hangarPanels).
     addUpgradePanel(this, input, { kind: 'capacity', plane, counter, state, onBought: (inf, up) => {
       up.destroy();
       seats.forEach((s) => s.setAlpha(1).setFillStyle(0x3498db));
@@ -50,6 +50,10 @@ export default class Hangar extends Phaser.Scene {
     } });
     addUpgradePanel(this, input, { kind: 'range', plane, counter, state, onBought: (inf, up, symbol) => {
       pulse(symbol);  // zväčšená nádrž v paneli, panel ostáva do odchodu
+      leave();
+    } });
+    addUpgradePanel(this, input, { kind: 'engine', plane, counter, state, onBought: (inf, up, symbol) => {
+      pulse(symbol);
       leave();
     } });
     const busy = () => state.busy;

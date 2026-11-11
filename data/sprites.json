@@ -17,8 +17,9 @@
             "airportBackdrop": { "saturation": -0.6 },
             "hangarUi": { "saturation": -1, "text": "#666666", "border": "#9e9e9e" } },
   "hangarPanels": {
-    "capacity": { "x": 315, "y": 385, "w": 300, "h": 100 },
-    "range": { "x": 645, "y": 385, "w": 300, "h": 100 }
+    "capacity": { "x": 315, "y": 310, "w": 300, "h": 100 },
+    "range": { "x": 645, "y": 310, "w": 300, "h": 100 },
+    "engine": { "x": 480, "y": 425, "w": 300, "h": 100 }
   },
   "fx": {
     "farClouds": { "layers": [

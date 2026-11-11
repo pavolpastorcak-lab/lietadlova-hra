@@ -85,9 +85,11 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 `planes.json`
 ```json
 [{ "id": "zelene", "sprites": { "side": "plane_zelene_side", "top": "plane_zelene_top" },
-   "capacity": [{ "value": 4, "cost": 0 }, { "value": 6, "cost": 50 }],
-   "range":    [{ "value": 1500, "cost": 0 }] }]
+   "capacity": [{ "value": 4, "cost": 0 }, { "value": 6, "cost": 200 }, { "value": 8, "cost": 500 }],
+   "range":    [{ "value": 900, "cost": 0 }, { "value": 1100, "cost": 100 }, "… až 2600 (6 stupňov)"],
+   "engine":   [{ "value": 1, "cost": 0 }, { "value": 0.9, "cost": 300 }, { "value": 0.8, "cost": 600 }] }]
 ```
+`engine.value` = násobič času letu: `routes.flight(from, to, engine)` násobí `durationSec`, `every` (prekážky, hviezdy, búrka, vietor), `wind.durationSec`, `faces.recoverSec` a delí `speed` (počet prekážok na let ostáva).
 `airport.json`: poradie a pozície stanovíšť
 ```json
 { "stations": [
@@ -117,11 +119,11 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 
 ### Save (localStorage, kľúč `lietadla.save`)
 ```json
-{ "saveVersion": 2, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0 } },
+{ "saveVersion": 3, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0, "engine": 0 } },
   "location": "bts", "unlocked": ["bts", "lon"], "bestStars": { "bts-lon": 0 } }
 ```
 - `save.js` drží pole migrácií `migrations[n]` (n → n+1). Pri načítaní sa postupne aplikujú, kým nie je `saveVersion` aktuálna.
-- `location` = kde lietadlo stojí (zapisuje sa v `Landing` pri vstupe; neznáme id → `bts`). `bestStars` kľúče `from-to`, nové páry vznikajú pri prvom rekorde. `unlocked` o otvorení mesta už nerozhoduje. Migrácia 1 → 2 doplní `location`.
+- `location` = kde lietadlo stojí (zapisuje sa v `Landing` pri vstupe; neznáme id → `bts`). `bestStars` kľúče `from-to`, nové páry vznikajú pri prvom rekorde. `unlocked` o otvorení mesta už nerozhoduje. Migrácia 1 → 2 doplní `location`, 2 → 3 `engine = 0` a posunie index `range` o 3 (nový rad doletu od 900 km). `load` doplní chýbajúce kľúče upgradov a orezá indexy.
 - Poškodený save sa nezmaže, odloží sa do `lietadla.save.bak` a hra začne odznova.
 
 ### Sprity v dátach (úloha 3d)

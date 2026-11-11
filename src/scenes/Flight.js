@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
 import * as routes from '../systems/routes.js';
+import * as economy from '../systems/economy.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { createCruise } from './flight/cruise.js';
@@ -22,7 +23,7 @@ export default class Flight extends Phaser.Scene {
 
   create(args) {
     this.args = args || {};
-    this.flight = routes.flight(this.args.from, this.args.to);
+    this.flight = routes.flight(this.args.from, this.args.to, economy.engineValue(data.get('planes')[0]));
     this.cameras.main.setBackgroundColor('#87ceeb');
     const cfg = this.cfg = data.flightCfg();
     this.speed = this.flight.speed || cfg.speed;       // rýchlosť trasy (px/s), inak predvolená z airport.flight

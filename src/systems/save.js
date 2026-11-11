@@ -3,18 +3,25 @@
 
 const KEY = 'lietadla.save';
 const BAK = KEY + '.bak';
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 // migrations[n] prevedie save z verzie n na n+1.
 // 1 → 2: poloha lietadla (`location`), lety idú z miesta pristátia.
-const migrations = [null, (s) => ({ ...s, location: 'bts' })];
+// 2 → 3: motor (`engine` = 0) a nový rad doletu (900…2600): starý index 0/1/2 (1500/2000/2600) → 3/4/5.
+const migrations = [null, (s) => ({ ...s, location: 'bts' }), (s) => {
+  const planes = {};
+  Object.entries(s.planes || {}).forEach(([id, p]) => {
+    planes[id] = { ...p, engine: 0, range: (p.range || 0) + 3 };
+  });
+  return { ...s, planes };
+}];
 
 let state = null;
 
 // Predvolený save podľa dát (štart mincí, lietadlá, odomknuté destinácie).
 function defaults(data) {
   const planes = {};
-  data.planes.forEach((p) => { planes[p.id] = { capacity: 0, range: 0 }; });
+  data.planes.forEach((p) => { planes[p.id] = { capacity: 0, range: 0, engine: 0 }; });
   return {
     saveVersion: SAVE_VERSION,
     coins: data.economy.startCoins,
@@ -43,7 +50,13 @@ export function load(data) {
     try {
       const s = JSON.parse(raw);
       if (!s || typeof s.saveVersion !== 'number') throw new Error('chýba saveVersion');
-      state = { ...defaults(data), ...migrate(s) };
+      const def = defaults(data);
+      state = { ...def, ...migrate(s) };
+      // Chýbajúci kľúč upgradu (alebo celé lietadlo) sa doplní na 0, stupne mimo dát sa orežú.
+      data.planes.forEach((p) => {
+        const sp = state.planes[p.id] = { ...def.planes[p.id], ...(state.planes[p.id] || {}) };
+        ['capacity', 'range', 'engine'].forEach((k) => { sp[k] = Math.min(Math.max(0, sp[k] | 0), p[k].length - 1); });
+      });
       if (!data.destinations.some((d) => d.id === state.location)) state.location = 'bts';
       if (!state.bestStars || typeof state.bestStars !== 'object') state.bestStars = {};
     } catch (e) {

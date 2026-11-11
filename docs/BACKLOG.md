@@ -57,7 +57,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
-| R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | ceny schválené 2026-11-11 |
+| R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
 | R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
@@ -591,7 +591,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R3a: Hangár: Motor a pomalší progres
+## [x] R3a: Hangár: Motor a pomalší progres
 **Cieľ:** Hra vydrží desiatky letov. Nový upgrade Motor (rýchlejší a kratší let), viac stupňov doletu, drahšie upgrady a prísnejšie zarábanie.
 
 **Súbory:** `data/planes.json`, `data/economy.json`, `src/systems/economy.js`, `src/systems/routes.js`, `src/scenes/Hangar.js`, `src/scenes/hangar/upgradePanel.js`, `src/systems/save.js`, `data/voice.json`, `sw.js`, docs.

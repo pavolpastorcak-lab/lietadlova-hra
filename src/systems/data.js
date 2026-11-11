@@ -6,7 +6,7 @@ const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice'
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
   destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice', 'geo'],
-  planes: ['id', 'sprites', 'capacity', 'range'],
+  planes: ['id', 'sprites', 'capacity', 'range', 'engine'],
   tiers: ['durationSec', 'speed', 'payMult'],
   stations: ['id', 'x', 'voice'],
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
@@ -136,7 +136,12 @@ export function collect(scene) {
   checkSecurity(store.airport && store.airport.security, errors);
   if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
   const hp = store.sprites && store.sprites.hangarPanels;
-  ['capacity', 'range'].forEach((k) => {
+  ['capacity', 'range', 'engine'].forEach((k) => {
+    (store.planes || []).forEach((p) => {
+      if (!Array.isArray(p[k]) || !p[k].length || p[k].some((s) => typeof s.value !== 'number' || typeof s.cost !== 'number')) {
+        errors.push(`planes.${p.id}.${k}: chýbajú stupne {value, cost}`);
+      }
+    });
     ['x', 'y', 'w', 'h'].forEach((f) => {
       if (!hp || !hp[k] || hp[k][f] === undefined) errors.push(`sprites.hangarPanels.${k}: chýba "${f}"`);
     });

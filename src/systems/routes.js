@@ -21,7 +21,9 @@ export function reachable(from, to, range) {
 }
 
 // Parametre letu v tvare, aký čaká Flight: base + stupeň podľa km + počasie cieľa + from, to, km.
-export function flight(from, to) {
+// engine = násobič času letu z motora (1 = základ). Časy (durationSec, every, stormCloudEvery, wind.every a
+// wind.durationSec, faces.recoverSec) sa vynásobia, speed vydelí: počet prekážok a hviezd na let ostane rovnaký.
+export function flight(from, to, engine = 1) {
   const f = data.get('flights');
   const a = from || HOME;
   const d = km(a, to);
@@ -31,5 +33,15 @@ export function flight(from, to) {
   const out = { ...f.base, ...tierData, from: a, to, km: d };
   if (dest.flightWeather) out.weather = dest.flightWeather;
   if (dest.wind) out.wind = dest.wind;
-  return out;
+  return engine === 1 ? out : applyEngine(out, engine);
+}
+
+function applyEngine(o, v) {
+  const r = { ...o, durationSec: o.durationSec * v, speed: o.speed / v };
+  r.obstacles = o.obstacles.map((x) => ({ ...x, every: x.every * v }));
+  r.stars = { ...o.stars, every: o.stars.every * v };
+  if (o.faces) r.faces = { ...o.faces, recoverSec: o.faces.recoverSec * v };
+  if (o.weather) r.weather = { ...o.weather, stormCloudEvery: o.weather.stormCloudEvery * v };
+  if (o.wind) r.wind = { ...o.wind, every: o.wind.every * v, durationSec: o.wind.durationSec * v };
+  return r;
 }
