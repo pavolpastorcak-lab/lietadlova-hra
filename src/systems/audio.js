@@ -61,15 +61,23 @@ export function init(voiceData) { voice = voiceData || {}; }
 
 export function preload(keys) { keys.forEach(buffer); }
 
+// Vráti Promise, ktorý sa splní, keď zvuk dohrá, hlas ho preruší, alebo hneď, keď zvuk chýba / nie je AudioContext.
+// Volania bez `await` fungujú ako predtým.
 export function play(key, opts) {
-  buffer(key).then((buf) => {
-    if (!buf || !ctx) return;
+  return buffer(key).then((buf) => new Promise((resolve) => {
+    if (!buf || !ctx) { resolve(); return; }
     const isSfx = key.startsWith('sfx_');
     if (!isSfx && currentVoice) { try { currentVoice.stop(); } catch (_) { /* nič */ } }
     const { src } = make(buf, vol(key, opts), false);
+    src.addEventListener('ended', () => resolve());
     src.start();
     if (!isSfx) currentVoice = src;
-  });
+  }));
+}
+
+// Zastaví aktuálny hlas (napr. pri odchode zo scény).
+export function stopVoice() {
+  if (currentVoice) { try { currentVoice.stop(); } catch (_) { /* nič */ } currentVoice = null; }
 }
 
 // Slučka (napr. motor): vráti { setRate(r), setVolume(v), stop() }. Chýbajúci súbor = ticho, volania sú bezpečné.

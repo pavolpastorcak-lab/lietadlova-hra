@@ -5,6 +5,7 @@
   "st_security": {"file":"voice/sk/st_security.mp3","text":"Čo do lietadla nepatrí? Daj to do koša."},
   "st_apron": {"file":"voice/sk/st_apron.mp3","text":"Uvoľni cestu. Ťukni na auto, ktoré môže odísť."},
   "st_gate": {"file":"voice/sk/st_gate.mp3","text":"Otvor bránu."},
+  "quiz_flag": {"file":"voice/sk/quiz_flag.mp3","text":"Ktorá vlajka sem patrí?"},
   "dest_lon": {"file":"voice/sk/dest_lon.mp3","text":"Letíme do Londýna."},
   "land_lon": {"file":"voice/sk/land_lon.mp3","text":"V Londýne prší."},
   "sfx_bump": {"file":"sfx/bump.mp3","text":"(zvuk) bum-bum, jemný náraz"},

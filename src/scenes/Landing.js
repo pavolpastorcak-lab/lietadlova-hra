@@ -5,6 +5,7 @@ import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { addSprite, role } from '../systems/sprites.js';
 import { desaturate, addVeil } from '../ui/haze.js';
+import { startQuiz, quizCfg } from './landing/quiz.js';
 
 const WEATHER_BG = { sun: '#ffd54f', rain: '#7f9cb3' };
 const FLAG_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };
@@ -36,17 +37,20 @@ export default class Landing extends Phaser.Scene {
       });
     }
 
+    const input = createInput(this);
+    addHome(this, input);
+    audio.init(data.get('voice'));
+    if (dest && dest.id !== 'bts' && quizCfg()) {
+      startQuiz(this, input, dest, (quizFirstTry) => fx.go(this, 'Payout', { ...args, quizFirstTry }));
+      return;
+    }
+
     const color = (dest && FLAG_COLORS[dest.country]) || 0x999999;
     const flagSpr = addSprite(this, dest && dest.flag, 640, 380, { w: 256 });
     const flag = flagSpr || this.add.rectangle(640, 380, 256, 192, color).setStrokeStyle(8, 0xffffff);
     const base = flag.scale;
     this.tweens.add({ targets: flag, scale: base * 1.08, duration: 700, yoyo: true, repeat: -1 });
-
-    const input = createInput(this);
-    addHome(this, input);
     input.onTapIn(input.hitZone(640, 380, 256, 192), () => fx.go(this, 'Payout', args));
-
-    audio.init(data.get('voice'));
     if (dest) audio.play(`land_${dest.id}`);
   }
 }

@@ -312,7 +312,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 7a: Kvíz s vlajkami po pristátí (v1.4)
+## [x] 7a: Kvíz s vlajkami po pristátí (v1.4)
 **Cieľ:** Po pristátí syn vyberie vlajku krajiny, kde pristál. Správne na prvý pokus = bonus do prepitného.
 
 **Súbory:** `data/economy.json`, `data/voice.json`, `src/scenes/Landing.js` (+ nový `src/scenes/landing/quiz.js`), `src/systems/economy.js`, `src/scenes/Payout.js`, `sw.js`, docs.

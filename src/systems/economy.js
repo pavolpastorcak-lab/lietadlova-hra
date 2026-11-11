@@ -3,11 +3,13 @@ import * as data from './data.js';
 import * as save from './save.js';
 
 // Základ sa vypláca vždy; hviezdičky a smajlíky dávajú len prepitné.
+// quizFirstTry = správna vlajka na prvý pokus: bonus quiz.tipFirstTry ide do prepitného (nenásobí sa mult).
 // mult = payMult trasy (chýba = 1): násobí len základ, nie prepitné; zaokrúhľuje sa nahor.
-export function payout(passengers, smiles, stars, mult = 1) {
+export function payout(passengers, smiles, stars, mult = 1, quizFirstTry = false) {
   const e = data.get('economy');
   const base = Math.ceil(passengers * e.basePerPassenger * (mult || 1) - 1e-9);
-  const tip = stars * e.tipPerStar + smiles * e.tipPerSmile;
+  const bonus = quizFirstTry && e.quiz ? e.quiz.tipFirstTry : 0;
+  const tip = stars * e.tipPerStar + smiles * e.tipPerSmile + bonus;
   return { base, tip, total: base + tip };
 }
 

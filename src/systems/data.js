@@ -94,6 +94,11 @@ export function collect(scene) {
   });
   checkPuzzles(store.puzzles, store.flights, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
+  const qz = store.economy && store.economy.quiz;
+  ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'doneMs'].forEach((f) => {
+    if (!qz || typeof qz[f] !== 'number') errors.push(`economy.quiz: chýba "${f}"`);
+  });
+  if (qz && !Array.isArray(qz.extraFlags)) errors.push('economy.quiz: chýba "extraFlags"');
   errors.forEach((e) => console.error('[data]', e));
   return errors;
 }

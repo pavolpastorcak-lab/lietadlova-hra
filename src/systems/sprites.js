@@ -33,6 +33,7 @@ export function allKeys() {
     add(d.flag); add(d.mapLayer);
     if (d.scenery) { add(d.scenery.skyline); (d.scenery.trees || []).forEach((t) => add(t.sprite)); }
   });
+  (((data.get('economy') || {}).quiz || {}).extraFlags || []).forEach(add);   // kvíz: doplnkové vlajky
   return [...keys];
 }
 

@@ -32,6 +32,7 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `land_mad.mp3` | V Madride svieti slnko. |
 | `dest_lis.mp3` | Letíme do Lisabonu. |
 | `land_lis.mp3` | V Lisabone svieti slnko. |
+| `quiz_flag.mp3` | Ktorá vlajka sem patrí? (kvíz po pristátí, zaznie po `land_*`) |
 
 Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
 

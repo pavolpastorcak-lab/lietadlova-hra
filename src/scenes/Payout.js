@@ -15,12 +15,12 @@ export default class Payout extends Phaser.Scene {
   constructor() { super('Payout'); }
 
   create(args) {
-    const { to, passengers = 0, smiles = 0, stars = 0 } = args || {};
+    const { to, passengers = 0, smiles = 0, stars = 0, quizFirstTry = false } = args || {};
     this.cameras.main.setBackgroundColor('#fff3d6');
     audio.init(data.get('voice'));
     audio.preload(['sfx_coins']);
     const f = data.flight(to);
-    const pay = economy.payout(passengers, smiles, stars, f && f.payMult);
+    const pay = economy.payout(passengers, smiles, stars, f && f.payMult, quizFirstTry);
     if (f) save.setBestStars(`${f.from}-${f.to}`, stars);
     const before = save.get().coins;
     save.addCoins(pay.total);
