@@ -530,6 +530,19 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
+## [ ] R2a2: Názov krajiny ostane do ťuknutia (oprava po R2a)
+**Cieľ:** Po správnej vlajke v kvíze ostane zväčšená vlajka s názvom krajiny na obrazovke, kým syn neťukne (nech si názvy prečíta). Dnes sa po `quiz.doneMs` (1,2 s) scéna hneď prepne na výplatu.
+
+**Súbory:** `src/scenes/landing/quiz.js`, `data/economy.json` (`quiz`), `src/systems/data.js` (ak treba), `sw.js`, docs.
+
+**Zadanie:** po správnej odpovedi sa `onDone` nevolá časovačom, ale ťuknutím kamkoľvek (cez `input.js`, nie na ikonu domov). Ťuk je povolený až po poistke `quiz.tapAfterMs: 800` (rýchle dvojťuknutie nesmie hneď odbehnúť). Po `quiz.idleMs` nečinnosti zväčšená vlajka jemne pulzuje ako nápoveda (bez hlasu). Bratislava (bez kvízu) už dnes čaká na ťuk na vlajku, nemení sa. `doneMs` odstráň z dát aj validácie, ak sa už nepoužíva.
+
+**Akceptačné kritériá:** po správnej vlajke sa scéna neprepne sama ani po 30 s; ťuk po 0,8 s prepne na výplatu s `quizFirstTry` ako doteraz; ťuk pred 0,8 s nič neurobí; nesprávna vlajka sa správa ako predtým; ikona domov funguje.
+
+**Nesmie sa zmeniť:** logika kvízu, bonus za prvý pokus, Bratislava.
+
+---
+
 ## [x] R2b: Paralaxa pri pristátí
 **Cieľ:** Pri pristávaní sa panoráma mesta (skyline) posúva pomalšie ako dráha a stromy, aby scéna pôsobila hlbšie.
 
