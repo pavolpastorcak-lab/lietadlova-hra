@@ -123,3 +123,5 @@ v1.1 dolet + nové destinácie · v1.2 bezpečnostná kontrola · v1.3 hádanka 
 - **Zvuky z Magnificu (dávka 1, architekt)** (2026-11-10)
   - 25 hlasových TTS zástupiek (`dest_*`, `land_*` pre 6 nových miest, `land_lon`, `st_takeoff`, `st_brake`, `st_stand`, `num_1`–`num_9`) a 4 zvuky (`sfx/bump`, `engine`, `takeoff`, `touchdown`). Nastavenie hlasu je v `docs/AUDIO.md` §6. 120 kreditov. Každý kľúč z `voice.json` má teraz súbor. SW: CACHE_VERSION v18.
   - NEVYPOČUTÉ: architekt zvuk prehrať nevie. Paľo overí výslovnosť, dĺžky čísel a slučku motora.
+- **Hlasitosti po teste (architekt, len dáta)** (2026-11-11)
+  - Paľo: hala a pás takmer nepočuteľné, let (motor + hviezdičky) o polovicu tichší než vzlet a pristátie. `voice.json`: `sfx_airport` 0,25 → 0,75, `sfx_belt` 0,4 → 1,2, `sfx_cruise` 0,35 → 0,7, `sfx_star` 0,6 → 1,2 (pomer motor : hviezdička zachovaný). SW: CACHE_VERSION v20. Ostatné zvuky Paľo schválil. Hodnoty nad 1 zosilňujú nad pôvodnú nahrávku; ak by skresľovali, treba zvuk vygenerovať hlasnejší.
