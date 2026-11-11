@@ -6,7 +6,7 @@ Záväzné rozhodnutia. Pred každou úlohou ich skontroluj. Webové referencie 
 **Pravidlá**
 - Každý dokončený let **vždy vyplatí základ** (mince za cestujúcich).
 - **Hviezdičky** sa počas letu zbierajú **od 0** a dávajú len **prepitné**. Nikdy sa neodpočítavajú.
-- **Smajlíky cestujúcich** (spokojnosť na letisku a počas letu) ovplyvňujú **len prepitné**.
+- **Smajlíky cestujúcich** (spokojnosť na letisku a počas letu) ovplyvňujú **len prepitné**. V lete je to rad tvárí (`flights.json` → `base.faces`): náraz zosmutní jednu, po `recoverSec` pokoja sa znova usmeje; usmiate tváre na konci letu pridajú smajlíky do prepitného. Mince sa nikdy neodpočítavajú.
 - **Upgrady závisia len od mincí.** Žiadne hviezdičkové brány, žiadne časovače.
 - **Po 3 nárazoch** sa prekážky v danom lete zriedia (`thinAfterHits`, `thinFactor` v `flights.json`).
 - Náraz = zatrasenie lietadla a zvuk „bum-bum" (žiadna škoda, výbuch ani pád).

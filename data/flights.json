@@ -2,7 +2,8 @@
   "base": {
     "obstacles": [{ "type": "cloud", "every": 2.4 }, { "type": "bird", "every": 4.5 }],
     "stars": { "every": 2.5, "arcEvery": 3, "arcDx": 110, "arcRise": 70 },
-    "thinAfterHits": 3, "thinFactor": 0.5
+    "thinAfterHits": 3, "thinFactor": 0.5,
+    "faces": { "recoverSec": 8, "size": 44, "gap": 10, "maxRow": 8, "x": 810, "y": 135, "shakeMs": 250 }
   },
   "byKm": [
     { "upTo": 600,  "durationSec": 35, "speed": 420, "payMult": 1,   "puzzles": ["p1", "p3"] },

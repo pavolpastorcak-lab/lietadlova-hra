@@ -56,7 +56,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2a2 | Oprava: názov krajiny ostane do ťuknutia | hotovo |
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
-| R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | po R2c, pred R3a (Paľo 2026-11-11) |
+| R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
 | R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
@@ -572,7 +572,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2e: Tváre cestujúcich v lete
+## [x] R2e: Tváre cestujúcich v lete
 **Cieľ:** Nárazy do mrakov a vtákov majú viditeľný, mierny vplyv na prepitné. Dnes nemajú žiadny (len zatrasenie a zriedenie po 3 nárazoch). Rozhodnutie Paľa (2026-11-11): rad tvárí cestujúcich počas letu. Mince sa nikdy neodpočítavajú.
 
 **Súbory:** nový `src/scenes/flight/faces.js`, `src/scenes/Flight.js` (napojenie na náraz a na koniec letu), `src/scenes/Payout.js` (ak treba zobraziť), `data/flights.json` (`base.faces`) alebo `data/sprites.json` (`fx.faces`), `src/systems/data.js`, `docs/design-notes.md` (pravidlo prepitného), `sw.js`, docs.

@@ -61,6 +61,10 @@ function checkSecurity(sec, errors) {
 // Trasy: base + stupne podľa km (zoradené, posledný bez upTo), geo v destináciách.
 function checkFlights(fl, dests, errors) {
   if (!fl || !fl.base || !Array.isArray(fl.base.obstacles) || !fl.base.stars) { errors.push('flights.base: chýba (obstacles, stars)'); return; }
+  const fc = fl.base.faces;
+  ['recoverSec', 'size', 'gap', 'maxRow', 'x', 'y', 'shakeMs'].forEach((f) => {
+    if (!fc || typeof fc[f] !== 'number' || !(fc[f] > 0)) errors.push(`flights.base.faces: "${f}" má byť číslo > 0`);
+  });
   if (!Array.isArray(fl.byKm) || !fl.byKm.length) { errors.push('flights.byKm: očakávam neprázdne pole'); return; }
   fl.byKm.forEach((t, i) => {
     REQUIRED.tiers.forEach((f) => { if (t[f] === undefined) errors.push(`flights.byKm[${i}]: chýba "${f}"`); });

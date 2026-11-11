@@ -8,6 +8,7 @@ import { createCruise } from './flight/cruise.js';
 import { createSpawner } from './flight/spawner.js';
 import { createWeather } from './flight/weather.js';
 import { createWind } from './flight/wind.js';
+import { createFaces } from './flight/faces.js';
 import { makePlane, makeCloud, makeStormCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
 const MAKERS = { cloud: makeCloud, stormCloud: makeStormCloud, bird: makeBird, star: makeStar };
@@ -40,6 +41,7 @@ export default class Flight extends Phaser.Scene {
     this.ended = false;
     this.spawner = createSpawner(this.flight, { minY: cfg.minY, maxY: cfg.maxY });
     this.hud = makeHud(this);
+    this.faces = createFaces(this, this.args.passengers, this.flight.faces);
     this.far = fx.farClouds(this);
     this.trail = fx.trail(this);
     this.weather = createWeather(this, this.flight, this.spawner, this.far);
@@ -79,6 +81,7 @@ export default class Flight extends Phaser.Scene {
     this.trail.update(dt, this.plane.x, this.plane.y);
     this.weather.update(dt, this.elapsed);
     this.wind.update(dt, this.elapsed);
+    this.faces.update(dt);
 
     if (!this.returning) {
       this.spawner.tick(dt).forEach((s) => {
@@ -147,6 +150,7 @@ export default class Flight extends Phaser.Scene {
   bump(o) {
     if (o.kind === 'cloud' || o.kind === 'stormCloud') fx.puff(this, o);
     this.spawner.hit();
+    this.faces.sad();
     this.invuln = this.cfg.invulnMs;
     audio.play('sfx_bump');
     this.cameras.main.shake(250, 0.012);
@@ -160,6 +164,7 @@ export default class Flight extends Phaser.Scene {
     this.wind.stop();
     this.plane.angle = 0;
     const { to, passengers, smiles } = this.args;
-    fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars }, { fade: false });
+    const flightSmiles = this.faces.smiling();   // usmiate tváre = smajlíky do prepitného
+    fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles: (smiles || 0) + flightSmiles, flightSmiles, stars: this.stars }, { fade: false });
   }
 }
