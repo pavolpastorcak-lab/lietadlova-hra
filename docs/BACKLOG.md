@@ -34,6 +34,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
 | 6c | Sprity a zvuky hádanky | v1.3 | hotovo |
 | 7a | Kvíz s vlajkami po pristátí | v1.4 | **PO: tablet**, mp3 |
+| 4d | Viac Európy na mape (6 miest) | v1.4 | **PO: tablet**; dávka Magnific (12 hlasov) na jedno schválenie |
 | 8a | Búrkové mraky a dážď počas letu | v1.5 | – |
 | 8b | Vietor počas letu | v1.5 | **PO: tablet** (sila vetra) |
 | 9a | Aktívne lietadlo v save (bez viditeľnej zmeny) | v1.6 | **PRED 9b:** dávka Magnific (6 spritov lietadiel) na jedno schválenie |
@@ -328,6 +329,40 @@ Povinné pri každej úlohe:
 **Nesmie sa zmeniť:** počasie, pozadie a hlas v Landing; základ výplaty; uloženie mincí a rekordu hneď pri vstupe do Payout.
 
 **Paľo overí na tablete (STOP po 7a):** či 4 vlajky nie sú príliš ťažké/ľahké; či syn vlajky rozozná. mp3 `quiz_flag`.
+
+---
+
+## [ ] 4d: Viac Európy na mape (v1.4, Paľo schválil 2026-11-11)
+**Cieľ:** Na dnešnej mape Európy pribudne 6 miest s vlajkami, ktoré už máme. Bez nových obrázkov. Všetky sú v základnom dolete (do 1500 km), takže sú hneď otvorené; vzdialenejšie sú ťažšie rýchlosťou a lepšie platené (`payMult`) ako v 4b.
+
+**Prečo nie Viedeň, Praha, Budapešť:** sú od Bratislavy 55 až 290 km, na mape 1280 px je to 15 až 85 px, špendlíky by sa prekrývali s Bratislavou. Prídu s priblíženou mapou (samostatná úloha neskôr).
+
+**Súbory:** `data/destinations.json`, `data/flights.json`, `data/voice.json`, `docs/AUDIO.md`, `sw.js`. Kód len ak treba (Map.js má poradie kreslenia podľa `y` a výber najbližšieho špendlíka z 4b).
+
+**Mestá** (km z Bratislavy, `unlockCost` nedávaj):
+
+| id | mesto | vlajka | km | počasie | skyline / stromy | dur s | speed | payMult | puzzles |
+|---|---|---|---|---|---|---|---|---|---|
+| var | Varšava | `flag_pl` | 530 | sun | domy / listnaté | 35 | 420 | 1.0 | p3, p1 |
+| zur | Zürich | `flag_ch` | 680 | sun | domy / ihličnaté | 40 | 440 | 1.0 | p1, p3 |
+| ams | Amsterdam | `flag_nl` | 1050 | rain | domy / listnaté | 45 | 480 | 1.2 | p2, p4 |
+| sto | Štokholm | `flag_se` | 1250 | rain | historické / ihličnaté | 45 | 500 | 1.2 | p4, p5 |
+| ath | Atény | `flag_gr` | 1240 | sun | historické / palma | 45 | 500 | 1.2 | p5, p2 |
+| ist | Istanbul | `flag_tr` | 1250 | sun | púšť (`env_skyline_pustatina`, kupola a minarety) / palma | 45 | 500 | 1.2 | p4, p5 |
+
+Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.5 s oblúkom, `thinAfterHits` 3).
+
+**Polohy špendlíkov:** urči podľa `assets/sprites/map/map_01_europa.jpg`: hrot vnútri krajiny, vlajka (96 px nad špendlíkom) celá na obrazovke a **nezakrýva iný špendlík ani vlajku**, zásahové plochy sa smú dotýkať, ale ťuk musí ísť na najbližší špendlík. Polohy existujúcich 8 miest nemeň. Rizikové dvojice: Amsterdam–Londýn, Varšava–Berlín/Bratislava, Zürich–Paríž/Berlín. Ak sa niektoré mesto nedá umiestniť bez prekrytia, nahraď ho: Oslo (`flag_no`, 1350, rain, historické / ihličnaté) alebo Helsinki (`flag_fi`, 1400, rain, domy / ihličnaté), rovnaké parametre letu ako Štokholm. Napíš to v pláne.
+
+**Hlas:** kľúče `dest_<id>` a `land_<id>` (`landVoice` ak ho 4b zaviedol) s textami: „Letíme do Varšavy / Zürichu / Amsterdamu / Štokholmu / Atén / Istanbulu." a „Vo Varšave svieti slnko." „V Zürichu svieti slnko." „V Amsterdame prší." „V Štokholme prší." „V Aténach svieti slnko." „V Istanbule svieti slnko." Súbory zatiaľ nie sú (ticho), architekt ich vygeneruje v dávke.
+
+**Kvíz:** nové vlajky sa automaticky stanú možnosťami v kvíze (berú sa z `destinations.json`). Over, že `quiz.extraFlags` nevytvorí duplicitu s novými destináciami.
+
+**Akceptačné kritériá:** 14 špendlíkov, žiadne prekrytie vlajok a špendlíkov; všetkých 6 nových miest hneď otvorených; let do každého prejde celú slučku (letisko, hádanka, let, pristátie so správnou vlajkou, počasím a skyline, kvíz, výplata s `payMult`, rekord `bts-<id>`); starý save bez straty; nové sprity (`flag_pl`, `flag_ch`, `flag_nl`, `flag_se`, `flag_gr`, `flag_tr`, `env_skyline_pustatina`) v `PRECACHE`, `CACHE_VERSION` +1.
+
+**Nesmie sa zmeniť:** polohy a parametre existujúcich 8 miest, stupne doletu a ich ceny, save.
+
+**Paľo overí na tablete:** či mapa so 14 špendlíkmi nie je preplnená a či sa dá trafiť správny špendlík; skyline Istanbulu.
 
 ---
 
