@@ -29,7 +29,7 @@ export function security(ctx, done) {
       if (busy || scene.time.now - lastAct < idleMs) return;
       lastAct = scene.time.now;
       const it = items.find((o) => o.def.type === 'forbidden' && !o.gone);
-      if (it) scene.tweens.add({ targets: it.obj, scale: 1.25, duration: 300, yoyo: true, repeat: 2 });
+      if (it) scene.tweens.add({ targets: it.obj, scale: it.base * 1.25, duration: 300, yoyo: true, repeat: 2 });
       audio.play(ctx.station.voice);
     },
   });
@@ -49,7 +49,7 @@ export function security(ctx, done) {
     items = pickBag(cfg, bagNo === 0).map((def, i) => {
       const x = P.itemXs[i], obj = makeItem(scene, def, x, 0, sz);
       panel.add(obj);
-      return { def, obj, home: { x, y: 0 }, gone: false };
+      return { def, obj, home: { x, y: 0 }, gone: false, base: obj.scale };
     });
     scene.tweens.add({ targets: panel, alpha: 1, scale: 1, duration: 250, onComplete: () => { busy = false; lastAct = scene.time.now; } });
   }
@@ -90,7 +90,7 @@ export function security(ctx, done) {
     });
     if (!best) return;
     scene.tweens.killTweensOf(best.obj);
-    best.obj.setScale(1);
+    best.obj.setScale(best.base);
     held = { it: best, dx: P.x + best.home.x - pt.x, dy: P.y - pt.y };
     panel.bringToTop(best.obj);
   });
@@ -112,11 +112,12 @@ export function security(ctx, done) {
     if (!inBin(pt)) { back(false); return; }
     if (it.def.type === 'allowed') { mistake = true; back(true); return; }
     it.gone = true;
+    audio.play('sfx_bin');
     scene.tweens.add({
-      targets: it.obj, x: P.binX, y: 0, scale: 0.1, alpha: 0, duration: 280,
+      targets: it.obj, x: P.binX, y: -P.binSize / 3, scale: it.base * 0.1, alpha: 0, duration: 280,   // do otvoru koša (horná tretina)
       onComplete: () => {
         it.obj.destroy();
-        fx.sparks(scene, P.x + P.binX, P.y - 40);
+        fx.sparks(scene, P.x + P.binX, P.y - P.binSize / 3);
         if (!items.some((o) => o.def.type === 'forbidden' && !o.gone)) clean();
       },
     });

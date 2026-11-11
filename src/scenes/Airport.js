@@ -80,7 +80,7 @@ export default class Airport extends Phaser.Scene {
     ctx.input = createInput(this);
     addHome(this, ctx.input);
     audio.init(data.get('voice'));
-    audio.preload([...stations.map((s) => s.voice), 'sfx_airport', 'sfx_belt', 'sfx_gate']);
+    audio.preload([...stations.map((s) => s.voice), 'sfx_airport', 'sfx_belt', 'sfx_gate', 'sfx_bin']);
     const hall = audio.loop('sfx_airport');
     this.events.once('shutdown', () => hall.stop());
 

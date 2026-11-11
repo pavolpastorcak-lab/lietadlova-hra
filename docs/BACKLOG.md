@@ -248,7 +248,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 5b: Zapojenie spritov a zvukov bezpečnostnej kontroly (v1.2)
+## [x] 5b: Zapojenie spritov a zvukov bezpečnostnej kontroly (v1.2)
 **Cieľ:** Bezpečnostná kontrola používa nové obrázky a zvuky namiesto záložných tvarov. Súbory už sú v repozitári, úloha ich len zapojí.
 
 **Súbory:** `data/sprites.json` (roly), `data/airport.json` (sprite vecí, veľkosti), `data/voice.json` (`sfx_bin`), `src/scenes/airport/security.js`, `src/scenes/airport/shapes.js`, `src/scenes/Airport.js` (ak treba), `src/systems/sprites.js` (ak `allKeys` nepozná sprity vecí), `docs/AUDIO.md`, `sw.js`.

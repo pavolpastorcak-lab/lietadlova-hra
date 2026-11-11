@@ -54,7 +54,9 @@ export function makeScanner(scene, x, y, w, bags) {
     c.add([scene.add.rectangle(0, -85, w, 170, 0x7f8c8d).setStrokeStyle(5, 0x34495e),
       scene.add.rectangle(0, -60, w - 50, 90, 0x2c3e50), scene.add.rectangle(0, -60, w - 90, 8, 0x95a5a6)]);
   }
-  c.light = scene.add.circle(0, -150, 18, 0xe74c3c).setStrokeStyle(4, 0x34495e);
+  // so spritom sedí stavové svetlo na jeho lampe (lampa je hore, ~8 % výšky od vrchu)
+  c.light = spr ? scene.add.circle(spr.displayWidth * 0.01, -spr.displayHeight * 0.92, 13, 0xe74c3c).setStrokeStyle(3, 0x34495e)
+    : scene.add.circle(0, -150, 18, 0xe74c3c).setStrokeStyle(4, 0x34495e);
   c.dots = [];
   for (let i = 0; i < bags; i++) c.dots.push(scene.add.circle((i - (bags - 1) / 2) * 34, -18, 11, 0xbdc3c7).setStrokeStyle(3, 0x34495e));
   c.add([c.light, ...c.dots]);
@@ -63,7 +65,7 @@ export function makeScanner(scene, x, y, w, bags) {
 
 // Kôš: stred x,y, výška ~ size.
 export function makeBin(scene, x, y, size) {
-  const spr = addSprite(scene, role('bin'), x, y, { w: size });
+  const spr = addSprite(scene, role('bin'), x, y, { h: size });
   if (spr) return spr;
   const c = scene.add.container(x, y);
   const k = size / 150;
@@ -80,7 +82,7 @@ export function makeBin(scene, x, y, size) {
 // Vec v kufri: rozoznateľný tvar, veľký `size` px (stred x,y). def = položka z airport.security.items.
 export function makeItem(scene, def, x, y, size) {
   const spr = addSprite(scene, def.sprite, x, y, { w: size });
-  if (spr) return spr;
+  if (spr) { if (spr.displayHeight > size) spr.setScale(size / spr.height); return spr; }   // dlhšia strana = size
   const c = scene.add.container(x, y);
   const k = size / 120, col = Number(def.color);
   const g = scene.add.graphics();

@@ -7,13 +7,13 @@
 ],
   "security": { "bags": 3, "itemsPerBag": 3, "forbiddenPerBag": [1, 2], "firstBagForbidden": 1, "idleHintSec": 8,
                 "items": [
-                  { "id": "flasa",   "type": "forbidden", "color": "0x3498db" },
-                  { "id": "noznice", "type": "forbidden", "color": "0xe67e22" },
-                  { "id": "macko",   "type": "allowed",   "color": "0x9c6b3f" },
-                  { "id": "tricko",  "type": "allowed",   "color": "0xe74c3c" },
-                  { "id": "kniha",   "type": "allowed",   "color": "0x27ae60" }
+                  { "id": "flasa", "sprite": "item_flasa", "type": "forbidden", "color": "0x3498db" },
+                  { "id": "noznice", "sprite": "item_noznice", "type": "forbidden", "color": "0xe67e22" },
+                  { "id": "macko", "sprite": "item_macko", "type": "allowed",   "color": "0x9c6b3f" },
+                  { "id": "tricko", "sprite": "item_tricko", "type": "allowed",   "color": "0xe74c3c" },
+                  { "id": "kniha", "sprite": "item_kniha", "type": "allowed",   "color": "0x27ae60" }
                 ],
-                "panel": { "x": 640, "y": 340, "w": 900, "h": 280, "itemSize": 120, "itemXs": [-300, -120, 60], "binX": 320, "binSize": 150 } },
+                "panel": { "x": 640, "y": 315, "w": 900, "h": 280, "itemSize": 120, "itemXs": [-300, -120, 60], "binX": 320, "binSize": 150 } },
   "backdrop": [
     { "sprite": "bld_letisko_terminal", "x": 560, "y": 545, "w": 640, "depth": -10 },
     { "sprite": "bld_veza", "x": 1235, "y": 545, "h": 340, "depth": -12 }

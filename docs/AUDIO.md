@@ -49,6 +49,7 @@ Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.jso
 | `airport.mp3` | slučka, šum haly počas celej scény Letisko (potichu) |
 | `belt.mp3` | slučka, kým je aktívna stanica batožiny (pás) |
 | `gate.mp3` | otvorenie brány na letisku |
+| `bin.mp3` | zakázaná vec padne do koša pri bezpečnostnej kontrole |
 
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 

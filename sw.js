@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v21';
+const CACHE_VERSION = 'v22';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -46,6 +46,7 @@ const PRECACHE = [
   './assets/sprites/bld/bld_letisko_terminal.png',
   './assets/sprites/bld/bld_pas.png',
   './assets/sprites/bld/bld_schody.png',
+  './assets/sprites/bld/bld_skener.png',
   './assets/sprites/bld/bld_veza.png',
   './assets/sprites/env/env_palma.png',
   './assets/sprites/env/env_skyline_domy.png',
@@ -63,7 +64,12 @@ const PRECACHE = [
   './assets/sprites/flag/flag_it.png',
   './assets/sprites/flag/flag_pt.png',
   './assets/sprites/flag/flag_sk.png',
+  './assets/sprites/item/item_flasa.png',
+  './assets/sprites/item/item_kniha.png',
+  './assets/sprites/item/item_macko.png',
+  './assets/sprites/item/item_noznice.png',
   './assets/sprites/item/item_sedadlo.png',
+  './assets/sprites/item/item_tricko.png',
   './assets/sprites/item/item_nadrz.png',
   './assets/sprites/map/map_01_europa.jpg',
   './assets/sprites/obs/obs_hviezda.png',
@@ -83,6 +89,7 @@ const PRECACHE = [
   './assets/sprites/person/person_zena_03.png',
   './assets/sprites/ui/ui_domov.png',
   './assets/sprites/ui/ui_hviezda.png',
+  './assets/sprites/ui/ui_kos.png',
   './assets/sprites/ui/ui_letenka.png',
   './assets/sprites/ui/ui_paka_gombik.png',
   './assets/sprites/ui/ui_paka_podstavec.png',
