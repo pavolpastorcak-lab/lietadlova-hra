@@ -98,3 +98,4 @@ Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, k
 - **Zvuky:** Magnific → Sound effects: `bump` (1 s), `engine` (slučka 2 s), `takeoff` (2 s), `touchdown` (1 s).
 - **Na vypočutie:** čísla `num_1`–`num_9` sú jednoslovné a model pri nich občas pridá ticho alebo ruch (dĺžky 0,7 až 3,9 s). Ktoré neznejú čisto, treba vygenerovať znova alebo nahrať.
 - **Dávka 2 (2026-11-10):** `st_checkin.mp3` nahradený Paľovou novou verziou (model `eleven_v4`, znie prirodzenejšie; **ďalšie hlasy generuj modelom `eleven_v4`**, hlas a ostatné nastavenie rovnaké). Nové zvuky v `assets/audio/sfx/`: `cruise` (slučka, motory v lete), `star`, `coins`, `upgrade` (pneumatický uťahovák), `airport` (slučka, šum haly), `belt` (slučka, pás), `gate`. Do hry ich zapojí úloha 4c.
+- **Dávka 3 (2026-11-11):** `st_security.mp3` (hlas, `eleven_v4`) a `sfx/bin.mp3` (vec padne do koša, 1 s). Zapojí úloha 5b.

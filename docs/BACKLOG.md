@@ -28,6 +28,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 4b | 6 nových destinácií + ťažšie lety | v1.1 | **PO: tablet** (polohy špendlíkov, obtiažnosť), mp3 `dest_*`, `land_*` |
 | 4c | Zvuky v hre (let, hviezdy, mince, hangár, letisko) | v1.1 | **PO: tablet** (hlasitosti) |
 | 5a | Bezpečnostná kontrola (záložné tvary) | v1.2 | **PO: tablet**; dávka Magnific (7 spritov) na jedno schválenie |
+| 5b | Zapojenie spritov a zvukov bezpečnostnej kontroly | v1.2 | **PO: tablet** |
 | 6a | Hádanka Arrows: engine + 2 levely | v1.3 | – |
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
 | 7a | Kvíz s vlajkami po pristátí | v1.4 | **PO: tablet**, mp3 |
@@ -244,6 +245,28 @@ Povinné pri každej úlohe:
 **Nesmie sa zmeniť:** správanie check-inu, batožiny, schodov a brány; argumenty do Takeoff `{ to, passengers, smiles }`.
 
 **Paľo overí na tablete (STOP po 5a):** či syn rozumie, čo je zakázané; veľkosť ikon a koša; či 3 kufre nie sú zdĺhavé. **Dávka Magnific (po schválení):** 7 spritov vyššie (prompty doplní architekt do `docs/SPRITES.md`), TTS `st_security`.
+
+---
+
+## [ ] 5b: Zapojenie spritov a zvukov bezpečnostnej kontroly (v1.2)
+**Cieľ:** Bezpečnostná kontrola používa nové obrázky a zvuky namiesto záložných tvarov. Súbory už sú v repozitári, úloha ich len zapojí.
+
+**Súbory:** `data/sprites.json` (roly), `data/airport.json` (sprite vecí, veľkosti), `data/voice.json` (`sfx_bin`), `src/scenes/airport/security.js`, `src/scenes/airport/shapes.js`, `src/scenes/Airport.js` (ak treba), `src/systems/sprites.js` (ak `allKeys` nepozná sprity vecí), `docs/AUDIO.md`, `sw.js`.
+
+**Nové súbory (existujú):** `assets/sprites/bld/bld_skener.png` (512×358), `assets/sprites/ui/ui_kos.png` (206×256), `assets/sprites/item/item_flasa.png`, `item_noznice.png`, `item_macko.png`, `item_tricko.png`, `item_kniha.png` (dlhšia strana 192), `assets/audio/voice/sk/st_security.mp3` (kľúč už je vo `voice.json`), `assets/audio/sfx/bin.mp3`.
+
+**Zadanie:**
+- Roly `scanner: "bld_skener"`, `bin: "ui_kos"` v `sprites.json`; každej veci v `airport.json` → `security.items` pridaj `sprite`. Preload ich musí načítať (over `allKeys()`), záložné tvary ostávajú ako záloha.
+- Skener pri stanici: sprite stojí na zemi ako ostatné stanice (spodok na úrovni podlahy), šírka z dát. Stavové svetlo (červená/zelená) a bodky za vyriešené kufre musia ostať viditeľné a čitateľné aj so spritom (sprite má vlastné červené svetlo hore: stavové svetlo daj naň alebo tesne nad neho).
+- Veci v paneli: zachovaj pomer strán spritu, dlhšia strana = `panel.itemSize`; zásahová plocha ostáva ≥ 96 px. Kôš: sprite vo veľkosti `panel.binSize`, vec mizne do jeho otvoru (horná tretina).
+- Zvuk: `sfx_bin` (`sfx/bin.mp3`, hlasitosť 0,8) pri vhodení zakázanej veci do koša. Hlas `st_security` sa už prehráva cez stanicu, len over, že súbor hrá.
+- `sw.js`: `CACHE_VERSION` +1 a 7 nových spritov do `PRECACHE`.
+
+**Akceptačné kritériá:** celé letisko prejde ako po 5a; v konzole žiadna chyba načítania; skener, kôš a všetkých 5 vecí sú sprity; po zmazaní ktoréhokoľvek spritu sa ukáže záložný tvar; rozmiestnenie staníc sa nezmení.
+
+**Nesmie sa zmeniť:** pravidlá stanice z 5a (chyba len pri povolenej veci v koši, prvý kufor 1 zakázaná vec, smajlíky), ostatné stanice.
+
+**Paľo overí na tablete (STOP po 5b):** či syn pochopí, čo je zakázané; veľkosť vecí a koša; či 3 kufre nie sú zdĺhavé; ako skener sedí medzi stanicami.
 
 ---
 

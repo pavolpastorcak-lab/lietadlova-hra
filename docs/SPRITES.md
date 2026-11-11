@@ -140,3 +140,6 @@ Stiahnuté a uložené do `assets/sprites/<kategoria>/`: **88 súborov** (bag 15
   - `bag_*`: všetky veľkosti sú na plátne 128×128 (relatívna veľkosť je v obsahu, malý ≈ 60 px), OK; veľké sú ťažšie na zásahovú plochu, ladí sa v scéne.
   - `map_04_svet`: dole kúsok Antarktídy, `obs_vtak_a`/`b` majú rôzny rozmer plátna (160×142 vs 160×104), pri animácii zarovnať podľa stredu.
   - `plane_zelene_*` presahujú ~200 KB (už pred tým známe).
+
+## Dávka 2026-11-11: bezpečnostná kontrola (Magnific, Nano Banana 2.1, 1k + remove_background)
+Spoločný štýl ako vyššie. Orezané na obsah a zmenšené (dlhšia strana): `bld_skener` 512 (pohľad mierne zhora-zboku, pás prechádza tunelom, červené svetlo hore), `ui_kos` 256 (kovové vedro spredu), `item_flasa`, `item_noznice`, `item_macko`, `item_tricko`, `item_kniha` 192. Zapojí úloha 5b.
