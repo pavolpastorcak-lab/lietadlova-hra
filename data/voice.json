@@ -26,6 +26,7 @@
   "sfx_touchdown": {"file":"sfx/touchdown.mp3","text":"(zvuk) dosadnutie kolies na dráhu, ~1 s"},
   "dest_ber": {"file":"voice/sk/dest_ber.mp3","text":"Letíme do Berlína."},
   "land_ber": {"file":"voice/sk/land_ber.mp3","text":"V Berlíne svieti slnko."},
+  "land_bts": {"file":"voice/sk/land_bts.mp3","text":"V Bratislave svieti slnko."},
   "dest_rim": {"file":"voice/sk/dest_rim.mp3","text":"Letíme do Ríma."},
   "land_rim": {"file":"voice/sk/land_rim.mp3","text":"V Ríme svieti slnko."},
   "dest_par": {"file":"voice/sk/dest_par.mp3","text":"Letíme do Paríža."},

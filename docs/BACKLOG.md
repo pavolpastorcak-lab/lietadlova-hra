@@ -482,7 +482,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R1b: Let z miesta pristátia
+## [x] R1b: Let z miesta pristátia
 **Cieľ:** Lietadlo štartuje tam, kde naposledy pristálo (SK → GR, potom GR → TR alebo domov). Bratislava je normálny cieľ s pristátím a hlásením počasia. Dĺžka letu, rýchlosť, výplata a hádanky sa počítajú zo vzdialenosti medzi dvoma mestami, nie z ručných trás `bts-x`.
 
 **Rozhodnutie Paľa:** dolet sa meria **od miesta, kde lietadlo stojí**. Bratislava je dosiahnuteľná vždy (syn nikdy neuviazne).

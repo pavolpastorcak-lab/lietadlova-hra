@@ -1,15 +1,15 @@
-[
-  {"from":"bts","to":"ber","durationSec":35,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"thinAfterHits":3,"thinFactor":0.5,"speed":420,"payMult":1,"puzzles":["p1","p3"]},
-  {"from":"bts","to":"rim","durationSec":40,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"thinAfterHits":3,"thinFactor":0.5,"speed":450,"payMult":1,"puzzles":["p3","p1"]},
-  {"from":"bts","to":"par","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.55,"stormCloudEvery":1.6,"rain":true},"thinAfterHits":3,"thinFactor":0.5,"speed":480,"payMult":1.2,"puzzles":["p2","p4"]},
-  {"from":"bts","to":"lon","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.55,"stormCloudEvery":1.6,"rain":true},"thinAfterHits":3,"thinFactor":0.5,"speed":500,"payMult":1.2,"puzzles":["p4","p5"]},
-  {"from":"bts","to":"dub","durationSec":55,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.5,"stormCloudEvery":1.5,"rain":true},"wind":{"every":9,"durationSec":3,"push":120},"thinAfterHits":3,"thinFactor":0.5,"speed":540,"payMult":1.5,"puzzles":["p5","p6"]},
-  {"from":"bts","to":"mad","durationSec":55,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"wind":{"every":9,"durationSec":3,"push":120},"thinAfterHits":3,"thinFactor":0.5,"speed":560,"payMult":1.5,"puzzles":["p4","p7"]},
-  {"from":"bts","to":"lis","durationSec":65,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"wind":{"every":9,"durationSec":3,"push":120},"thinAfterHits":3,"thinFactor":0.5,"speed":600,"payMult":2,"puzzles":["p6","p7","p8"]},
-  {"from":"bts","to":"zur","durationSec":40,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"thinAfterHits":3,"thinFactor":0.5,"speed":440,"payMult":1,"puzzles":["p1","p3"]},
-  {"from":"bts","to":"ams","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.55,"stormCloudEvery":1.6,"rain":true},"thinAfterHits":3,"thinFactor":0.5,"speed":480,"payMult":1.2,"puzzles":["p2","p4"]},
-  {"from":"bts","to":"sto","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.5,"stormCloudEvery":1.6,"rain":true},"thinAfterHits":3,"thinFactor":0.5,"speed":500,"payMult":1.2,"puzzles":["p4","p5"]},
-  {"from":"bts","to":"ath","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"thinAfterHits":3,"thinFactor":0.5,"speed":500,"payMult":1.2,"puzzles":["p5","p2"]},
-  {"from":"bts","to":"ist","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"thinAfterHits":3,"thinFactor":0.5,"speed":500,"payMult":1.2,"puzzles":["p4","p5"]},
-  {"from":"bts","to":"fin","durationSec":45,"obstacles":[{"type":"cloud","every":2.4},{"type":"bird","every":4.5}],"stars":{"every":2.5,"arcEvery":3,"arcDx":110,"arcRise":70},"weather":{"stormFrom":0.5,"stormCloudEvery":1.6,"rain":true},"thinAfterHits":3,"thinFactor":0.5,"speed":500,"payMult":1.2,"puzzles":["p4","p5"]}
-]
+{
+  "base": {
+    "obstacles": [{ "type": "cloud", "every": 2.4 }, { "type": "bird", "every": 4.5 }],
+    "stars": { "every": 2.5, "arcEvery": 3, "arcDx": 110, "arcRise": 70 },
+    "thinAfterHits": 3, "thinFactor": 0.5
+  },
+  "byKm": [
+    { "upTo": 600,  "durationSec": 35, "speed": 420, "payMult": 1,   "puzzles": ["p1", "p3"] },
+    { "upTo": 850,  "durationSec": 40, "speed": 445, "payMult": 1,   "puzzles": ["p1", "p3"] },
+    { "upTo": 1150, "durationSec": 45, "speed": 480, "payMult": 1.2, "puzzles": ["p2", "p4"] },
+    { "upTo": 1450, "durationSec": 45, "speed": 500, "payMult": 1.2, "puzzles": ["p4", "p5"] },
+    { "upTo": 2000, "durationSec": 55, "speed": 550, "payMult": 1.5, "puzzles": ["p4", "p5", "p6", "p7"] },
+    {               "durationSec": 65, "speed": 600, "payMult": 2,   "puzzles": ["p6", "p7", "p8"] }
+  ]
+}

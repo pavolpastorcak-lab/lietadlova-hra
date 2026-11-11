@@ -1,12 +1,11 @@
 import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
-import { addSprite, role } from '../systems/sprites.js';
+import { addSprite, addPlane, role } from '../systems/sprites.js';
 import * as economy from '../systems/economy.js';
 import * as save from '../systems/save.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 import * as fx from '../ui/fx.js';
 
-const HOME = 'bts';                                      // odtiaľ sa letí
 const PIN_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };       // zástupka za vlajku
 
 // Mapa zhora: špendlíky destinácií, ťuk na cieľ → letisko.
@@ -21,7 +20,7 @@ export default class MapScene extends Phaser.Scene {
     if (!layer) this.add.ellipse(560, 380, 760, 520, 0x7cc36b);      // pevnina
     desaturate(layer, 'map');
     addVeil(this, 'map', 1);
-    const unlocked = save.get().unlocked || [];
+    const here = save.get().location;                 // tu lietadlo stojí, odtiaľ sa letí
     const plane = data.get('planes')[0];
     const input = createInput(this);
 
@@ -38,9 +37,10 @@ export default class MapScene extends Phaser.Scene {
       } else {
         pin.add(this.add.circle(0, 0, 44, 0xffffff));
         pin.add(this.add.circle(0, 0, 34, PIN_COLORS[d.country] || 0x999999));
-        if (d.id === HOME) pin.add(this.add.circle(0, 0, 10, 0xffffff));
+        if (d.id === here) pin.add(this.add.circle(0, 0, 10, 0xffffff));
       }
-      const open = d.id === HOME || unlocked.includes(d.id) || economy.inRange(d, plane);
+      const open = d.id === here || economy.inRange(d, plane);
+      if (d.id === here) this.addHere(pin);
       if (!open) pin.setAlpha(0.45);              // zatiaľ nedostupná destinácia
       pin.setDepth(5 + d.map.y / 1000);           // nižšie na mape = vpredu
       if (open) drops.push({ obj: pin, y: d.map.y });
@@ -55,14 +55,26 @@ export default class MapScene extends Phaser.Scene {
       if (!hit) return;
       const { d, pin } = hit;
       if (!hit.open) return this.lockedPin(hit);
-      if (d.id === HOME) {
+      if (d.id === here) {
         this.tweens.add({ targets: pin, scale: 1.2, duration: 120, yoyo: true });
         return;
       }
       fx.press(this, pin);
-      fx.go(this, 'Airport', { to: d.id });
+      fx.go(this, 'Airport', { from: here, to: d.id });
     });
     fx.dropPins(this, drops);
+  }
+
+  // „Si tu": pulzujúci krúžok pri hrote a malé lietadlo zhora pod ním (záložný tvar: trojuholník), vlajku nezakrýva.
+  addHere(pin) {
+    const ring = this.add.ellipse(0, 0, 90, 34).setStrokeStyle(6, 0xffffff);
+    pin.addAt(ring, 0);
+    this.tweens.add({ targets: ring, scale: 1.35, alpha: 0.35, duration: 800, yoyo: true, repeat: -1 });
+    const y = 56;
+    const plane = addPlane(this, 'top', 0, y, 56) || this.add.triangle(0, y, 0, 40, 40, 40, 20, 0, 0x2e7d32);
+    const disc = this.add.circle(0, y, 34, 0xffffff, 0.92).setStrokeStyle(5, 0xff9800);   // aby lietadlo nezapadlo do mapy
+    pin.add([disc, plane]);
+    this.tweens.add({ targets: [disc, plane], y: y + 8, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
   }
 
   // Zamknutý špendlík: zatrasie sa a nad ním sa na 1,5 s ukáže nádrž (treba väčší dolet).

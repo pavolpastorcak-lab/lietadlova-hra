@@ -1,6 +1,7 @@
 import * as data from '../../systems/data.js';
 import * as save from '../../systems/save.js';
 import * as economy from '../../systems/economy.js';
+import * as routes from '../../systems/routes.js';
 import * as audio from '../../systems/audio.js';
 import * as fx from '../../ui/fx.js';
 import { addPlane, addSprite, role } from '../../systems/sprites.js';
@@ -38,7 +39,8 @@ export function addUpgradePanel(scene, input, { kind, plane, counter, state, onB
   // Hodnota: "+N" pri kapacite, pri dolete vlajky (max 3, ~34 px) destinácií, ktoré ďalší stupeň otvorí.
   let value;
   if (range) {
-    const opens = data.get('destinations').filter((d) => d.distance > info.current && d.distance <= info.next).slice(0, 3);
+    const here = save.get().location;
+    const opens = data.get('destinations').filter((d) => d.id !== routes.HOME && routes.km(here, d.id) > info.current && routes.km(here, d.id) <= info.next).slice(0, 3);
     value = opens.map((d, i) => addSprite(scene, d.flag, -58 + i * 40, 0, { w: 34 })
       || scene.add.rectangle(-58 + i * 40, 0, 34, 24, 0x3498db));
   } else {

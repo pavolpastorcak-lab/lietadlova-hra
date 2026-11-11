@@ -3,10 +3,11 @@
 
 const KEY = 'lietadla.save';
 const BAK = KEY + '.bak';
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
-// migrations[n] prevedie save z verzie n na n+1. Zatiaľ žiadne.
-const migrations = [];
+// migrations[n] prevedie save z verzie n na n+1.
+// 1 → 2: poloha lietadla (`location`), lety idú z miesta pristátia.
+const migrations = [null, (s) => ({ ...s, location: 'bts' })];
 
 let state = null;
 
@@ -14,14 +15,13 @@ let state = null;
 function defaults(data) {
   const planes = {};
   data.planes.forEach((p) => { planes[p.id] = { capacity: 0, range: 0 }; });
-  const bestStars = {};
-  data.flights.forEach((f) => { bestStars[`${f.from}-${f.to}`] = 0; });
   return {
     saveVersion: SAVE_VERSION,
     coins: data.economy.startCoins,
     planes,
     unlocked: data.destinations.filter((d) => d.unlockCost === 0).map((d) => d.id),
-    bestStars,
+    location: 'bts',
+    bestStars: {},   // kľúče `from-to`, nové páry vznikajú pri prvom rekorde
   };
 }
 
@@ -44,6 +44,8 @@ export function load(data) {
       const s = JSON.parse(raw);
       if (!s || typeof s.saveVersion !== 'number') throw new Error('chýba saveVersion');
       state = { ...defaults(data), ...migrate(s) };
+      if (!data.destinations.some((d) => d.id === state.location)) state.location = 'bts';
+      if (!state.bestStars || typeof state.bestStars !== 'object') state.bestStars = {};
     } catch (e) {
       console.warn('[save] poškodený save, odkladám do .bak', e);
       try { localStorage.setItem(BAK, raw); } catch (_) { /* nič */ }

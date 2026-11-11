@@ -1,6 +1,7 @@
 // Výpočet výplaty a cien. Čísla sú v data/economy.json a data/planes.json.
 import * as data from './data.js';
 import * as save from './save.js';
+import * as routes from './routes.js';
 
 // Základ sa vypláca vždy; hviezdičky a smajlíky dávajú len prepitné.
 // quizFirstTry = správna vlajka na prvý pokus: bonus quiz.tipFirstTry ide do prepitného (nenásobí sa mult).
@@ -42,7 +43,8 @@ export function planeRange(plane) {
   return plane.range[save.get().planes[plane.id].range].value;
 }
 
-export const inRange = (dest, plane) => dest.distance <= planeRange(plane);
+// Dolet sa meria od miesta, kde lietadlo stojí; Bratislava je dosiahnuteľná vždy.
+export const inRange = (dest, plane) => routes.reachable(save.get().location, dest.id, planeRange(plane));
 
 export const capacityInfo = (plane) => upgradeInfo(plane, 'capacity');
 export const buyCapacity = (plane) => buyUpgrade(plane, 'capacity');

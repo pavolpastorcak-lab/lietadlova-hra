@@ -75,10 +75,11 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 `destinations.json`
 ```json
 [{ "id": "bts", "name": "Bratislava", "country": "sk", "flag": "flag_sk",
-   "map": { "x": 640, "y": 420 }, "weather": "sun", "distance": 0,
+   "map": { "x": 640, "y": 420 }, "weather": "sun", "geo": { "lat": 48.17, "lon": 17.21 },
    "unlockCost": 0, "voice": "dest_bts" },
  { "id": "lon", "name": "Londýn", "country": "gb", "flag": "flag_gb",
-   "map": { "x": 420, "y": 300 }, "weather": "rain", "distance": 1300,
+   "map": { "x": 420, "y": 300 }, "weather": "rain", "geo": { "lat": 51.47, "lon": -0.45 },
+   "flightWeather": { "stormFrom": 0.55, "stormCloudEvery": 1.6, "rain": true },
    "unlockCost": 0, "voice": "dest_lon" }]
 ```
 `planes.json`
@@ -95,12 +96,14 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
   { "id": "gate",    "x": 760,  "sprite": "bld_gate",    "voice": "st_gate" },
   { "id": "boarding","x": 1040, "sprite": "plane_zelene_side", "voice": "st_boarding" } ] }
 ```
-`flights.json`: trasa a prekážky
+`flights.json`: parametre letu podľa vzdialenosti (R1b). Trasy sa nezadávajú ručne: `routes.flight(from, to)` zloží `base` + prvý stupeň `byKm`, kde `km <= upTo` (posledný stupeň bez `upTo`), + `weather`/`wind` cieľa + `from`, `to`, `km`.
 ```json
-[{ "from": "bts", "to": "lon", "durationSec": 45,
-   "obstacles": [{ "type": "cloud", "every": 3.0 }, { "type": "bird", "every": 6.0 }],
-   "stars": { "every": 2.5 }, "thinAfterHits": 2, "thinFactor": 0.5 }]
+{ "base": { "obstacles": [{ "type": "cloud", "every": 2.4 }], "stars": { "every": 2.5 }, "thinAfterHits": 3, "thinFactor": 0.5 },
+  "byKm": [{ "upTo": 600, "durationSec": 35, "speed": 420, "payMult": 1, "puzzles": ["p1", "p3"] },
+           { "durationSec": 65, "speed": 600, "payMult": 2, "puzzles": ["p6", "p7", "p8"] }] }
 ```
+`routes.js`: `km(a, b)` (haversine z `geo`, na 10 km), `reachable(from, to, range)` (Bratislava vždy), `flight(from, to)`. Búrka (`flightWeather`) a vietor (`wind`) patria cieľu v `destinations.json`. Dolet sa meria od `save.location`.
+
 `economy.json`
 ```json
 { "startCoins": 0, "basePerPassenger": 5, "tipPerStar": 1,
@@ -114,10 +117,11 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 
 ### Save (localStorage, kľúč `lietadla.save`)
 ```json
-{ "saveVersion": 1, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0 } },
-  "unlocked": ["bts", "lon"], "bestStars": { "bts-lon": 0 } }
+{ "saveVersion": 2, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0 } },
+  "location": "bts", "unlocked": ["bts", "lon"], "bestStars": { "bts-lon": 0 } }
 ```
 - `save.js` drží pole migrácií `migrations[n]` (n → n+1). Pri načítaní sa postupne aplikujú, kým nie je `saveVersion` aktuálna.
+- `location` = kde lietadlo stojí (zapisuje sa v `Landing` pri vstupe; neznáme id → `bts`). `bestStars` kľúče `from-to`, nové páry vznikajú pri prvom rekorde. `unlocked` o otvorení mesta už nerozhoduje. Migrácia 1 → 2 doplní `location`.
 - Poškodený save sa nezmaže, odloží sa do `lietadla.save.bak` a hra začne odznova.
 
 ### Sprity v dátach (úloha 3d)
@@ -160,7 +164,7 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 8. **Hlas:** Paľove vlastné mp3 nahrávky (mono, 64 kbps) v `assets/audio/voice/sk/<kluc>.mp3`. Kým nie sú, slúži ako zástupka TTS mp3 z Magnificu s rovnakým názvom. V hre sa nikdy nepoužíva živé TTS.
 
 ## 6. Hádanka Arrows (scéna `Apron`, v1.3, v slučke Airport → Apron → Takeoff)
-- Trasa v `flights.json` má `puzzles: [id, …]`; `apron/pick.js` vyberie level (počítadlo v pamäti), trasa bez `puzzles` hádanku preskočí. Čistý level pridá `smiles + 1` do `args` pre Takeoff.
+- Stupeň v `flights.json` (`byKm`) má `puzzles: [id, …]`; `apron/pick.js` (`pickLevel(from, to)`) vyberie level (počítadlo v pamäti podľa `from-to`), stupeň bez `puzzles` hádanku preskočí. Čistý level pridá `smiles + 1` do `args` pre Takeoff.
 - `data/puzzles.json`: `[{ id, cols, rows, cell?, pieces: [{ x, y, dir: up|down|left|right, kind: car|bus|truck }] }]`. Vozidlo zaberá 1 bunku, `kind` je len vzhľad. Čísla scény v `airport.json` → `apron` (bunka 160, vozidlo 0,85, posun mriežky, nečinnosť, oslava).
 - `scenes/apron/board.js`: čistá logika bez Phaseru (`canMove`, `blocker`, `remove`, `isClear`, `isSolvable`, `validateLevel`, `selfTest`). `data.js` pri načítaní nahlási neriešiteľný level ako chybu. Vozidlo odíde, ak je v smere šípky voľná cesta po okraj.
 - `scenes/Apron.js` dostane `{ level, next, args }`, po vyčistení `fx.go(next || 'Map', args)`. `apron/shapes.js` kreslí záložné vozidlo (predok = smer šípky) alebo sprite z `role('car'|'bus'|'truck')`, pozadie `role('bgApronTop')`.

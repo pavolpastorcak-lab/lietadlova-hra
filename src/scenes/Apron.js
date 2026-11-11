@@ -122,7 +122,7 @@ export default class Apron extends Phaser.Scene {
   finish() {
     this.done = true;
     const a = this.args;
-    if (a && a.to) markDone(a.to);   // do počítadla až po vyčistení (nie pri odchode domov)
+    if (a && a.to) markDone(a.from, a.to);   // do počítadla až po vyčistení (nie pri odchode domov)
     if (this.mistakes === 0 && a && typeof a.smiles === 'number') this.args = { ...a, smiles: a.smiles + 1 };
     confetti(this, 640, 400);
     this.time.delayedCall(this.cfg.doneMs, () => fx.go(this, this.next, this.args));

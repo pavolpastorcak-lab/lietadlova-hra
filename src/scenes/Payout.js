@@ -2,6 +2,7 @@ import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
 import * as economy from '../systems/economy.js';
+import * as routes from '../systems/routes.js';
 import { addHome } from '../ui/home.js';
 import * as audio from '../systems/audio.js';
 import * as fx from '../ui/fx.js';
@@ -15,11 +16,11 @@ export default class Payout extends Phaser.Scene {
   constructor() { super('Payout'); }
 
   create(args) {
-    const { to, passengers = 0, smiles = 0, stars = 0, quizFirstTry = false } = args || {};
+    const { from, to, passengers = 0, smiles = 0, stars = 0, quizFirstTry = false } = args || {};
     this.cameras.main.setBackgroundColor('#fff3d6');
     audio.init(data.get('voice'));
     audio.preload(['sfx_coins']);
-    const f = data.flight(to);
+    const f = to ? routes.flight(from, to) : null;
     const pay = economy.payout(passengers, smiles, stars, f && f.payMult, quizFirstTry);
     if (f) save.setBestStars(`${f.from}-${f.to}`, stars);
     const before = save.get().coins;

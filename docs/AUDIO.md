@@ -22,6 +22,7 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `land_lon.mp3` | V Londýne prší. |
 | `dest_ber.mp3` | Letíme do Berlína. |
 | `land_ber.mp3` | V Berlíne svieti slnko. |
+| `land_bts.mp3` | V Bratislave svieti slnko. |
 | `dest_rim.mp3` | Letíme do Ríma. |
 | `land_rim.mp3` | V Ríme svieti slnko. |
 | `dest_par.mp3` | Letíme do Paríža. |

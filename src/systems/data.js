@@ -5,9 +5,9 @@ const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice'
 
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
-  destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice'],
+  destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice', 'geo'],
   planes: ['id', 'sprites', 'capacity', 'range'],
-  flights: ['from', 'to', 'durationSec', 'obstacles', 'stars'],
+  tiers: ['durationSec', 'speed', 'payMult'],
   stations: ['id', 'x', 'voice'],
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
 };
@@ -58,36 +58,53 @@ function checkSecurity(sec, errors) {
   if (!p || !Array.isArray(p.itemXs) || p.itemXs.length < sec.itemsPerBag) errors.push('airport.security.panel: "itemXs" má mať položku pre každú vec');
 }
 
+// Trasy: base + stupne podľa km (zoradené, posledný bez upTo), geo v destináciách.
+function checkFlights(fl, dests, errors) {
+  if (!fl || !fl.base || !Array.isArray(fl.base.obstacles) || !fl.base.stars) { errors.push('flights.base: chýba (obstacles, stars)'); return; }
+  if (!Array.isArray(fl.byKm) || !fl.byKm.length) { errors.push('flights.byKm: očakávam neprázdne pole'); return; }
+  fl.byKm.forEach((t, i) => {
+    REQUIRED.tiers.forEach((f) => { if (t[f] === undefined) errors.push(`flights.byKm[${i}]: chýba "${f}"`); });
+    const last = i === fl.byKm.length - 1;
+    if (last && t.upTo !== undefined) errors.push('flights.byKm: posledný stupeň nemá mať "upTo"');
+    if (!last && !(t.upTo > 0)) errors.push(`flights.byKm[${i}]: chýba "upTo"`);
+    if (!last && i > 0 && !(t.upTo > fl.byKm[i - 1].upTo)) errors.push(`flights.byKm[${i}]: "upTo" musí rásť`);
+  });
+  (dests || []).forEach((d) => {
+    const g = d.geo;
+    if (!g || typeof g.lat !== 'number' || typeof g.lon !== 'number') errors.push(`destinations ${d.id}: geo.lat/lon musia byť čísla`);
+  });
+}
+
 // Hádanky: tvar levelu a riešiteľnosť (slepá ulička = chyba dát).
 function checkPuzzles(list, flights, errors) {
   if (!Array.isArray(list) || !list.length) { errors.push('puzzles: očakávam neprázdne pole'); return; }
   list.forEach((lv, i) => validateLevel(lv).forEach((e) => errors.push(`puzzles[${i}] ${lv && lv.id}: ${e}`)));
   const ids = new Set(list.map((lv) => lv && lv.id));
-  (flights || []).forEach((f) => {
-    if (f.puzzles === undefined) return;
-    if (!Array.isArray(f.puzzles)) { errors.push(`flights ${f.to}: "puzzles" má byť pole`); return; }
-    f.puzzles.forEach((id) => { if (!ids.has(id)) errors.push(`flights ${f.to}: neznáma hádanka "${id}"`); });
+  ((flights && flights.byKm) || []).forEach((t, i) => {
+    if (t.puzzles === undefined) return;
+    if (!Array.isArray(t.puzzles)) { errors.push(`flights.byKm[${i}]: "puzzles" má byť pole`); return; }
+    t.puzzles.forEach((id) => { if (!ids.has(id)) errors.push(`flights.byKm[${i}]: neznáma hádanka "${id}"`); });
   });
 }
 
-// Voliteľná búrka v lete: flights[].weather + sprites.fx.storm (ak ju niektorá trasa používa).
-function checkWeather(flights, sprites, errors) {
-  const list = (flights || []).filter((f) => f.weather !== undefined);
-  list.forEach((f) => {
-    const w = f.weather;
-    if (!w || typeof w.stormFrom !== 'number' || w.stormFrom < 0 || w.stormFrom >= 1) errors.push(`flights ${f.to}: weather.stormFrom má byť číslo 0–1`);
-    if (!w || !(w.stormCloudEvery > 0)) errors.push(`flights ${f.to}: weather.stormCloudEvery má byť > 0`);
+// Voliteľná búrka v lete: destinations[].flightWeather + sprites.fx.storm (ak ju niektoré mesto používa).
+function checkWeather(dests, sprites, errors) {
+  const list = (dests || []).filter((d) => d.flightWeather !== undefined);
+  list.forEach((d) => {
+    const w = d.flightWeather;
+    if (!w || typeof w.stormFrom !== 'number' || w.stormFrom < 0 || w.stormFrom >= 1) errors.push(`destinations ${d.id}: flightWeather.stormFrom má byť číslo 0–1`);
+    if (!w || !(w.stormCloudEvery > 0)) errors.push(`destinations ${d.id}: flightWeather.stormCloudEvery má byť > 0`);
   });
   const st = sprites && sprites.fx && sprites.fx.storm;
   if (list.length && (!st || !st.rain || !(st.rampSec > 0))) errors.push('sprites.fx.storm: chýba blok (rampSec, rain)');
 }
 
-// Voliteľný vietor v lete: flights[].wind + sprites.fx.wind (ak ho niektorá trasa používa).
-function checkWind(flights, sprites, errors) {
-  const list = (flights || []).filter((f) => f.wind !== undefined);
-  list.forEach((f) => {
+// Voliteľný vietor v lete: destinations[].wind + sprites.fx.wind (ak ho niektoré mesto používa).
+function checkWind(dests, sprites, errors) {
+  const list = (dests || []).filter((d) => d.wind !== undefined);
+  list.forEach((d) => {
     ['every', 'durationSec', 'push'].forEach((k) => {
-      if (!f.wind || !(f.wind[k] > 0)) errors.push(`flights ${f.to}: wind.${k} má byť > 0`);
+      if (!d.wind || !(d.wind[k] > 0)) errors.push(`destinations ${d.id}: wind.${k} má byť > 0`);
     });
   });
   const wc = sprites && sprites.fx && sprites.fx.wind;
@@ -103,7 +120,7 @@ export function collect(scene) {
   KEYS.forEach((k) => { if (store[k] == null) errors.push(`${k}.json sa nenačítal`); });
   checkItems('destinations', store.destinations, REQUIRED.destinations, errors);
   checkItems('planes', store.planes, REQUIRED.planes, errors);
-  checkItems('flights', store.flights, REQUIRED.flights, errors);
+  checkFlights(store.flights, store.destinations, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
   if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
   const cr = store.airport && store.airport.audio && store.airport.audio.cruise;
@@ -119,8 +136,8 @@ export function collect(scene) {
     });
   });
   checkPuzzles(store.puzzles, store.flights, errors);
-  checkWeather(store.flights, store.sprites, errors);
-  checkWind(store.flights, store.sprites, errors);
+  checkWeather(store.destinations, store.sprites, errors);
+  checkWind(store.destinations, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   const qz = store.economy && store.economy.quiz;
   ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'doneMs'].forEach((f) => {
@@ -133,10 +150,6 @@ export function collect(scene) {
 
 export function get(key) {
   return store[key];
-}
-
-export function flight(to) {
-  return (store.flights || []).find((f) => f.to === to);
 }
 
 // Nastavenia letu: airport.flight doplnené o predvolené hodnoty.

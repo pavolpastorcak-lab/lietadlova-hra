@@ -87,7 +87,7 @@ export default class Airport extends Phaser.Scene {
 
     runFlow(ctx, stations, RUNNERS, () => {
       const next = { ...args, passengers: n, smiles: ctx.smiles };
-      const level = pickLevel(args && args.to);   // trasa bez hádanky ide rovno do Takeoff
+      const level = pickLevel(args && args.from, args && args.to);   // trasa bez hádanky ide rovno do Takeoff
       if (level) fx.go(this, 'Apron', { level, next: 'Takeoff', args: next });
       else fx.go(this, 'Takeoff', next);
     });
