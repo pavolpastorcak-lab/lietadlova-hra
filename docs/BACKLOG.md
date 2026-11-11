@@ -58,7 +58,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
-| R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
+| R3b | Palivo a tankovanie | otázky zodpovedané 2026-11-11; **PO: tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
@@ -617,9 +617,26 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 ## [ ] R3b: Palivo a tankovanie
 **Cieľ:** Lietadlo má nádrž. Let spotrebuje palivo podľa km, tankuje sa za mince. Mapa ukáže, kam sa s aktuálnym palivom dá doletieť.
 
-**Otázky na Paľa pred zadaním:** kde sa tankuje (ťuk na nádrž na mape alebo v hangári), cena za plnú nádrž, či dolet = veľkosť nádrže.
+**Rozhodnutia Paľa (2026-11-11):** tankuje sa ťukom na nádrž na mape; cena 1 minca za 50 km; Bratislava je dosiahnuteľná vždy (aj bez paliva a mincí). Ceny R3a ostávajú, tempo overí na tablete.
 
-**Návrh zadania:** save `fuel` (km v nádrži, nový save plný); nádrž = dolet lietadla; mesto je dosiahnuteľné, ak `km ≤ fuel`; ikona nádrže na mape s hladinou, ťuk = natankovať doplna za mince z `economy.json` (`fuelPerKm`), animácia čerpania + `sfx_fuel`. Poistka: najbližšie mesto (vrátane Bratislavy, ak je najbližšie) je dosiahnuteľné vždy; ak na tankovanie nie sú mince, natankuje sa zadarmo presne naň. 2 hlasy (napr. „Natankuj lietadlo.", „Nádrž je plná.").
+**Súbory:** `src/scenes/Map.js` (+ nový `src/scenes/map/fuel.js`, ak Map prerastie), `src/systems/economy.js`, `src/systems/routes.js`, `src/systems/save.js`, `src/scenes/Landing.js`, `src/scenes/Hangar.js` (kúpa doletu), `data/economy.json`, `data/sprites.json` (pozícia a veľkosť nádrže), `data/voice.json`, `docs/AUDIO.md`, `src/systems/data.js`, `sw.js`, docs.
+
+**Zadanie:**
+- Nádrž = dolet lietadla (`planeRange`). Save v4: `fuel` (km v nádrži). Migrácia 3 → 4 aj nový save: plná nádrž.
+- Spotreba: v `Landing` pri vstupe (tam, kde sa zapisuje `location`) `fuel = max(0, fuel − km(from, to))`.
+- Mapa, tri stavy špendlíka: **otvorené** (`km ≤ fuel`, alebo Bratislava, alebo najbližšie mesto od polohy) = ako dnes; **treba natankovať** (`fuel < km ≤ dolet`) = jemne priesvitný špendlík s malou ikonou kvapky/kanistra (kódom); ťuk naň zatrasie a rozbliká nádrž + hlas `st_fuel_need`; **mimo doletu** (`km > dolet`) = ako dnes (zamknuté, ukáže nádrž). Let do Bratislavy alebo do najbližšieho mesta pri nedostatku paliva je zadarmo (palivo klesne na 0, mince sa nemenia).
+- Nádrž na mape: vpravo dole, zásahová plocha ≥ 120 px, ikona nádrže (`role('tank')` alebo kódom) so stĺpcom hladiny (plná = zelená, pod 1/3 oranžová). Ťuk = natankovať doplna za `ceil((dolet − fuel) / economy.fuel.kmPerCoin)` mincí. Pri nedostatku mincí natankuje toľko, koľko mince dovolia (aspoň 1 minca = 50 km); pri 0 minciach sa nádrž len zatrasie. Plná nádrž = hlas `st_fuel_full` a nič sa neodpočíta. Animácia: hladina stúpa 0,8 s, mince odletia z počítadla, `sfx_fuel`. Po tankovaní sa stavy špendlíkov hneď prekreslia.
+- Hangár: kúpa vyššieho doletu nádrž doplní na nový maximálny objem (darček, nič sa neplatí).
+- `economy.json` → `fuel: { "kmPerCoin": 50 }`; pozícia a veľkosť nádrže v `sprites.json`. Validácia v `data.js`.
+- Zvuky (kľúče do `voice.json` + `AUDIO.md`, mp3 dodá architekt po schválení dávky Magnific, dovtedy ticho): `st_fuel_need` („Natankuj lietadlo."), `st_fuel_full` („Nádrž je plná."), `sfx_fuel` (čerpanie paliva, 1 s).
+
+**Akceptačné kritériá:** nový save má plnú nádrž 900 km; po lete Bratislava → Berlín (530 km) ostane 370 km a na mape sa zmenia stavy špendlíkov; ťuk na nádrž odpočíta presne `ceil(530/50) = 11` mincí a nádrž je plná; s 0 mincami a prázdnou nádržou sa dá doletieť do Bratislavy a do najbližšieho mesta zadarmo; starý save v3 sa načíta s plnou nádržou, mincami, upgradmi aj polohou; kúpa doletu doplní nádrž.
+
+**Nesmie sa zmeniť:** pravidlo doletu z R1b (Bratislava vždy), ceny upgradov, výplata, let samotný.
+
+**Plán:** mení save, dáta a viac ako 3 súbory, najprv plán architektovi.
+
+**STOP po R3b:** dávka Magnific (2 hlasy + 1 sfx, ~15 kreditov) na schválenie Paľovi, potom tablet.
 
 **STOP po R3b: tablet** (tempo progresu, ceny, tankovanie zrozumiteľné pre syna).
 
