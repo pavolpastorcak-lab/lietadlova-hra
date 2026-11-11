@@ -121,3 +121,4 @@ Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, k
 - **Dávka 3 (2026-11-11):** `st_security.mp3` (hlas, `eleven_v4`) a `sfx/bin.mp3` (vec padne do koša, 1 s). Zapojí úloha 5b.
 - **Dávka 4 (2026-11-11):** `st_apron.mp3` (hlas, `eleven_v4`), `sfx/drive.mp3` (rozjazd vozidla, 1 s), `sfx/honk.mp3` (zatrúbenie pri zablokovanom vozidle, 1 s). Zapojí úloha 6c.
 - **Dávka 5 (2026-11-11, pripomienky Paľa):** `sfx/drive.mp3` (bol piskľavý) a `sfx/upgrade.mp3` (vysoký tón) pregenerované s dôrazom na nízky, realistický zvuk (2 s každý).
+- **Dávka 6 (2026-11-11):** `land_bts.mp3` (hlas, `eleven_v4`, 6 kreditov) pre pristátie v Bratislave (úloha R1b).
