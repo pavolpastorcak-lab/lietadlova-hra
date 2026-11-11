@@ -143,3 +143,4 @@ Stiahnuté a uložené do `assets/sprites/<kategoria>/`: **88 súborov** (bag 15
 
 ## Dávka 2026-11-11: bezpečnostná kontrola (Magnific, Nano Banana 2.1, 1k + remove_background)
 Spoločný štýl ako vyššie. Orezané na obsah a zmenšené (dlhšia strana): `bld_skener` 512 (pohľad mierne zhora-zboku, pás prechádza tunelom, červené svetlo hore), `ui_kos` 256 (kovové vedro spredu), `item_flasa`, `item_noznice`, `item_macko`, `item_tricko`, `item_kniha` 192. Zapojí úloha 5b.
+- **Doplnok 2026-11-11 (pripomienky Paľa):** `bld_skener` nahradený verziou čisto zboku (640×284, pás vodorovne cez skriňu, závesy na oboch koncoch). Druhá sada vecí (192): `item_flasa_sport` (zakázaná), `item_pribor` (nôž a vidlička, zakázané), `item_koleso` (plávacie koleso, povolené), `item_nohavice` (povolené). Zapojí úloha 5c.
