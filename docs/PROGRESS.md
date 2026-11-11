@@ -201,3 +201,6 @@ v1.1 dolet + nové destinácie · v1.2 bezpečnostná kontrola · v1.3 hádanka 
   - Pozor: kulisy sa predtým pri dojazde neposúvali vôbec (boli statické); skyline pred zmenou zaberal len x 200–920, teraz je cez celú šírku.
   - Otestované v Browser paneli (port 8090): bts a rim začiatok aj koniec dojazdu (skyline bez medzery), lon dojazd do `brake`, stojisko po zastavení, ťuk na stojiská → Landing. Bez nových chýb v konzole.
   - NEOTESTOVANÉ: tablet, plynulosť na ňom, švy medzi dlaždicami skyline pri iných mestách (skyline sprity sa opakujú rovnaké ako v bts), offline.
+- **Úloha R2a2: názov krajiny ostane do ťuknutia** (2026-11-11)
+  - `quiz.js`: po správnej vlajke sa scéna neprepne časovačom; `onDone(firstTry)` ide až po ťuknutí kamkoľvek (mimo ikony domov, ľavý horný roh 125×125) a po poistke `quiz.tapAfterMs` 800 ms. Po `quiz.idleMs` nečinnosti zväčšená vlajka jemne pulzuje (bez hlasu). `economy.json` → `quiz.doneMs` nahradené `tapAfterMs: 800`, `data.js` validuje nové pole. Bratislava a logika kvízu bez zmeny. SW: CACHE_VERSION v37.
+  - NEOTESTOVANÉ (Browser pane sa na localhost:8090 nedostal, navigácia zamietnutá): ťuk skôr/po 0,8 s, 30 s čakanie, pulz, nesprávna vlajka, ikona domov, tablet. Len `node --check` a JSON parse prešli.

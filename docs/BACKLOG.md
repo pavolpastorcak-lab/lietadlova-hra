@@ -53,7 +53,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R1a | Oprava dvojitého „Uvoľni" v hádanke | po: architekt prípadne pregeneruje `st_apron` (schválené) |
 | R1b | Let z miesta pristátia (poloha v save, vzdialenosti zo súradníc) | **PRED: plán architektovi**; po: hlas `land_bts` (schválené) |
 | R2a | Názov krajiny pod vlajkou (Finland / Suomi) | ✔ hotové |
-| R2a2 | Oprava: názov krajiny ostane do ťuknutia | – |
+| R2a2 | Oprava: názov krajiny ostane do ťuknutia | [x] |
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
@@ -530,7 +530,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2a2: Názov krajiny ostane do ťuknutia (oprava po R2a)
+## [x] R2a2: Názov krajiny ostane do ťuknutia (oprava po R2a)
 **Cieľ:** Po správnej vlajke v kvíze ostane zväčšená vlajka s názvom krajiny na obrazovke, kým syn neťukne (nech si názvy prečíta). Dnes sa po `quiz.doneMs` (1,2 s) scéna hneď prepne na výplatu.
 
 **Súbory:** `src/scenes/landing/quiz.js`, `data/economy.json` (`quiz`), `src/systems/data.js` (ak treba), `sw.js`, docs.

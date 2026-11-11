@@ -72,7 +72,22 @@ export function startQuiz(scene, input, dest, onDone) {
     fx.sparks(scene, 640, q.y - 20);
     confetti(scene, 640, q.y - 20);
     audio.play('sfx_star');
-    scene.time.delayedCall(q.doneMs, () => { if (alive) onDone(firstTry); });
+    // Obrazovka ostane, kým syn neťukne (po poistke tapAfterMs); po idleMs vlajka jemne pulzuje.
+    const t0 = scene.time.now;
+    let left = false;
+    input.on('tap', (pt) => {
+      if (!alive || left || scene.time.now - t0 < q.tapAfterMs) return;
+      if (pt.x < 125 && pt.y < 125) return;    // ikona domov má vlastný ťuk
+      left = true;
+      onDone(firstTry);
+    });
+    scene.time.addEvent({
+      delay: q.idleMs, loop: true,
+      callback: () => {
+        if (!alive || left) return;
+        scene.tweens.add({ targets: it.obj, scale: it.base * 1.65, duration: 350, yoyo: true, ease: 'Sine.inOut' });
+      },
+    });
   }
 
   (async () => {

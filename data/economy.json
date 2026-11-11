@@ -1,4 +1,4 @@
 { "startCoins": 0, "basePerPassenger": 5, "tipPerStar": 1,
   "tipPerSmile": 1, "replayForStars": true,
   "quiz": { "options": 4, "tipFirstTry": 5, "extraFlags": ["flag_at", "flag_cz", "flag_pl", "flag_hu"],
-    "flagW": 220, "gap": 50, "y": 430, "gapMs": 300, "maxWaitMs": 5000, "idleMs": 8000, "doneMs": 1200 } }
+    "flagW": 220, "gap": 50, "y": 430, "gapMs": 300, "maxWaitMs": 5000, "idleMs": 8000, "tapAfterMs": 800 } }

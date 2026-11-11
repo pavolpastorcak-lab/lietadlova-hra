@@ -142,7 +142,7 @@ export function collect(scene) {
   checkWind(store.destinations, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   const qz = store.economy && store.economy.quiz;
-  ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'doneMs'].forEach((f) => {
+  ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'tapAfterMs'].forEach((f) => {
     if (!qz || typeof qz[f] !== 'number') errors.push(`economy.quiz: chýba "${f}"`);
   });
   if (qz && !Array.isArray(qz.extraFlags)) errors.push('economy.quiz: chýba "extraFlags"');
