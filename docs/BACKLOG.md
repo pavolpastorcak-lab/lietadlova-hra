@@ -466,7 +466,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ## Roadmapa v2: briefy
 
-## [ ] R1a: Dvojité „Uvoľni" v hádanke (oprava)
+## [x] R1a: Dvojité „Uvoľni" v hádanke (oprava)
 **Cieľ:** Na začiatku hádanky Arrows zaznie veta `st_apron` presne raz. Paľo na tablete pri **každej** hádanke počuje „Uvoľni… Uvoľni cestu" (dvakrát, prvé slovo sa opakuje).
 
 **Súbory:** `src/scenes/Apron.js`, `src/scenes/Airport.js` (r. ~91, prechod do Apron), `src/ui/fx.js` (`go`), `src/systems/audio.js`; podľa príčiny len tie, ktoré treba.

@@ -52,7 +52,7 @@ export default class Apron extends Phaser.Scene {
     this.input_ = createInput(this);
     addHome(this, this.input_);
     this.input_.on('tap', (pt) => this.onTap(pt));
-    this.lastAct = this.time.now;
+    this.lastAct = Date.now();
     this.time.addEvent({ delay: 500, loop: true, callback: () => this.idleCheck(cfg) });
     audio.init(data.get('voice'));
     audio.preload(['sfx_drive', 'sfx_honk']);
@@ -82,7 +82,7 @@ export default class Apron extends Phaser.Scene {
     if (this.done) return;
     const p = this.pieceAt(pt);
     if (!p) return;
-    this.lastAct = this.time.now;
+    this.lastAct = Date.now();
     const v = this.views.get(p);
     if (canMove(this.board, p)) this.leave(p, v);
     else this.blocked(p, v);
@@ -112,8 +112,8 @@ export default class Apron extends Phaser.Scene {
   }
 
   idleCheck(cfg) {
-    if (this.done || this.time.now - this.lastAct < cfg.idleHintSec * 1000) return;
-    this.lastAct = this.time.now;
+    if (this.done || Date.now() - this.lastAct < cfg.idleHintSec * 1000) return;
+    this.lastAct = Date.now();
     const p = movable(this.board)[0], v = p && this.views.get(p);
     if (v) this.tweens.add({ targets: v, scale: 1.18, duration: 260, yoyo: true, repeat: 2 });
     audio.play('st_apron');
