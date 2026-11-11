@@ -30,7 +30,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 5a | Bezpečnostná kontrola (záložné tvary) | v1.2 | **PO: tablet**; dávka Magnific (7 spritov) na jedno schválenie |
 | 5b | Zapojenie spritov a zvukov bezpečnostnej kontroly | v1.2 | **PO: tablet** |
 | 5c | Skener zboku a druhá sada vecí | v1.2 | hotovo |
-| 6a | Hádanka Arrows: engine + 2 levely | v1.3 | – |
+| 6a | Hádanka Arrows: engine + 2 levely | v1.3 | hotovo |
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
 | 7a | Kvíz s vlajkami po pristátí | v1.4 | **PO: tablet**, mp3 |
 | 8a | Búrkové mraky a dážď počas letu | v1.5 | – |
@@ -271,7 +271,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 6a: Hádanka Arrows, engine + 2 levely (v1.3)
+## [x] 6a: Hádanka Arrows, engine + 2 levely (v1.3)
 **Cieľ:** Samostatná scéna `Apron` (pohľad zhora): na mriežke stoja vozidlá so šípkou. Ťuk na vozidlo = odíde v smere šípky, ak má voľnú cestu až po okraj. Keď je plocha prázdna, cesta na dráhu je voľná. Zatiaľ sa spúšťa len pre test, do slučky ju zapojí 6b.
 
 **Súbory:** nový `data/puzzles.json`, `src/systems/data.js` (načítanie + validácia), nový `src/scenes/Apron.js`, nový `src/scenes/apron/board.js` (čistá logika bez Phaseru), `src/main.js`, `sw.js`, docs.

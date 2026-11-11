@@ -1,0 +1,16 @@
+[
+  { "id": "p1", "cols": 4, "rows": 3, "pieces": [
+    { "x": 3, "y": 0, "dir": "right", "kind": "car" },
+    { "x": 0, "y": 1, "dir": "right", "kind": "bus" },
+    { "x": 2, "y": 1, "dir": "up", "kind": "car" },
+    { "x": 3, "y": 2, "dir": "up", "kind": "truck" }
+  ] },
+  { "id": "p2", "cols": 5, "rows": 3, "pieces": [
+    { "x": 0, "y": 0, "dir": "down", "kind": "car" },
+    { "x": 2, "y": 0, "dir": "left", "kind": "truck" },
+    { "x": 4, "y": 0, "dir": "right", "kind": "bus" },
+    { "x": 3, "y": 1, "dir": "right", "kind": "car" },
+    { "x": 0, "y": 2, "dir": "right", "kind": "truck" },
+    { "x": 4, "y": 2, "dir": "up", "kind": "bus" }
+  ] }
+]

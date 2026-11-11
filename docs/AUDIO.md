@@ -11,6 +11,7 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `st_checkin.mp3` | Ukáž letenku. |
 | `st_bags.mp3` | Daj kufre na pás. |
 | `st_security.mp3` | Čo do lietadla nepatrí? Daj to do koša. |
+| `st_apron.mp3` | Uvoľni cestu. Ťukni na auto, ktoré môže odísť. |
 | `st_boarding.mp3` | Pritiahni schody k lietadlu. |
 | `st_gate.mp3` | Otvor bránu. |
 | `st_takeoff.mp3` | Potiahni páku hore. |

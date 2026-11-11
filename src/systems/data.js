@@ -1,6 +1,7 @@
 // Načítanie a validácia JSON dát z data/. Obsah hry je len tu, nie v kóde.
+import { validateLevel } from '../scenes/apron/board.js';
 
-const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice', 'sprites'];
+const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice', 'sprites', 'puzzles'];
 
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
@@ -57,6 +58,12 @@ function checkSecurity(sec, errors) {
   if (!p || !Array.isArray(p.itemXs) || p.itemXs.length < sec.itemsPerBag) errors.push('airport.security.panel: "itemXs" má mať položku pre každú vec');
 }
 
+// Hádanky: tvar levelu a riešiteľnosť (slepá ulička = chyba dát).
+function checkPuzzles(list, errors) {
+  if (!Array.isArray(list) || !list.length) { errors.push('puzzles: očakávam neprázdne pole'); return; }
+  list.forEach((lv, i) => validateLevel(lv).forEach((e) => errors.push(`puzzles[${i}] ${lv && lv.id}: ${e}`)));
+}
+
 // Prevezme dáta z Phaser cache, overí ich a vráti zoznam chýb (prázdny = OK).
 export function collect(scene) {
   KEYS.forEach((k) => { store[k] = scene.cache.json.get(k); });
@@ -79,6 +86,7 @@ export function collect(scene) {
       if (!hp || !hp[k] || hp[k][f] === undefined) errors.push(`sprites.hangarPanels.${k}: chýba "${f}"`);
     });
   });
+  checkPuzzles(store.puzzles, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   errors.forEach((e) => console.error('[data]', e));
   return errors;
@@ -104,4 +112,10 @@ export function cruiseCfg() {
 
 export function destination(id) {
   return (store.destinations || []).find((d) => d.id === id);
+}
+
+// Level hádanky podľa id (neznáme id → prvý level).
+export function puzzle(id) {
+  const list = store.puzzles || [];
+  return list.find((p) => p.id === id) || list[0];
 }

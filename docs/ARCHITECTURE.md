@@ -158,3 +158,9 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 6. **Smer:** lietadlá kreslené smerom doprava (inak flip v kóde podľa dát). Veľkosť do ~200 KB na sprite.
 7. **Doplnky:** chýbajúce sprity a variácie sa môžu generovať cez Magnific z pôvodných kresieb. UI, pozadia a jednoduché tvary môžu byť SVG/vektor.
 8. **Hlas:** Paľove vlastné mp3 nahrávky (mono, 64 kbps) v `assets/audio/voice/sk/<kluc>.mp3`. Kým nie sú, slúži ako zástupka TTS mp3 z Magnificu s rovnakým názvom. V hre sa nikdy nepoužíva živé TTS.
+
+## 6. Hádanka Arrows (scéna `Apron`, v1.3, zatiaľ mimo slučky)
+- `data/puzzles.json`: `[{ id, cols, rows, cell?, pieces: [{ x, y, dir: up|down|left|right, kind: car|bus|truck }] }]`. Vozidlo zaberá 1 bunku, `kind` je len vzhľad. Čísla scény v `airport.json` → `apron` (bunka 160, vozidlo 0,85, posun mriežky, nečinnosť, oslava).
+- `scenes/apron/board.js`: čistá logika bez Phaseru (`canMove`, `blocker`, `remove`, `isClear`, `isSolvable`, `validateLevel`, `selfTest`). `data.js` pri načítaní nahlási neriešiteľný level ako chybu. Vozidlo odíde, ak je v smere šípky voľná cesta po okraj.
+- `scenes/Apron.js` dostane `{ level, next, args }`, po vyčistení `fx.go(next || 'Map', args)`. `apron/shapes.js` kreslí záložné vozidlo (predok = smer šípky) alebo sprite z `role('car'|'bus'|'truck')`, pozadie `role('bgApronTop')`.
+- Test: `?scene=Apron&level=p1&next=Map` (Preload; `next` len Map/Airport/Hangar), `?test=1` spustí samotest `board.js`.

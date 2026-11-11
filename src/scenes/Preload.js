@@ -22,11 +22,20 @@ export default class Preload extends Phaser.Scene {
       destinations: data.get('destinations'),
     });
     // Sprity lietadiel: mená až z načítaných dát. Chýbajúci súbor hru nezhodí (záložný tvar).
-    const go = () => this.scene.start('Map');
+    const go = () => this.scene.start(...startTarget());
     queuePlaneSprites(this, data.get('planes'));
     queueSprites(this);
     if (!this.load.list.size) { go(); return; }
     this.load.once('complete', go);
     this.load.start();
   }
+}
+
+// Test hádanky (zatiaľ nie je v slučke): ?scene=Apron&level=p1&next=Map. Iné scény sa z URL nespúšťajú.
+const NEXT_OK = ['Map', 'Airport', 'Hangar'];
+function startTarget() {
+  const q = new URLSearchParams(location.search);
+  if (q.get('scene') !== 'Apron') return ['Map'];
+  const next = q.get('next');
+  return ['Apron', { level: q.get('level') || undefined, next: NEXT_OK.includes(next) ? next : undefined, args: {} }];
 }
