@@ -53,7 +53,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R1a | Oprava dvojitého „Uvoľni" v hádanke | po: architekt prípadne pregeneruje `st_apron` (schválené) |
 | R1b | Let z miesta pristátia (poloha v save, vzdialenosti zo súradníc) | **PRED: plán architektovi**; po: hlas `land_bts` (schválené) |
 | R2a | Názov krajiny pod vlajkou (Finland / Suomi) | ✔ hotové |
-| R2a2 | Oprava: názov krajiny ostane do ťuknutia | [x] |
+| R2a2 | Oprava: názov krajiny ostane do ťuknutia | hotovo |
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
