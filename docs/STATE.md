@@ -14,7 +14,10 @@ Aktualizované 2026-11-11. Architekt (Opus/Fable) riadi, Sonnet implementuje (CL
 1. Hádanka s vozidlami: na začiatku zaznie „Uvoľni… Uvoľni cestu" (2x). Kód `src/scenes/Apron.js:59` volá `audio.play('st_apron')` len raz, `idleCheck` (r. 119) neskôr; mp3 `assets/audio/voice/sk/st_apron.mp3` má 4 s. Príčina zatiaľ neznáma (nahrávka vs. dvojitý štart scény/audio unlock).
 2. Chýba let späť na Slovensko: vždy sa letí z Bratislavy. Má sa letieť odtiaľ, kde lietadlo pristálo (SK→GR, potom GR→?).
 
-## Roadmapa (navrhnutá architektom, ČAKÁ NA SCHVÁLENIE Paľa)
+## Roadmapa (SCHVÁLENÁ Paľom 2026-11-11, briefy R1a–R4b v BACKLOG.md)
+Odpovede Paľa: dolet sa meria od miesta pristátia, Bratislava vždy dosiahnuteľná; dvojité „Uvoľni" je pri každej hádanke; Magnific dávka `land_bts` + prípadne nový `st_apron` schválená (generuje architekt po R1a/R1b).
+Stav: R1a zadaná Sonnet session.
+
 Poradie: **1a → 1b → 2a → 2b → 2c → 3a → 3b → 2d → 3c → 4a → 4b**. Tablet test po 2c a po 3b.
 
 | # | Úloha | Náročnosť | Magnific |

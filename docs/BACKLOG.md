@@ -45,6 +45,23 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 11c | Živé letisko: občasný vzlet v pozadí | nápad | po 11b |
 | 11d | Vlastné sfarbenie lietadla | nápad | po 9b |
 
+## Roadmapa v2: progres a obsah (Paľo schválil 2026-11-11)
+Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú predponu **R**, aby sa nepliedli so starými 4a, 4b. 9a + 9b sa robia ako R3c, 11b ako R2d. Briefy sú na konci súboru (sekcia „Roadmapa v2: briefy").
+
+| # | Úloha | Stopka pred / po |
+|---|---|---|
+| R1a | Oprava dvojitého „Uvoľni" v hádanke | po: architekt prípadne pregeneruje `st_apron` (schválené) |
+| R1b | Let z miesta pristátia (poloha v save, vzdialenosti zo súradníc) | **PRED: plán architektovi**; po: hlas `land_bts` (schválené) |
+| R2a | Názov krajiny pod vlajkou (Finland / Suomi) | – |
+| R2b | Paralaxa skyline pri pristátí | – |
+| R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
+| R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
+| R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
+| R2d | Noc (večerné lety) | – |
+| R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
+| R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
+| R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
+
 ## Spoločné pravidlá (súčasť každého briefu)
 Si implementátor v režime orchestrátora. Prečítaj `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/design-notes.md` a z `docs/PROGRESS.md` len posledné 2 úlohy. Výnimky z `CLAUDE.md`:
 - **Paľa sa nepýtaj** (pravidlo 1 vybavil architekt). Nejasnosť = napíš otázku architektovi a skonči ťah.
@@ -444,6 +461,153 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 3. Čím sa platí: mince (súťažia s upgradmi lietadla), alebo nová surovina z letov?
 4. Má stavba vplyv na hru (viac cestujúcich, prepitné), alebo je len na radosť?
 5. Kresby syna: ktoré budovy nakreslí (podklad pre sprity)?
+
+---
+
+## Roadmapa v2: briefy
+
+## [ ] R1a: Dvojité „Uvoľni" v hádanke (oprava)
+**Cieľ:** Na začiatku hádanky Arrows zaznie veta `st_apron` presne raz. Paľo na tablete pri **každej** hádanke počuje „Uvoľni… Uvoľni cestu" (dvakrát, prvé slovo sa opakuje).
+
+**Súbory:** `src/scenes/Apron.js`, `src/scenes/Airport.js` (r. ~91, prechod do Apron), `src/ui/fx.js` (`go`), `src/systems/audio.js`; podľa príčiny len tie, ktoré treba.
+
+**Zadanie (diagnostika, potom najmenšia oprava):**
+- Over v Browser paneli dočasným logom (potom odstráň), koľkokrát sa pri jednom vstupe do hádanky zavolá `Apron.create` a `audio.play('st_apron')`. Podozrenia v poradí: (1) prechod do Apron sa spustí dvakrát (dvojitý `fx.go` po bráne alebo `scene.start` dvakrát) a vzniknú dve prehrávania o pár stoviek ms posunuté; (2) `audio.play` rovnaký kľúč spustí dvakrát (napr. čaká na načítanie a potom prehrá aj z cache); (3) `idleCheck` vystrelí hneď na štarte (napr. `lastAct` z iného času).
+- Ak je príčina v kóde, oprav ju. Ak kód volá prehranie raz a raz ho aj spustí, chyba je v nahrávke: napíš to architektovi (pregeneruje `st_apron`, má Paľovo schválenie) a kód nemeň.
+- Ak oprava patrí do spoločného kódu (`fx.go`, `audio.play`), ochráň aj ostatné scény (napr. hlas rovnakého kľúča sa nespustí znova, kým ešte hrá).
+
+**Akceptačné kritériá:** pri vstupe do hádanky jedno `create` a jedno spustenie `st_apron`; nápoveda po 8 s nečinnosti hlas zopakuje ako doteraz; ostatné scény (letisko, vzlet, pristátie) majú hlasy bez zmeny; konzola bez chýb.
+
+**Nesmie sa zmeniť:** logika hádanky, levely, poradie scén.
+
+---
+
+## [ ] R1b: Let z miesta pristátia
+**Cieľ:** Lietadlo štartuje tam, kde naposledy pristálo (SK → GR, potom GR → TR alebo domov). Bratislava je normálny cieľ s pristátím a hlásením počasia. Dĺžka letu, rýchlosť, výplata a hádanky sa počítajú zo vzdialenosti medzi dvoma mestami, nie z ručných trás `bts-x`.
+
+**Rozhodnutie Paľa:** dolet sa meria **od miesta, kde lietadlo stojí**. Bratislava je dosiahnuteľná vždy (syn nikdy neuviazne).
+
+**Súbory:** `data/destinations.json`, `data/flights.json`, `src/systems/data.js` (validácia, `data.flight`), nový `src/systems/routes.js`, `src/systems/save.js`, `src/systems/economy.js`, `src/scenes/Map.js`, scény, ktoré odovzdávajú `to` (Airport, Takeoff, Flight, Touchdown, Landing, Payout; nájdi grepom `args.to`, `data.flight`, `bestStars`), `src/scenes/apron/pick.js`, `data/voice.json`, `docs/AUDIO.md`, `docs/ARCHITECTURE.md` (§3), `sw.js`, docs.
+
+**Zadanie:**
+- `destinations.json`: každé mesto dostane `geo: { lat, lon }` (skutočné súradnice letiska alebo mesta, 2 desatinné miesta). Pole `distance` zmaž. `routes.km(a, b)` = haversine, zaokrúhlené na 10 km. Skontroluj, že vzdialenosť z `bts` padne do rovnakého stupňa doletu (1500 / 2000 / 2600) ako dnešné `distance`. Odhad: ber ~550, zur ~650, rim ~780, ams ~980, par ~1090, ath ~1150, lon ~1230, ist ~1240, sto ~1250, fin ~1460, dub ~1680, mad ~1900, lis ~2440. Ak niektoré nesedí, napíš architektovi.
+- Počasie patrí cieľu: búrku (`weather` z trasy) a vietor (`wind`) presuň z `flights.json` do destinácie ako `flightWeather` a `wind` (rovnaký tvar, rovnaké mestá: búrka par, lon, dub, ams, sto, fin; vietor dub, mad, lis). Platí pre každý let do toho mesta.
+- `flights.json` nový tvar: `{ "base": { obstacles, stars, thinAfterHits, thinFactor }, "byKm": [ { "upTo": 600, "durationSec": 35, "speed": 420, "payMult": 1, "puzzles": ["p1","p3"] }, … ] }`. Stupne nastav tak, aby lety z Bratislavy ostali ako dnes: ≤600 → 35/420/1/[p1,p3]; ≤850 → 40/445/1/[p1,p3]; ≤1150 → 45/480/1,2/[p2,p4]; ≤1450 → 45/500/1,2/[p4,p5]; ≤2000 → 55/550/1,5/[p4,p5,p6,p7]; zvyšok → 65/600/2/[p6,p7,p8]. Posledný stupeň bez `upTo`.
+- `routes.flight(from, to)` vráti objekt v tvare, aký dnes dostáva Flight (base + stupeň podľa km + `weather`/`wind` cieľa + `from`, `to`, `km`). `data.flight(to)` nahraď, všetky volania prepíš. Validácia v `data.js`: `geo` povinné, `byKm` zoradené, hádanky existujú, búrka/vietor v destinácii (prenes dnešné kontroly).
+- Save v2 (`SAVE_VERSION` 2): `location: "bts"`. Migrácia 1 → 2 doplní `location`, nič iné nemení. `bestStars` ostávajú s kľúčmi `from-to` (staré `bts-x` platia ďalej, nové páry začínajú 0, v `defaults` netreba vopred plniť všetky páry). Pozor: `load` spája s predvolenými hodnotami len plytko.
+- Mapa: namiesto konštanty `HOME` platí `save.location`. Pri špendlíku polohy značka „Si tu" (malé lietadlo cez `addPlane`/sprite aktívneho lietadla nad špendlíkom + jemne pulzujúci krúžok, záložný tvar). Ťuk na vlastnú polohu = poskočí ako dnes domov. Otvorené mesto: `id === 'bts'` alebo `km(location, d) <= planeRange`. Pole `unlocked` už o otvorení nerozhoduje (v save ostáva). Zamknutý špendlík sa správa ako dnes (nádrž).
+- Do `args` celej slučky pribudne `from` (= poloha pri štarte). `save.location = to` sa zapíše **v Landing pri vstupe** (lietadlo pristálo). Odchod domov ikonou počas letisku alebo letu polohu nemení.
+- Pristátie v Bratislave: počasie `sun`, hlas `land_bts` („V Bratislave svieti slnko.", kľúč do `voice.json` + riadok v `AUDIO.md`; mp3 dodá architekt, dovtedy ticho), kvíz sa nespúšťa (dnes `dest.id !== 'bts'`, ponechaj). Kulisy `bts` už existujú.
+- `ARCHITECTURE.md` §3: nový tvar `flights.json`, `geo`, `location` v save.
+
+**Akceptačné kritériá:**
+- Nová hra začína v Bratislave; lety z Bratislavy majú rovnakú dĺžku, rýchlosť, `payMult` a hádanky ako pred úlohou (v správe tabuľka 13 trás pred / po).
+- Po pristátí v Aténach mapa ukáže „Si tu" pri Aténach; otvorené sú mestá do doletu od Atén a Bratislava; let ath → bts prejde celou slučkou (letisko, hádanka, vzlet, let, pristátie bez kvízu, výplata podľa km).
+- Reštart (F5) zachová polohu; ikona domov počas letu polohu nezmení.
+- Starý save v1 (vlož ručne do localStorage pred načítaním) sa načíta s mincami, upgradmi, rekordmi a `location: "bts"`.
+- Búrka aj vietor fungujú pri lete do par/lon/dub aj z iného mesta než Bratislava.
+
+**Nesmie sa zmeniť:** stanice letiska, minihry, ovládanie letu, správanie búrky a vetra, vzorec výplaty (`economy.payout`), hangár, ceny upgradov.
+
+**Plán:** úloha mení dáta aj save, takže najprv plán architektovi.
+
+---
+
+## [ ] R2a: Názov krajiny pod vlajkou pri pristátí
+**Cieľ:** Pri pristátí sa pod vlajkou ukáže názov krajiny po anglicky a v miestnom jazyku, napr. „Finland / Suomi". Výnimka z pravidla „bez textu" (Paľo schválil).
+
+**Súbory:** `data/destinations.json`, `src/scenes/Landing.js`, `src/systems/data.js`, `sw.js`, docs.
+
+**Zadanie:**
+- `destinations.json`: `countryName: { "intl": "Finland", "local": "Suomi" }` pre všetkých 14 miest. Miestny názov v pôvodnom písme (napr. `Greece / Ελλάδα`, `Türkiye`, `Sweden / Sverige`, `Ireland / Éire`). Ak sú oba rovnaké (napr. Spojené kráľovstvo: `United Kingdom`), zobrazí sa raz. Bratislava: `Slovakia / Slovensko`.
+- Landing: text pod vlajkou, veľký (≥ 44 px), tmavý s bielym obrysom, objaví sa jemne (fade 300 ms) spolu s vlajkou. Veľkosť, farba a odstup v dátach (`airport.json` → `landing.countryText`).
+- Validácia: `countryName.intl` a `.local` povinné.
+
+**Akceptačné kritériá:** všetkých 14 miest má správny názov, text sa nezreže ani pri dlhom názve (`United Kingdom`), kvíz po pristátí funguje ako predtým.
+
+**Nesmie sa zmeniť:** kvíz, hlas pri pristátí, výplata.
+
+---
+
+## [ ] R2b: Paralaxa pri pristátí
+**Cieľ:** Pri pristávaní sa panoráma mesta (skyline) posúva pomalšie ako dráha a stromy, aby scéna pôsobila hlbšie.
+
+**Súbory:** `src/scenes/Touchdown.js`, `src/scenes/touchdown/scenery.js`, `data/airport.json`, `sw.js`, docs.
+
+**Zadanie:** vrstvy kulís dostanú koeficient posunu z dát (`airport.json` → `landing.parallax: { "skyline": 0.35, "trees": 0.7, "tower": 0.7 }`, dráha a svetlá = 1). Skyline musí byť dosť široký (alebo sa zopakuje), aby sa počas dojazdu neodkryl okraj.
+
+**Akceptačné kritériá:** pri dojazde je posun vrstiev viditeľný, okraj skyline sa nikdy neukáže, stojisko a čísla na stojiskách fungujú ako predtým.
+
+**Nesmie sa zmeniť:** priebeh pristátia (brzda, stojisko), kulisy podľa mesta.
+
+---
+
+## [ ] R2c: Počasie pri pristávaní
+**Cieľ:** Keď v cieli prší, prší aj počas pristávania: tmavšia obloha, sivé mraky, dážď. Zhoduje sa s hlásením („V Londýne prší").
+
+**Súbory:** `src/scenes/Touchdown.js` (prípadne `Landing.js`, ak sa obloha kreslí tam), znovupoužiť dážď z `src/scenes/flight/weather.js` (ak treba, vyčleniť spoločnú časť do `src/ui/rain.js`), `data/airport.json` alebo `data/sprites.json` (`fx`), `sw.js`, docs.
+
+**Zadanie:** podľa `weather` cieľa (`rain`) stmavni oblohu a závoj ako v búrke počas letu, pridaj 3–4 sivé mraky v pozadí a dážď (max ~60 čiarok), slučka `sfx_rain` počas pristátia, pri odchode zo scény ticho. `sun` = bez zmeny.
+
+**Akceptačné kritériá:** Londýn, Paríž, Dublin, Amsterdam, Štokholm, Helsinki pristávajú v daždi; Berlín, Rím, Bratislava bez dažďa; po odchode zo scény žiadna slučka zvuku ani kvapky; plynulosť ako pri búrke v lete.
+
+**Nesmie sa zmeniť:** búrka počas letu, priebeh pristátia.
+
+**STOP po R2c: tablet** (dvojité „Uvoľni", let z miesta pristátia, názvy krajín, paralaxa, dážď pri pristátí).
+
+---
+
+## [ ] R3a: Hangár: Motor a pomalší progres
+**Cieľ:** Hra vydrží desiatky letov. Nový upgrade Motor (rýchlejší a kratší let), viac stupňov doletu, drahšie upgrady a prísnejšie zarábanie.
+
+**Súbory:** `data/planes.json`, `data/economy.json`, `src/systems/economy.js`, `src/systems/routes.js`, `src/scenes/Hangar.js`, `src/scenes/hangar/upgradePanel.js`, `src/systems/save.js`, `data/voice.json`, `sw.js`, docs.
+
+**Zadanie (čísla potvrdí Paľo pred zadaním, architekt ich sem doplní):**
+- `planes.json` → `engine: [{ "value": 1, "cost": 0 }, { "value": 0.9, "cost": … }, { "value": 0.8, "cost": … }]`. `value` násobí `durationSec` letu (kratší let); rýchlosť posunu prekážok sa zvýši tak, aby počet prekážok ostal rovnaký.
+- Dolet: viac menších stupňov (návrh 1000 → 1300 → 1600 → 2000 → 2600), začiatok nižší, aby sa vzdialené mestá odomykali postupne. Overiť, že z Bratislavy je na štarte dosiahnuteľné aspoň 3 mestá.
+- Ceny upgradov vyššie, `basePerPassenger` prípadne nižší (cieľ: všetko kúpené po ~40 letoch). Save: nový kľúč `engine` v `planes[id]`, migrácia.
+- Hangár: tretí upgrade s ikonou motora (záložný tvar), rovnaké ovládanie ako kapacita a dolet. Nový `sfx_engine_up` (Magnific na schválenie).
+
+**Akceptačné kritériá:** výpočet v správe: koľko letov treba na každý upgrade pri priemernej výplate; starý save si ponechá kúpené stupne (prevod starých stupňov doletu na nové bez straty); motor viditeľne skráti let.
+
+**Nesmie sa zmeniť:** ovládanie hangára, mince sa nikdy neodpočítajú bez kúpy.
+
+---
+
+## [ ] R3b: Palivo a tankovanie
+**Cieľ:** Lietadlo má nádrž. Let spotrebuje palivo podľa km, tankuje sa za mince. Mapa ukáže, kam sa s aktuálnym palivom dá doletieť.
+
+**Otázky na Paľa pred zadaním:** kde sa tankuje (ťuk na nádrž na mape alebo v hangári), cena za plnú nádrž, či dolet = veľkosť nádrže.
+
+**Návrh zadania:** save `fuel` (km v nádrži, nový save plný); nádrž = dolet lietadla; mesto je dosiahnuteľné, ak `km ≤ fuel`; ikona nádrže na mape s hladinou, ťuk = natankovať doplna za mince z `economy.json` (`fuelPerKm`), animácia čerpania + `sfx_fuel`. Poistka: najbližšie mesto (vrátane Bratislavy, ak je najbližšie) je dosiahnuteľné vždy; ak na tankovanie nie sú mince, natankuje sa zadarmo presne naň. 2 hlasy (napr. „Natankuj lietadlo.", „Nádrž je plná.").
+
+**STOP po R3b: tablet** (tempo progresu, ceny, tankovanie zrozumiteľné pre syna).
+
+---
+
+## [ ] R2d: Noc (schválený nápad 11b)
+**Cieľ:** Dlhé lety sú večer alebo v noci: tmavomodrá obloha, hviezdy, svetlá dráhy, svietiace okná mesta. Pri vzlete aj pristátí.
+
+**Návrh zadania:** stupne `byKm` vo `flights.json` dostanú `time: day | dusk | night` (napr. do 1150 deň, do 2000 západ slnka, ďalej noc). Farby oblohy a závojov v dátach. V noci: hviezdy na oblohe (kódom), svetlá dráhy svietia, okná skyline žlté (prekrytie kódom), lietadlo má blikajúce svetlo na krídle. Hviezdičky na zbieranie musia ostať dobre viditeľné.
+
+**Nesmie sa zmeniť:** počasie (v daždi v noci bez hviezd na oblohe), obtiažnosť.
+
+---
+
+## [ ] R3c: Nové lietadlá (= 9a + 9b)
+Briefy 9a a 9b vyššie platia, s doplnením: lietadlá majú vlastné stupne motora (R3a) a nádrž (R3b). Čísla doladí architekt po R3b. **STOP pred:** dávka Magnific, 6 spritov.
+
+---
+
+## [ ] R4a: Hlásenia v miestnom jazyku pri odlete zo zahraničia
+**Cieľ:** Keď lietadlo štartuje zo zahraničia, hlásenia na letisku zaznejú najprv po slovensky a potom v jazyku krajiny (en, de, fr, it, es, pt, nl, sv, el, tr, fi).
+
+**Návrh zadania:** ~6 hlásení (check-in, kontrola, brána, nástup, vzlet, privítanie). `destinations.json` → `lang`. Kľúče `ann_<id>_<lang>` vo `voice.json`, prehrá sa slovenská veta a hneď po nej miestna. V Bratislave len slovenská. Chýbajúci mp3 = len slovenská. **STOP pred:** dávka Magnific ~66 hlasov (výber hlasov pre každý jazyk schváli Paľo).
+
+---
+
+## [ ] R4b: Nová mapa (brief zatiaľ nie je)
+Rusko, bývalé ZSSR, Blízky východ, sever Afriky (Omán, SAE, Egypt, Mongolsko…). Rozdelí sa na 2–3 úlohy, prvá so 6–8 mestami. **PRED: otázky Paľovi** (ktoré mestá, prepínanie máp, kresba mapy, odomknutie novej mapy) a dávka Magnific (mapa, vlajky, skyline, hlasy).
 
 ---
 
