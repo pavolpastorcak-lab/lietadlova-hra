@@ -161,3 +161,5 @@ v1.1 dolet + nové destinácie · v1.2 bezpečnostná kontrola · v1.3 hádanka 
   - NEVYPOČUTÉ: architekt zvuk prehrať nevie. Paľo overí výslovnosť, dĺžky čísel a slučku motora.
 - **Hlasitosti po teste (architekt, len dáta)** (2026-11-11)
   - Paľo: hala a pás takmer nepočuteľné, let (motor + hviezdičky) o polovicu tichší než vzlet a pristátie. `voice.json`: `sfx_airport` 0,25 → 0,75, `sfx_belt` 0,4 → 1,2, `sfx_cruise` 0,35 → 0,7, `sfx_star` 0,6 → 1,2 (pomer motor : hviezdička zachovaný). SW: CACHE_VERSION v20. Ostatné zvuky Paľo schválil. Hodnoty nad 1 zosilňujú nad pôvodnú nahrávku; ak by skresľovali, treba zvuk vygenerovať hlasnejší.
+- **Zvuky po teste hádanky (architekt, len súbory)** (2026-11-11)
+  - Paľo: rozjazd vozidla piskľavý, uťahovák v hangári príliš vysoký. Oba `sfx/drive.mp3` a `sfx/upgrade.mp3` pregenerované (Magnific, 20 kreditov). SW: CACHE_VERSION v27. Ostatné v hádanke schválené. NEVYPOČUTÉ architektom.
