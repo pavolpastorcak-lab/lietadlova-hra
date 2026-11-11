@@ -44,7 +44,7 @@ vendor/phaser.min.js
 src/
   main.js             # Phaser config, zoznam scén
   scenes/             # Boot, Preload, Map, Airport, Takeoff, Flight, Landing, Hangar
-    airport/          # flow.js (poradie staníc), checkin, bags, stairs, gate, shapes (zástupná grafika)
+    airport/          # flow.js (poradie staníc), checkin, bags, security, stairs, gate, shapes (zástupná grafika)
   systems/
     input.js          # jediný input modul (1 pointer, ťuk + ťahanie)
     save.js           # localStorage, saveVersion, migrácie

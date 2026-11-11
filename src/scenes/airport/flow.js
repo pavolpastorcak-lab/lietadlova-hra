@@ -21,6 +21,7 @@ export function runFlow(ctx, stations, runners, onDone) {
     const pulse = ctx.scene.tweens.add({
       targets: b, scaleX: bx * 1.04, scaleY: by * 1.04, duration: 500, yoyo: true, repeat: -1,
     });
+    ctx.station = st;
     audio.play(st.voice);
     runners[st.id](ctx, () => {
       clear();

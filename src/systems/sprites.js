@@ -26,6 +26,7 @@ export function allKeys() {
   c.bags.sizes.forEach((s) => c.bags.colors.forEach((col) => add(`bag_${s}_${col}`)));
   const ap = data.get('airport') || {};
   (ap.stations || []).forEach((s) => { if (s.sprite && !s.sprite.startsWith('plane_')) add(s.sprite); add(s.spriteOpen); });
+  ((ap.security && ap.security.items) || []).forEach((i) => add(i.sprite));   // sprite veci je voliteľný
   (ap.backdrop || []).forEach((b) => add(b.sprite));
   if (ap.landing && ap.landing.lights) Object.values(ap.landing.lights).forEach(add);
   (data.get('destinations') || []).forEach((d) => {

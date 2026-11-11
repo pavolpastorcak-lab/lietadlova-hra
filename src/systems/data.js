@@ -7,7 +7,7 @@ const REQUIRED = {
   destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice'],
   planes: ['id', 'sprites', 'capacity', 'range'],
   flights: ['from', 'to', 'durationSec', 'obstacles', 'stars'],
-  stations: ['id', 'x', 'sprite', 'voice'],
+  stations: ['id', 'x', 'voice'],
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
 };
 
@@ -37,6 +37,26 @@ function checkItems(name, items, fields, errors) {
   });
 }
 
+// Bezpečnostná kontrola: každý kufor sa musí dať zložiť z dostupných vecí.
+function checkSecurity(sec, errors) {
+  if (!sec) { errors.push('airport.security: chýba blok'); return; }
+  ['bags', 'itemsPerBag', 'firstBagForbidden', 'idleHintSec'].forEach((f) => {
+    if (typeof sec[f] !== 'number') errors.push(`airport.security: chýba "${f}"`);
+  });
+  const fpb = sec.forbiddenPerBag;
+  if (!Array.isArray(fpb) || !fpb.length) { errors.push('airport.security: "forbiddenPerBag" má byť neprázdne pole'); return; }
+  if (!Array.isArray(sec.items)) { errors.push('airport.security: chýba "items"'); return; }
+  const forb = sec.items.filter((i) => i.type === 'forbidden').length;
+  const allowed = sec.items.filter((i) => i.type === 'allowed').length;
+  if (forb < Math.max(...fpb, sec.firstBagForbidden)) errors.push('airport.security: málo zakázaných vecí');
+  if (allowed < sec.itemsPerBag - Math.min(...fpb, sec.firstBagForbidden)) errors.push('airport.security: málo povolených vecí');
+  const p = sec.panel;
+  ['x', 'y', 'w', 'h', 'itemSize', 'binX', 'binSize'].forEach((f) => {
+    if (!p || typeof p[f] !== 'number') errors.push(`airport.security.panel: chýba "${f}"`);
+  });
+  if (!p || !Array.isArray(p.itemXs) || p.itemXs.length < sec.itemsPerBag) errors.push('airport.security.panel: "itemXs" má mať položku pre každú vec');
+}
+
 // Prevezme dáta z Phaser cache, overí ich a vráti zoznam chýb (prázdny = OK).
 export function collect(scene) {
   KEYS.forEach((k) => { store[k] = scene.cache.json.get(k); });
@@ -51,6 +71,7 @@ export function collect(scene) {
   ['rateMin', 'rateMax', 'vxForMax', 'smoothMs'].forEach((f) => {
     if (!cr || typeof cr[f] !== 'number') errors.push(`airport.audio.cruise: chýba "${f}"`);
   });
+  checkSecurity(store.airport && store.airport.security, errors);
   if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
   const hp = store.sprites && store.sprites.hangarPanels;
   ['capacity', 'range'].forEach((k) => {

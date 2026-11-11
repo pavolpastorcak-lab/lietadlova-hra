@@ -222,7 +222,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 5a: Bezpečnostná kontrola (v1.2)
+## [x] 5a: Bezpečnostná kontrola (v1.2)
 **Cieľ:** Nová stanica na letisku medzi batožinou a schodmi: kufor ide cez skener, syn vyberie veci, ktoré do lietadla nepatria.
 
 **Súbory:** `data/airport.json`, `data/sprites.json`, `data/voice.json`, nový `src/scenes/airport/security.js`, `src/scenes/airport/flow.js`, `src/scenes/Airport.js`, `src/scenes/airport/shapes.js`, `sw.js`, docs.

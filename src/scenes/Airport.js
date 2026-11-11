@@ -10,11 +10,12 @@ import { checkin } from './airport/checkin.js';
 import { bags } from './airport/bags.js';
 import { stairs } from './airport/stairs.js';
 import { gate } from './airport/gate.js';
+import { security } from './airport/security.js';
 import { addPlane, addSprite, role, personKey } from '../systems/sprites.js';
-import { makePerson, PERSON_COLORS } from './airport/shapes.js';
+import { makePerson, makeScanner, PERSON_COLORS } from './airport/shapes.js';
 
 const COLORS = { checkin: 0xf0ad4e, bags: 0x5bc0de, gate: 0x9b59b6 };
-const RUNNERS = { checkin, bags, boarding: stairs, gate };
+const RUNNERS = { checkin, bags, security, boarding: stairs, gate };
 
 // Letisko zboku: stanice z airport.json idú po poradí (check-in, batožina, schody, gate) → let.
 // Sprity (pozadie, budovy, ľudia) idú z dát; keď chýbajú, kreslia sa zástupné tvary.
@@ -43,6 +44,10 @@ export default class Airport extends Phaser.Scene {
           door: { x: s.x - Math.round(120 * s.w / 380), y: 540 },
           stairsStart: { x: s.x - 280, y: 700 },
         };
+        return;
+      }
+      if (s.id === 'security') {   // skener: sprite z role, inak tvary
+        ctx.buildings[s.id] = makeScanner(this, s.x, s.y, s.w, ap.security.bags);
         return;
       }
       const spr = addSprite(this, s.sprite, s.x, s.y, { w: s.w, origin: [0.5, 1] });

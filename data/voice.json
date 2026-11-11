@@ -2,6 +2,7 @@
   "st_checkin": {"file":"voice/sk/st_checkin.mp3","text":"Ukáž letenku."},
   "st_bags": {"file":"voice/sk/st_bags.mp3","text":"Daj kufre na pás."},
   "st_boarding": {"file":"voice/sk/st_boarding.mp3","text":"Pritiahni schody k lietadlu."},
+  "st_security": {"file":"voice/sk/st_security.mp3","text":"Čo do lietadla nepatrí? Daj to do koša."},
   "st_gate": {"file":"voice/sk/st_gate.mp3","text":"Otvor bránu."},
   "dest_lon": {"file":"voice/sk/dest_lon.mp3","text":"Letíme do Londýna."},
   "land_lon": {"file":"voice/sk/land_lon.mp3","text":"V Londýne prší."},
