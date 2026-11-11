@@ -54,11 +54,11 @@ export function makeScanner(scene, x, y, w, bags) {
     c.add([scene.add.rectangle(0, -85, w, 170, 0x7f8c8d).setStrokeStyle(5, 0x34495e),
       scene.add.rectangle(0, -60, w - 50, 90, 0x2c3e50), scene.add.rectangle(0, -60, w - 90, 8, 0x95a5a6)]);
   }
-  // so spritom sedí stavové svetlo na jeho lampe (lampa je hore, ~8 % výšky od vrchu)
-  c.light = spr ? scene.add.circle(spr.displayWidth * 0.01, -spr.displayHeight * 0.92, 13, 0xe74c3c).setStrokeStyle(3, 0x34495e)
+  // so spritom sedí stavové svetlo na jeho lampe (hore v strede), bodky kufrov na prednej stene skrine
+  c.light = spr ? scene.add.circle(0, -spr.displayHeight * 0.935, 11, 0xe74c3c).setStrokeStyle(3, 0x34495e)
     : scene.add.circle(0, -150, 18, 0xe74c3c).setStrokeStyle(4, 0x34495e);
   c.dots = [];
-  for (let i = 0; i < bags; i++) c.dots.push(scene.add.circle((i - (bags - 1) / 2) * 34, -18, 11, 0xbdc3c7).setStrokeStyle(3, 0x34495e));
+  for (let i = 0; i < bags; i++) c.dots.push(scene.add.circle((i - (bags - 1) / 2) * 34, spr ? -spr.displayHeight * 0.4 : -18, 11, 0xbdc3c7).setStrokeStyle(3, 0x34495e));
   c.add([c.light, ...c.dots]);
   return c;
 }
@@ -88,11 +88,18 @@ export function makeItem(scene, def, x, y, size) {
   const g = scene.add.graphics();
   const R = (a, b, w, h, f) => g.fillStyle(f).fillRect(a * k, b * k, w * k, h * k);
   const C = (a, b, r, f) => g.fillStyle(f).fillCircle(a * k, b * k, r * k);
-  if (def.id === 'flasa') {
+  if (def.id === 'flasa' || def.id === 'flasa_sport') {
     R(-28, -20, 56, 80, col); R(-14, -55, 28, 36, 0xd6eaf8); R(-18, -66, 36, 14, 0xe74c3c); R(-28, 5, 56, 22, 0xffffff);
   } else if (def.id === 'noznice') {
     g.lineStyle(10 * k, 0x95a5a6).lineBetween(-5 * k, 5 * k, 30 * k, -55 * k).lineBetween(5 * k, 5 * k, -30 * k, -55 * k);
     g.lineStyle(10 * k, col).strokeCircle(-22 * k, 38 * k, 18 * k).strokeCircle(22 * k, 38 * k, 18 * k);
+  } else if (def.id === 'pribor') {
+    g.lineStyle(10 * k, col).lineBetween(-25 * k, -55 * k, -25 * k, 55 * k).lineBetween(25 * k, -55 * k, 25 * k, 55 * k);
+    R(-38, -55, 26, 36, col); R(12, -55, 26, 36, col);
+  } else if (def.id === 'koleso') {
+    g.lineStyle(26 * k, col).strokeCircle(0, 0, 42 * k);
+  } else if (def.id === 'nohavice') {
+    R(-34, -55, 68, 30, col); R(-34, -25, 30, 80, col); R(4, -25, 30, 80, col);
   } else if (def.id === 'macko') {
     C(-34, -38, 16, col); C(34, -38, 16, col); C(0, -10, 44, col); C(0, 8, 20, 0xf5cba7);
     C(-16, -20, 6, 0x222222); C(16, -20, 6, 0x222222); C(0, 0, 7, 0x222222);

@@ -122,6 +122,12 @@
   - `security.js`: zakázaná vec mizne do otvoru koša (horná tretina), pri vhodení hrá `sfx_bin`; mierka veci a pulz berú základnú mierku spritu (`it.base`). `sfx_bin` vo `voice.json` (hlasitosť 0,8), preload v `Airport.js`, riadok v `AUDIO.md`. SW: CACHE_VERSION v22, 7 spritov do `PRECACHE`, `bin.mp3` ide z `voice.json`.
   - Otestované v Browser paneli (port 8090, ručné vstupy, dočasné `window.__game`/`__ctx` vrátené): všetky 7 textúr existuje, celé letisko checkin → bags → security → boarding → gate → Takeoff, chybný ťah (tričko) bez smajlíka, vhodenie zakázanej veci spustí zvuk 1 s (`bin.mp3`), svetlo zelené po čistom kufri, bodky, po odstránení textúr sa ukážu záložné tvary. Screenshot panelu skontrolovaný.
   - NEOTESTOVANÉ: tablet (dotyk, veľkosť vecí a koša), nepočul som zvuky, offline režim a aktualizácia cache cez SW.
+- **Úloha 5c: skener zboku, druhá sada vecí** (2026-11-11)
+  - Nový `bld_skener` (640×284, zboku): stanica `security` má `x` 615, `w` 250 (výška ~111, stojí na podlahe), susedné stanice posunuté: `bags` x 385 → 370, `gate` x 800 → 850. Stavové svetlo je na lampe v strede hore (r 11), bodky kufrov na prednej stene skrine (40 % výšky). Záložný skener ostal pri starých polohách.
+  - `airport.json` → `security.items` má 9 vecí (4 zakázané: `flasa`, `noznice`, `flasa_sport`, `pribor`; 5 povolených: `macko`, `tricko`, `kniha`, `koleso`, `nohavice`), každá so `sprite`. `shapes.js`: záložné tvary pre `pribor`, `koleso`, `nohavice`; `flasa_sport` zdieľa tvar s `flasa`. Výber kufra (`security.js`) sa nezmenil.
+  - SW: CACHE_VERSION v23, 4 nové sprity v `PRECACHE`.
+  - Otestované v Browser paneli (port 8090, pane spomalený, hra krokovaná ručne cez `game.step`, dočasné `window.__game`/`__ctx` vrátené): všetkých 9 textúr vecí + skener + kôš existuje, celé letisko prešlo do Takeoff, konzola bez chýb. 20 náhodných kufrov (kópia `pickBag` s dátami): vždy 3 rôzne veci, 1–2 zakázané; zo 300 dvojíc vyšlo všetkých 6 možných párov. Záložné tvary nových vecí aj skenera sa nakreslia. Screenshot letiska: skener sedí medzi pásom a bránou, svetlo na lampe.
+  - NEOTESTOVANÉ: tablet (veľkosť, dotyk), zvuk, offline. V jednom kufri môže byť fľaša aj športová fľaša (rôzne `id`, podobný vzhľad).
 - [ ] spracovať ďalšie kresby syna na sprity (ľudia, kufre, budovy; hrubá fixka, 1 objekt na papier)
 - [ ] nahrať vlastné hlasové mp3 podľa `docs/AUDIO.md` (po pridaní zvýšiť CACHE_VERSION)
 

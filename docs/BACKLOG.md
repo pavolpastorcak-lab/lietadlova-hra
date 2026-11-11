@@ -29,6 +29,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 4c | Zvuky v hre (let, hviezdy, mince, hangár, letisko) | v1.1 | **PO: tablet** (hlasitosti) |
 | 5a | Bezpečnostná kontrola (záložné tvary) | v1.2 | **PO: tablet**; dávka Magnific (7 spritov) na jedno schválenie |
 | 5b | Zapojenie spritov a zvukov bezpečnostnej kontroly | v1.2 | **PO: tablet** |
+| 5c | Skener zboku a druhá sada vecí | v1.2 | hotovo |
 | 6a | Hádanka Arrows: engine + 2 levely | v1.3 | – |
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
 | 7a | Kvíz s vlajkami po pristátí | v1.4 | **PO: tablet**, mp3 |

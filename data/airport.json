@@ -1,9 +1,9 @@
 { "stations": [
   { "id": "checkin",  "x": 150,  "y": 610, "w": 260, "sprite": "bld_checkin",       "voice": "st_checkin" },
-  { "id": "bags",     "x": 385,  "y": 668, "w": 240, "sprite": "bld_pas",           "voice": "st_bags" },
-  { "id": "security", "x": 590,  "y": 610, "w": 200, "voice": "st_security" },
+  { "id": "bags",     "x": 370,  "y": 668, "w": 240, "sprite": "bld_pas",           "voice": "st_bags" },
+  { "id": "security", "x": 615,  "y": 610, "w": 250, "voice": "st_security" },
   { "id": "boarding", "x": 1040, "w": 420, "sprite": "plane_zelene_side", "voice": "st_boarding" },
-  { "id": "gate",     "x": 800,  "y": 610, "w": 220, "sprite": "bld_gate_zatvorena", "spriteOpen": "bld_gate_otvorena", "voice": "st_gate" }
+  { "id": "gate",     "x": 850,  "y": 610, "w": 220, "sprite": "bld_gate_zatvorena", "spriteOpen": "bld_gate_otvorena", "voice": "st_gate" }
 ],
   "security": { "bags": 3, "itemsPerBag": 3, "forbiddenPerBag": [1, 2], "firstBagForbidden": 1, "idleHintSec": 8,
                 "items": [
@@ -11,7 +11,11 @@
                   { "id": "noznice", "sprite": "item_noznice", "type": "forbidden", "color": "0xe67e22" },
                   { "id": "macko", "sprite": "item_macko", "type": "allowed",   "color": "0x9c6b3f" },
                   { "id": "tricko", "sprite": "item_tricko", "type": "allowed",   "color": "0xe74c3c" },
-                  { "id": "kniha", "sprite": "item_kniha", "type": "allowed",   "color": "0x27ae60" }
+                  { "id": "kniha", "sprite": "item_kniha", "type": "allowed",   "color": "0x27ae60" },
+                  { "id": "flasa_sport", "sprite": "item_flasa_sport", "type": "forbidden", "color": "0x2ecc71" },
+                  { "id": "pribor", "sprite": "item_pribor", "type": "forbidden", "color": "0x95a5a6" },
+                  { "id": "koleso", "sprite": "item_koleso", "type": "allowed",   "color": "0xf1c40f" },
+                  { "id": "nohavice", "sprite": "item_nohavice", "type": "allowed",   "color": "0x2c5aa0" }
                 ],
                 "panel": { "x": 640, "y": 315, "w": 900, "h": 280, "itemSize": 120, "itemXs": [-300, -120, 60], "binX": 320, "binSize": 150 } },
   "backdrop": [
