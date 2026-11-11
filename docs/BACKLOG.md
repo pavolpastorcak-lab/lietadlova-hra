@@ -56,6 +56,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2a2 | Oprava: názov krajiny ostane do ťuknutia | hotovo |
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
+| R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | po R2c, pred R3a (Paľo 2026-11-11) |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
 | R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
@@ -568,6 +569,25 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 **Nesmie sa zmeniť:** búrka počas letu, priebeh pristátia.
 
 **STOP po R2c: tablet** (dvojité „Uvoľni", let z miesta pristátia, názvy krajín, paralaxa, dážď pri pristátí).
+
+---
+
+## [ ] R2e: Tváre cestujúcich v lete
+**Cieľ:** Nárazy do mrakov a vtákov majú viditeľný, mierny vplyv na prepitné. Dnes nemajú žiadny (len zatrasenie a zriedenie po 3 nárazoch). Rozhodnutie Paľa (2026-11-11): rad tvárí cestujúcich počas letu. Mince sa nikdy neodpočítavajú.
+
+**Súbory:** nový `src/scenes/flight/faces.js`, `src/scenes/Flight.js` (napojenie na náraz a na koniec letu), `src/scenes/Payout.js` (ak treba zobraziť), `data/flights.json` (`base.faces`) alebo `data/sprites.json` (`fx.faces`), `src/systems/data.js`, `docs/design-notes.md` (pravidlo prepitného), `sw.js`, docs.
+
+**Zadanie:**
+- Hore uprostred HUD rad okrúhlych tvárí kreslených kódom, jedna za každého cestujúceho (`args.passengers`). Pri viac ako 8 sa zmenšia, aby sa zmestili. Na začiatku letu sú všetky usmiate.
+- Náraz: najbližšia usmiata tvár sprava zosmutnie (zmena úst + krátke zatrasenie tváre). Ak sú všetky smutné, nič ďalšie.
+- Zotavenie: po `recoverSec` (návrh 8 s) bez nárazu sa jedna smutná tvár znova usmeje (s malou iskrou). Opakuje sa, kým nie sú všetky usmiate.
+- Koniec letu: počet usmiatych tvárí ide do `args` ako `flightSmiles` a pripočíta sa k `smiles` pre výplatu (`tipPerSmile` sa nemení). Výplata a Payout inak bez zmeny.
+- Čísla v dátach: `recoverSec`, veľkosť tváre, rozostup, max veľkosť radu. Nezakryť počítadlo hviezdičiek ani ikonu domov.
+- `design-notes.md`: doplniť, že spokojnosť cestujúcich v lete ovplyvňuje len prepitné a nikdy neodpočítava mince.
+
+**Akceptačné kritériá:** let bez nárazu = +N smajlíkov (N = počet cestujúcich); 3 rýchle nárazy = 3 smutné tváre, po ~8 s pokoja sa postupne usmievajú; prepitné na výplate sa zmení presne o počet usmiatych tvárí; zriedenie prekážok po 3 nárazoch funguje ako predtým; búrka a vietor bez zmeny.
+
+**Nesmie sa zmeniť:** pravidlá nárazu a hitbox, hviezdičky, základná výplata, smajlíky z letiska a hádanky.
 
 ---
 

@@ -16,7 +16,7 @@ Aktualizované 2026-11-11. Architekt (Opus/Fable) riadi, Sonnet implementuje (CL
 
 ## Roadmapa (SCHVÁLENÁ Paľom 2026-11-11, briefy R1a–R4b v BACKLOG.md)
 Odpovede Paľa: dolet sa meria od miesta pristátia, Bratislava vždy dosiahnuteľná; dvojité „Uvoľni" je pri každej hádanke; Magnific dávka `land_bts` + prípadne nový `st_apron` schválená (generuje architekt po R1a/R1b).
-Stav: R1a hotová (fd0999d, v32), R1b hotová (672d232, v33), `land_bts.mp3` doplnený (v34), R2a hotová (07bb02a, v35), R2b hotová (9e596cd, v36; na tablete pozrieť opakovanie skyline a veže). Ďalšia R2c.
+Stav: R1a hotová (fd0999d, v32), R1b hotová (672d232, v33), `land_bts.mp3` doplnený (v34), R2a hotová (07bb02a, v35), R2b hotová (9e596cd, v36; na tablete pozrieť opakovanie skyline a veže), R2a2 hotová (3417825, v37, NEotestovaná v prehliadači: navigácia na localhost zamietnutá). Ďalšia R2c, potom nová R2e (tváre cestujúcich, Paľo schválil).
 
 Poradie: **1a → 1b → 2a → 2b → 2c → 3a → 3b → 2d → 3c → 4a → 4b**. Tablet test po 2c a po 3b.
 
