@@ -55,7 +55,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2a | Názov krajiny pod vlajkou (Finland / Suomi) | ✔ hotové |
 | R2a2 | Oprava: názov krajiny ostane do ťuknutia | hotovo |
 | R2b | Paralaxa skyline pri pristátí | hotovo |
-| R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
+| R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | po R2c, pred R3a (Paľo 2026-11-11) |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
 | R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
@@ -557,7 +557,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2c: Počasie pri pristávaní
+## [x] R2c: Počasie pri pristávaní
 **Cieľ:** Keď v cieli prší, prší aj počas pristávania: tmavšia obloha, sivé mraky, dážď. Zhoduje sa s hlásením („V Londýne prší").
 
 **Súbory:** `src/scenes/Touchdown.js` (prípadne `Landing.js`, ak sa obloha kreslí tam), znovupoužiť dážď z `src/scenes/flight/weather.js` (ak treba, vyčleniť spoločnú časť do `src/ui/rain.js`), `data/airport.json` alebo `data/sprites.json` (`fx`), `sw.js`, docs.

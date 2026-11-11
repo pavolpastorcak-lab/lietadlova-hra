@@ -31,5 +31,7 @@
   "landing": { "descendSec": 2.2, "brakeTauSec": 1.0, "stopSpeed": 0.04, "standCount": 3, "numberRange": [1, 9],
                "taxiSec": 2.4, "numberDelaySec": 1.6, "idleHintSec": 8, "brakeVoice": "st_brake", "standVoice": "st_stand",
                "parallax": { "skyline": 0.35, "trees": 0.7, "tower": 0.7 },
+               "rain": { "max": 60, "veilColor": "0x1c2a44", "veilAlpha": 0.3, "veilDepth": 3, "cloudDepth": 0.5,
+                         "clouds": [{ "x": 160, "y": 90, "w": 380 }, { "x": 520, "y": 160, "w": 320 }, { "x": 880, "y": 80, "w": 400 }, { "x": 1180, "y": 170, "w": 300 }] },
                "lights": { "off": "env_svetlo_drahy_vyp", "on": "env_svetlo_drahy_zap" },
                "countryText": { "size": 48, "color": "#2c3e50", "stroke": "#ffffff", "strokeW": 8, "gap": 24, "fadeMs": 300, "maxW": 1100 } } }
