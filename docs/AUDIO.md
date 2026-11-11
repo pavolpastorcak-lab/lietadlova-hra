@@ -51,6 +51,8 @@ Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.jso
 | `belt.mp3` | slučka, kým je aktívna stanica batožiny (pás) |
 | `gate.mp3` | otvorenie brány na letisku |
 | `bin.mp3` | zakázaná vec padne do koša pri bezpečnostnej kontrole |
+| `drive.mp3` | vozidlo odchádza v hádanke Arrows (`sfx_drive`, hlasitosť 0,7) |
+| `honk.mp3` | ťuk na zablokované vozidlo v hádanke (`sfx_honk`, hlasitosť 0,6) |
 
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 

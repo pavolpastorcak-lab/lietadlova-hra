@@ -5,11 +5,14 @@ const ASPECT = { car: 0.78, bus: 0.9, truck: 0.84 };   // šírka tela voči bun
 
 // Vozidlo zhora, predok smeruje doprava a celý kontajner sa otočí podľa šípky (rotation = angle).
 // Sprite z role (car/bus/truck) sa kreslí rovnako orientovaný (predok vpravo); šípka je vždy navrchu.
-export function makeVehicle(scene, piece, cell, ratio, angle) {
+export function makeVehicle(scene, piece, cell, ratio, angle, spriteLong) {
   const s = cell * ratio;
   const c = scene.add.container(0, 0).setAngle(angle);
-  const spr = addSprite(scene, role(piece.kind), 0, 0, { w: s });
-  if (spr) c.add(spr);
+  const spr = addSprite(scene, role(piece.kind), 0, 0, { scale: 1 });
+  if (spr) {
+    spr.setScale((cell * (spriteLong || ratio)) / Math.max(spr.width, spr.height));   // zachová pomer strán, dlhšia strana = zlomok bunky
+    c.add(spr);
+  }
   else {
     const g = scene.add.graphics();
     const w = s * ASPECT[piece.kind];

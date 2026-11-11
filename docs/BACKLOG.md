@@ -32,6 +32,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 5c | Skener zboku a druhá sada vecí | v1.2 | hotovo |
 | 6a | Hádanka Arrows: engine + 2 levely | v1.3 | hotovo |
 | 6b | Hádanka Arrows: 8 levelov, zapojenie do slučky | v1.3 | **PO: tablet**; dávka Magnific (`bg_letisko_top`, 3 vozidlá) na jedno schválenie |
+| 6c | Sprity a zvuky hádanky | v1.3 | hotovo |
 | 7a | Kvíz s vlajkami po pristátí | v1.4 | **PO: tablet**, mp3 |
 | 8a | Búrkové mraky a dážď počas letu | v1.5 | – |
 | 8b | Vietor počas letu | v1.5 | **PO: tablet** (sila vetra) |

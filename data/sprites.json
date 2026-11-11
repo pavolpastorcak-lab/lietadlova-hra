@@ -8,7 +8,8 @@
     "leverBase": "ui_paka_podstavec", "leverKnob": "ui_paka_gombik",
     "tower": "bld_veza", "stairs": "bld_schody", "scanner": "bld_skener", "bin": "ui_kos",
     "cloud": ["obs_oblak_biely_01", "obs_oblak_biely_02"], "stormCloud": "obs_oblak_tmavy_01",
-    "bird": ["obs_vtak_a", "obs_vtak_b"], "flightStar": "obs_hviezda"
+    "bird": ["obs_vtak_a", "obs_vtak_b"], "flightStar": "obs_hviezda",
+    "car": "obs_auto_top", "bus": "obs_autobus_top", "truck": "obs_cisterna_top", "bgApronTop": "map_letisko_top"
   },
   "haze": { "map": { "saturation": -0.4, "color": "#cfe6f7", "alpha": 0.22 },
             "landing": { "saturation": -0.5, "color": "#9cc4e4", "alpha": 0.3 },

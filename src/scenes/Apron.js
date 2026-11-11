@@ -28,6 +28,7 @@ export default class Apron extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('#6b7378');
     const bg = addSprite(this, role('bgApronTop'), 640, 400, { w: 1280 });
     if (bg) bg.setDepth(-10);
+    this.hasBg = !!bg;
 
     // Mriežka: bunka z levelu/dát, zmenší sa, ak by zasahovala pod ikonu domov.
     let cell = level.cell || cfg.cell;
@@ -43,7 +44,7 @@ export default class Apron extends Phaser.Scene {
 
     this.views = new Map();
     this.board.pieces.forEach((p) => {
-      const v = makeVehicle(this, p, cell, cfg.vehicle, ANGLE[p.dir]);
+      const v = makeVehicle(this, p, cell, cfg.vehicle, ANGLE[p.dir], cfg.spriteLong);
       v.setPosition(this.cx(p.x), this.cy(p.y)).setDepth(10 + p.y);
       this.views.set(p, v);
     });
@@ -54,6 +55,7 @@ export default class Apron extends Phaser.Scene {
     this.lastAct = this.time.now;
     this.time.addEvent({ delay: 500, loop: true, callback: () => this.idleCheck(cfg) });
     audio.init(data.get('voice'));
+    audio.preload(['sfx_drive', 'sfx_honk']);
     audio.play('st_apron');
     this.cfg = cfg;
   }
@@ -64,8 +66,9 @@ export default class Apron extends Phaser.Scene {
   drawGrid() {
     const { left, top, w, h } = this.grid;
     const gr = this.add.graphics().setDepth(-5);
-    gr.fillStyle(0x4a5257, 0.55).fillRoundedRect(left - 12, top - 12, w + 24, h + 24, 20);
-    gr.lineStyle(4, 0xffffff, 0.45);
+    const bg = this.hasBg;   // na nakreslenom pozadí len jemný podklad a jemné čiary
+    gr.fillStyle(0x4a5257, bg ? 0.18 : 0.55).fillRoundedRect(left - 12, top - 12, w + 24, h + 24, 20);
+    gr.lineStyle(4, bg ? 0x37474f : 0xffffff, bg ? 0.5 : 0.45);
     for (let i = 0; i <= this.board.cols; i++) gr.lineBetween(left + i * this.cell, top, left + i * this.cell, top + h);
     for (let j = 0; j <= this.board.rows; j++) gr.lineBetween(left, top + j * this.cell, left + w, top + j * this.cell);
   }
@@ -89,6 +92,7 @@ export default class Apron extends Phaser.Scene {
   leave(p, v) {
     remove(this.board, p);
     this.views.delete(p);
+    audio.play('sfx_drive');
     const [dx, dy] = DIRS[p.dir];
     v.setDepth(50);
     this.tweens.add({ targets: v, x: v.x + dx * 1500, y: v.y + dy * 1500, duration: this.cfg.exitMs * 2.2, ease: 'Quad.in',
@@ -98,6 +102,7 @@ export default class Apron extends Phaser.Scene {
 
   blocked(p, v) {
     this.mistakes++;
+    audio.play('sfx_honk');
     this.tweens.add({ targets: v, x: v.x + 12, duration: 60, yoyo: true, repeat: 3, onComplete: () => v.setX(this.cx(p.x)) });
     const b = blocker(this.board, p), bv = b && this.views.get(b);
     if (bv && !bv.__blink) {

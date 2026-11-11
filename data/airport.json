@@ -5,7 +5,7 @@
   { "id": "boarding", "x": 1040, "w": 420, "sprite": "plane_zelene_side", "voice": "st_boarding" },
   { "id": "gate",     "x": 850,  "y": 610, "w": 220, "sprite": "bld_gate_zatvorena", "spriteOpen": "bld_gate_otvorena", "voice": "st_gate" }
 ],
-  "apron": { "cell": 160, "vehicle": 0.85, "offsetY": 30, "exitMs": 450, "idleHintSec": 8, "doneMs": 1100, "homeZone": 135 },
+  "apron": { "cell": 160, "vehicle": 0.85, "spriteLong": 0.84, "offsetY": 30, "exitMs": 450, "idleHintSec": 8, "doneMs": 1100, "homeZone": 135 },
   "security": { "bags": 3, "itemsPerBag": 3, "forbiddenPerBag": [1, 2], "firstBagForbidden": 1, "idleHintSec": 8,
                 "items": [
                   { "id": "flasa", "sprite": "item_flasa", "type": "forbidden", "color": "0x3498db" },

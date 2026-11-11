@@ -42,5 +42,7 @@
   "sfx_airport": {"file":"sfx/airport.mp3","text":"(zvuk) šum letiskovej haly, slučka","volume":0.75},
   "sfx_belt": {"file":"sfx/belt.mp3","text":"(zvuk) pás s batožinou, slučka","volume":1.2},
   "sfx_gate": {"file":"sfx/gate.mp3","text":"(zvuk) otvorenie brány","volume":0.8},
-  "sfx_bin": {"file":"sfx/bin.mp3","text":"(zvuk) vec padne do koša","volume":0.8}
+  "sfx_bin": {"file":"sfx/bin.mp3","text":"(zvuk) vec padne do koša","volume":0.8},
+  "sfx_drive": {"file":"sfx/drive.mp3","text":"(zvuk) vozidlo sa rozbehne a odíde","volume":0.7},
+  "sfx_honk": {"file":"sfx/honk.mp3","text":"(zvuk) zatrúbenie pri zablokovanom vozidle","volume":0.6}
 }
