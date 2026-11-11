@@ -57,7 +57,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2b | Paralaxa skyline pri pristátí | hotovo |
 | R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
-| R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
+| R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | ceny schválené 2026-11-11 |
 | R3b | Palivo a tankovanie | **PRED: otázky Paľovi**; **PO: tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
@@ -596,13 +596,19 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 **Súbory:** `data/planes.json`, `data/economy.json`, `src/systems/economy.js`, `src/systems/routes.js`, `src/scenes/Hangar.js`, `src/scenes/hangar/upgradePanel.js`, `src/systems/save.js`, `data/voice.json`, `sw.js`, docs.
 
-**Zadanie (čísla potvrdí Paľo pred zadaním, architekt ich sem doplní):**
-- `planes.json` → `engine: [{ "value": 1, "cost": 0 }, { "value": 0.9, "cost": … }, { "value": 0.8, "cost": … }]`. `value` násobí `durationSec` letu (kratší let); rýchlosť posunu prekážok sa zvýši tak, aby počet prekážok ostal rovnaký.
-- Dolet: viac menších stupňov (návrh 1000 → 1300 → 1600 → 2000 → 2600), začiatok nižší, aby sa vzdialené mestá odomykali postupne. Overiť, že z Bratislavy je na štarte dosiahnuteľné aspoň 3 mestá.
-- Ceny upgradov vyššie, `basePerPassenger` prípadne nižší (cieľ: všetko kúpené po ~40 letoch). Save: nový kľúč `engine` v `planes[id]`, migrácia.
-- Hangár: tretí upgrade s ikonou motora (záložný tvar), rovnaké ovládanie ako kapacita a dolet. Nový `sfx_engine_up` (Magnific na schválenie).
+**Rozhodnutia Paľa (2026-11-11):** tempo ~40 letov, štart doletu 900 km, motor 3 stupne. Výplata (`economy.json`) sa nemení.
 
-**Akceptačné kritériá:** výpočet v správe: koľko letov treba na každý upgrade pri priemernej výplate; starý save si ponechá kúpené stupne (prevod starých stupňov doletu na nové bez straty); motor viditeľne skráti let.
+**Zadanie:**
+- `planes.json` (lietadlo `zelene`):
+  - `capacity`: 4 (0) → 6 (200) → 8 (500)
+  - `range`: 900 (0) → 1100 (100) → 1300 (200) → 1500 (300) → 2000 (450) → 2600 (650)
+  - nové `engine`: `{ value: 1, cost: 0 }` → `{ 0.9, 300 }` → `{ 0.8, 600 }`. Spolu 3300 mincí.
+- Motor: `value` násobí `durationSec` letu (v `routes.flight` alebo pri štarte Flight, podľa aktívneho lietadla). Aby počet prekážok a hviezdičiek na let ostal rovnaký, intervaly `every` (prekážky, hviezdy, búrka, vietor) sa vynásobia rovnakým `value` a rýchlosť posunu (`speed`) sa vydelí `value`. Výplata ani `payMult` sa nemenia.
+- Save v3 (`SAVE_VERSION` 3), migrácia 2 → 3: `planes[id].engine = 0`; prevod doletu bez straty: starý index 0/1/2 (1500/2000/2600) → nový 3/4/5. Kapacita index ostáva. Nový save začína na 900 km.
+- Hangár: tretí upgrade s ikonou motora (kreslená kódom, záložný tvar; sprite neskôr), rovnaké ovládanie ako kapacita a dolet. Zvuk kúpy: existujúci `sfx_upgrade` (bez Magnificu). Ak sa 3 panely nezmestia, uprav rozloženie v `upgradePanel.js`, zásahová plocha ≥ 96 px.
+- Mapa: pri 900 km z Bratislavy majú byť otvorené ber (530), zur (650), rim (810), plus Bratislava. Over aj, že kapacita 8 sa zmestí na letisku (check-in, sedadlá) a v tvárach R2e (`maxRow` 8).
+
+**Akceptačné kritériá:** v správe tabuľka: pri priemernej výplate (odhadni z `economy.payout` pre 4/6/8 cestujúcich, typické hviezdy a smajlíky) koľko letov treba na každý upgrade a na všetky (cieľ ~40); starý save v2 s doletom 2000 ostane na 2000 a mince sa nezmenia; motor 0,8 skráti let do Berlína z 35 s na 28 s pri rovnakom počte prekážok; kúpa odpočíta mince raz.
 
 **Nesmie sa zmeniť:** ovládanie hangára, mince sa nikdy neodpočítajú bez kúpy.
 
