@@ -4,6 +4,7 @@ import * as audio from '../../systems/audio.js';
 import * as fx from '../../ui/fx.js';
 import { confetti } from '../../ui/fx-particles.js';
 import { addSprite } from '../../systems/sprites.js';
+import { showCountryName } from './countryName.js';
 
 export const quizCfg = () => (data.get('economy') || {}).quiz;
 
@@ -66,6 +67,8 @@ export function startQuiz(scene, input, dest, onDone) {
     if (idle) idle.remove(false);
     items.forEach((o) => { if (o !== it) scene.tweens.add({ targets: o.obj, alpha: 0, duration: 300 }); });
     scene.tweens.add({ targets: it.obj, x: 640, y: q.y - 20, scale: it.base * 1.5, duration: 400, ease: 'Back.out' });
+    const gap = ((data.get('airport').landing || {}).countryText || {}).gap || 24;
+    showCountryName(scene, dest, 640, q.y - 20 + (it.obj.displayHeight / it.obj.scale) * it.base * 1.5 / 2 + gap);
     fx.sparks(scene, 640, q.y - 20);
     confetti(scene, 640, q.y - 20);
     audio.play('sfx_star');

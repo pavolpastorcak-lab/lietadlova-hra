@@ -7,6 +7,7 @@ import * as fx from '../ui/fx.js';
 import { addSprite, role } from '../systems/sprites.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 import { startQuiz, quizCfg } from './landing/quiz.js';
+import { showCountryName, belowY } from './landing/countryName.js';
 
 const WEATHER_BG = { sun: '#ffd54f', rain: '#7f9cb3' };
 const FLAG_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };
@@ -52,6 +53,8 @@ export default class Landing extends Phaser.Scene {
     const flag = flagSpr || this.add.rectangle(640, 380, 256, 192, color).setStrokeStyle(8, 0xffffff);
     const base = flag.scale;
     this.tweens.add({ targets: flag, scale: base * 1.08, duration: 700, yoyo: true, repeat: -1 });
+    const gap = ((data.get('airport').landing || {}).countryText || {}).gap || 24;
+    showCountryName(this, dest, 640, belowY(flag, gap) + (flag.displayHeight * 0.08) / 2);
     input.onTapIn(input.hitZone(640, 380, 256, 192), () => fx.go(this, 'Payout', args));
     if (dest) audio.play(`land_${dest.id}`);
   }

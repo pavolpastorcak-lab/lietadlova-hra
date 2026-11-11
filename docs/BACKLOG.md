@@ -52,7 +52,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 |---|---|---|
 | R1a | Oprava dvojitého „Uvoľni" v hádanke | po: architekt prípadne pregeneruje `st_apron` (schválené) |
 | R1b | Let z miesta pristátia (poloha v save, vzdialenosti zo súradníc) | **PRED: plán architektovi**; po: hlas `land_bts` (schválené) |
-| R2a | Názov krajiny pod vlajkou (Finland / Suomi) | – |
+| R2a | Názov krajiny pod vlajkou (Finland / Suomi) | ✔ hotové |
 | R2b | Paralaxa skyline pri pristátí | – |
 | R2c | Počasie aj pri pristávaní | **PO: tablet** (R1a–R2c) |
 | R3a | Hangár: Motor, viac stupňov doletu, prísnejšie zarábanie | **PRED: ceny od Paľa** |
@@ -513,7 +513,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2a: Názov krajiny pod vlajkou pri pristátí
+## [x] R2a: Názov krajiny pod vlajkou pri pristátí
 **Cieľ:** Pri pristátí sa pod vlajkou ukáže názov krajiny po anglicky a v miestnom jazyku, napr. „Finland / Suomi". Výnimka z pravidla „bez textu" (Paľo schválil).
 
 **Súbory:** `data/destinations.json`, `src/scenes/Landing.js`, `src/systems/data.js`, `sw.js`, docs.

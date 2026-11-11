@@ -72,6 +72,8 @@ function checkFlights(fl, dests, errors) {
   (dests || []).forEach((d) => {
     const g = d.geo;
     if (!g || typeof g.lat !== 'number' || typeof g.lon !== 'number') errors.push(`destinations ${d.id}: geo.lat/lon musia byť čísla`);
+    const n = d.countryName;
+    if (!n || !n.intl || !n.local) errors.push(`destinations ${d.id}: countryName.intl a .local sú povinné`);
   });
 }
 

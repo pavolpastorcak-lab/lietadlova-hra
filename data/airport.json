@@ -30,4 +30,5 @@
   "takeoff": { "accelTauSec": 1.2, "fullAt": 0.92, "rotateSpeed": 0.85, "climbSec": 1.8, "hintVoice": "st_takeoff" },
   "landing": { "descendSec": 2.2, "brakeTauSec": 1.0, "stopSpeed": 0.04, "standCount": 3, "numberRange": [1, 9],
                "taxiSec": 2.4, "numberDelaySec": 1.6, "idleHintSec": 8, "brakeVoice": "st_brake", "standVoice": "st_stand",
-               "lights": { "off": "env_svetlo_drahy_vyp", "on": "env_svetlo_drahy_zap" } } }
+               "lights": { "off": "env_svetlo_drahy_vyp", "on": "env_svetlo_drahy_zap" },
+               "countryText": { "size": 48, "color": "#2c3e50", "stroke": "#ffffff", "strokeW": 8, "gap": 24, "fadeMs": 300, "maxW": 1100 } } }
