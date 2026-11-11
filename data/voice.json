@@ -49,6 +49,7 @@
   "dest_fin": {"file":"voice/sk/dest_fin.mp3","text":"Letíme do Helsínk."},
   "land_fin": {"file":"voice/sk/land_fin.mp3","text":"V Helsinkách prší."},
   "sfx_cruise": {"file":"sfx/cruise.mp3","text":"(zvuk) motory veľkého lietadla, slučka počas letu","volume":0.7},
+  "sfx_rain": {"file":"sfx/rain.mp3","text":"(zvuk) jemný dážď, slučka v búrke počas letu","volume":0.5},
   "sfx_star": {"file":"sfx/star.mp3","text":"(zvuk) zber hviezdičky","volume":1.2},
   "sfx_coins": {"file":"sfx/coins.mp3","text":"(zvuk) mince pri výplate","volume":0.8},
   "sfx_upgrade": {"file":"sfx/upgrade.mp3","text":"(zvuk) pneumatický uťahovák pri kúpe upgradu","volume":0.8},

@@ -1,6 +1,7 @@
 // Zástupná grafika letu (tvary + HUD bez textu). Neskôr ju nahradia sprity z kresieb syna.
 
 import { addPlane, addSprite, role } from '../../systems/sprites.js';
+import { fxCfg } from '../../ui/fx.js';
 
 export const PLANE_W = 200, PLANE_H = 70;
 
@@ -24,6 +25,19 @@ export function makeCloud(scene) {
   c.add([scene.add.circle(-40, 8, 34, 0xffffff), scene.add.circle(0, -8, 44, 0xffffff),
     scene.add.circle(42, 8, 32, 0xffffff), scene.add.rectangle(0, 20, 120, 30, 0xffffff)]);
   c.hit = { w: 150, h: 90 };
+  return c;
+}
+
+// Tmavý búrkový mrak: väčší (storm.cloudScale ×), rovnaký náraz ako biely (hitbox úmerne väčší).
+export function makeStormCloud(scene) {
+  const k = (fxCfg().storm || {}).cloudScale || 1.3;
+  const c = scene.add.container(0, 0).setDepth(10);
+  c.hit = { w: 150 * k, h: 90 * k };
+  const spr = addSprite(scene, role('stormCloud'), 0, 0, { w: 200 * k });
+  if (spr) { c.add(spr); return c; }
+  const f = 0x78828f;
+  c.add([scene.add.circle(-40 * k, 8 * k, 34 * k, f), scene.add.circle(0, -8 * k, 44 * k, f),
+    scene.add.circle(42 * k, 8 * k, 32 * k, f), scene.add.rectangle(0, 20 * k, 120 * k, 30 * k, f)]);
   return c;
 }
 

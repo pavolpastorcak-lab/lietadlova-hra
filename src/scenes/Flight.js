@@ -5,9 +5,10 @@ import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { createCruise } from './flight/cruise.js';
 import { createSpawner } from './flight/spawner.js';
-import { makePlane, makeCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
+import { createWeather } from './flight/weather.js';
+import { makePlane, makeCloud, makeStormCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
-const MAKERS = { cloud: makeCloud, bird: makeBird, star: makeStar };
+const MAKERS = { cloud: makeCloud, stormCloud: makeStormCloud, bird: makeBird, star: makeStar };
 const PLANE_HIT = { w: 160, h: 50 };   // menší než sprite = zhovievavé
 
 // Let zboku: lietadlo plynulo sleduje prst (aj doprava/doľava, kúsok vľavo od prsta), vyhýba sa
@@ -40,6 +41,7 @@ export default class Flight extends Phaser.Scene {
     this.hud = makeHud(this);
     this.far = fx.farClouds(this);
     this.trail = fx.trail(this);
+    this.weather = createWeather(this, this.flight, this.spawner, this.far);
     this.events.once('shutdown', () => { this.far.destroy(); this.trail.destroy(); });
 
     const input = createInput(this);
@@ -54,7 +56,7 @@ export default class Flight extends Phaser.Scene {
     addHome(this, input);
 
     audio.init(data.get('voice'));
-    audio.preload(['sfx_bump', 'sfx_star', 'sfx_cruise']);
+    audio.preload(['sfx_bump', 'sfx_star', 'sfx_cruise', 'sfx_rain']);
     this.cruise = createCruise(this);
     const dest = data.destination(this.args.to);
     if (dest) audio.play(dest.voice);
@@ -73,6 +75,7 @@ export default class Flight extends Phaser.Scene {
     this.cruise.update(this.plane.x, delta);
     this.far.update(dt, this.speed);
     this.trail.update(dt, this.plane.x, this.plane.y);
+    this.weather.update(dt, this.elapsed);
 
     if (!this.returning) {
       this.spawner.tick(dt).forEach((s) => {
@@ -138,7 +141,7 @@ export default class Flight extends Phaser.Scene {
   }
 
   bump(o) {
-    if (o.kind === 'cloud') fx.puff(this, o);
+    if (o.kind === 'cloud' || o.kind === 'stormCloud') fx.puff(this, o);
     this.spawner.hit();
     this.invuln = this.cfg.invulnMs;
     audio.play('sfx_bump');
@@ -149,6 +152,7 @@ export default class Flight extends Phaser.Scene {
   finish() {
     this.ended = true;
     this.cruise.stop();
+    this.weather.stop();
     this.plane.angle = 0;
     const { to, passengers, smiles } = this.args;
     fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars }, { fade: false });

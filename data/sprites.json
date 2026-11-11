@@ -25,6 +25,8 @@
         { "speed": 0.25, "alpha": 0.35, "width": 110, "count": 4, "minY": 150, "maxY": 600, "depth": 2 },
         { "speed": 0.5, "alpha": 0.55, "width": 150, "count": 4, "minY": 180, "maxY": 640, "depth": 3 } ],
       "spanX": 1500, "startX": -100 },
+    "storm": { "rampSec": 3, "cloudScale": 1.3, "veilColor": "0x1c2a44", "veilAlpha": 0.35, "farTint": "0x6f7d93",
+      "rain": { "max": 70, "w": 1.6, "len": 26, "alpha": 0.5, "color": "0xcfe6ff", "vx": -150, "vy": 700, "depth": 50 } },
     "trail": { "everyMs": 70, "lifeMs": 600, "radius": 14, "alpha": 0.7, "growTo": 2, "offsetX": -100, "driftX": -90, "maxLive": 12 },
     "sparks": { "count": 6, "dist": 80, "ms": 380, "size": 9, "color": "0xffd23f" },
     "counter": { "scale": 1.4, "ms": 140 },

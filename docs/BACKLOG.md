@@ -367,7 +367,7 @@ Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.
 
 ---
 
-## [ ] 8a: Búrkové mraky a dážď počas letu (v1.5, nápad syna)
+## [x] 8a: Búrkové mraky a dážď počas letu (v1.5, nápad syna)
 **Cieľ:** Pri lete do miesta, kde prší, sa biele mraky postupne menia na tmavé búrkové a začne pršať.
 
 **Súbory:** `data/flights.json`, `src/scenes/flight/spawner.js`, `src/scenes/flight/shapes.js`, `src/scenes/Flight.js` (+ nový `src/scenes/flight/weather.js`), `sw.js`, docs.

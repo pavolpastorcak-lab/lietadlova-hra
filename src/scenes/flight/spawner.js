@@ -11,7 +11,9 @@ export function createSpawner(flight, bounds, rand = Math.random) {
     ...flight.obstacles.map((o) => ({ kind: o.type, every: o.every, left: o.every, obstacle: true })),
     { kind: 'star', every: flight.stars.every, left: flight.stars.every * 0.5, obstacle: false },
   ];
-  let hits = 0, cooldown = 0, starCount = 0;
+  let hits = 0, cooldown = 0, starCount = 0, storm = null, stormT = 0;
+  // Interval prekážky: v búrke sa mraky plynulo zrýchlia na stormCloudEvery (podľa stormT 0..1).
+  const every = (t) => (storm && t.kind === 'cloud' ? t.every + (storm.stormCloudEvery - t.every) * stormT : t.every);
   const randY = (lo, hi) => lo + rand() * (hi - lo);
 
   function starItems() {
@@ -25,18 +27,21 @@ export function createSpawner(flight, bounds, rand = Math.random) {
 
   return {
     hit() { hits += 1; },
+    setStorm(cfg, t) { storm = cfg; stormT = t; },       // t > 0: tmavé mraky, bez vtákov
     get thin() { return hits >= (flight.thinAfterHits || Infinity); },
     tick(dt) {
       const out = [];
       cooldown = Math.max(0, cooldown - dt);
       timers.forEach((t) => {
-        t.left -= dt;
+        const ev = every(t), stormy = storm && stormT > 0;
+        t.left = Math.min(t.left - dt, ev);
         if (t.left > 0) return;
-        if (t.obstacle && this.thin && rand() > (flight.thinFactor ?? 1)) { t.left += t.every; return; }
+        if (stormy && t.kind === 'bird') { t.left += ev; return; }     // vtáky v búrke nelietajú
+        if (t.obstacle && this.thin && rand() > (flight.thinFactor ?? 1)) { t.left += ev; return; }
         if (cooldown > 0) return;               // pošle sa, keď sa uvoľní miesto
-        t.left += t.every;
+        t.left += ev;
         cooldown = MIN_GAP_SEC;
-        if (t.obstacle) out.push({ kind: t.kind, y: randY(minY, maxY) });
+        if (t.obstacle) out.push({ kind: stormy && t.kind === 'cloud' ? 'stormCloud' : t.kind, y: randY(minY, maxY) });
         else out.push(...starItems());
       });
       return out;

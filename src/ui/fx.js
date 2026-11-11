@@ -16,7 +16,7 @@ function cloudShape(scene, w) {
 // Vzdialené mraky za hernou vrstvou: pomalšie než prekážky, priehľadné, bez nárazu.
 // Vráti { update(dt, speed), destroy() }; speed = rýchlosť hernej vrstvy (px/s).
 export function farClouds(scene, cfg = fxCfg().farClouds) {
-  if (!cfg) return { update() {}, destroy() {} };
+  if (!cfg) return { update() {}, tint() {}, destroy() {} };
   const all = [];
   cfg.layers.forEach((L) => {
     for (let i = 0; i < L.count; i++) {
@@ -32,6 +32,12 @@ export function farClouds(scene, cfg = fxCfg().farClouds) {
         c.x -= speed * c.layer.speed * dt;
         if (c.x < cfg.startX - 200) { c.x += cfg.spanX + 200; c.y = Phaser.Math.Between(c.layer.minY, c.layer.maxY); }
       });
+    },
+    // Plynulé stmavnutie (t 0..1) z bielej na farbu `to` (sprite = tint, záložný tvar = výplň kruhov).
+    tint(t, to) {
+      const k = Phaser.Display.Color.Interpolate.ColorWithColor(new Phaser.Display.Color(255, 255, 255), Phaser.Display.Color.ValueToColor(to), 100, Math.round(t * 100));
+      const col = Phaser.Display.Color.GetColor(k.r, k.g, k.b);
+      all.forEach((c) => (c.setTint ? c.setTint(col) : c.list.forEach((s) => s.setFillStyle(col))));
     },
     destroy() { all.forEach((c) => c.destroy()); all.length = 0; },
   };

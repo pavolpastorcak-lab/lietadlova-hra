@@ -70,6 +70,18 @@ function checkPuzzles(list, flights, errors) {
   });
 }
 
+// Voliteľná búrka v lete: flights[].weather + sprites.fx.storm (ak ju niektorá trasa používa).
+function checkWeather(flights, sprites, errors) {
+  const list = (flights || []).filter((f) => f.weather !== undefined);
+  list.forEach((f) => {
+    const w = f.weather;
+    if (!w || typeof w.stormFrom !== 'number' || w.stormFrom < 0 || w.stormFrom >= 1) errors.push(`flights ${f.to}: weather.stormFrom má byť číslo 0–1`);
+    if (!w || !(w.stormCloudEvery > 0)) errors.push(`flights ${f.to}: weather.stormCloudEvery má byť > 0`);
+  });
+  const st = sprites && sprites.fx && sprites.fx.storm;
+  if (list.length && (!st || !st.rain || !(st.rampSec > 0))) errors.push('sprites.fx.storm: chýba blok (rampSec, rain)');
+}
+
 // Prevezme dáta z Phaser cache, overí ich a vráti zoznam chýb (prázdny = OK).
 export function collect(scene) {
   KEYS.forEach((k) => { store[k] = scene.cache.json.get(k); });
@@ -93,6 +105,7 @@ export function collect(scene) {
     });
   });
   checkPuzzles(store.puzzles, store.flights, errors);
+  checkWeather(store.flights, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   const qz = store.economy && store.economy.quiz;
   ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'doneMs'].forEach((f) => {
