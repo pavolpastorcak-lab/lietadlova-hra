@@ -8,15 +8,15 @@ Hra beží z internetu cez **GitHub Pages** (zadarmo, HTTPS). Tablet si ju pri p
 
 1. **Spoj prácu do hlavnej vetvy.** Všetky úlohy sú zatiaľ na vetve `claude/architect-orchestrator-setup-7d8f3d`, hlavná vetva `master` ich nemá. Napíš architektovi „zlúč do master" a spraví to za teba.
 2. **Účet:** na <https://github.com> si založ účet (alebo sa prihlás).
-3. **Repozitár:** vpravo hore **+** → **New repository**. Meno `lietadla`, **Public**, nič nezaškrtávaj (žiadne README) → **Create repository**.
-4. **Odoslanie hry:** v priečinku projektu `lietadlova-hra` otvor PowerShell a spusti (namiesto `TVOJE-MENO` daj svoje meno na GitHube):
+3. **Repozitár:** vpravo hore **+** → **New repository**. Meno `lietadlova-hra`, **Public**, nič nezaškrtávaj (žiadne README) → **Create repository**.
+4. **Odoslanie hry:** v priečinku projektu `lietadlova-hra` otvor PowerShell a spusti (hotové 2026-11-11, repozitár `pavolpastorcak-lab/lietadlova-hra`):
    ```
-   git remote add origin https://github.com/TVOJE-MENO/lietadla.git
+   git remote add origin https://github.com/pavolpastorcak-lab/lietadlova-hra.git
    git push -u origin master
    ```
    Pri prvom odoslaní sa otvorí okno prehliadača s prihlásením na GitHub, potvrď ho.
 5. **Zapnutie stránky:** na GitHube v repozitári **Settings** → vľavo **Pages** → **Source: Deploy from a branch** → Branch **master**, priečinok **/ (root)** → **Save**.
-6. Počkaj 1 až 2 minúty. Hore na tej istej stránke sa ukáže adresa, napríklad `https://tvoje-meno.github.io/lietadla/`. Otvor ju na počítači a over, že hra beží.
+6. Počkaj 1 až 2 minúty. Hore na tej istej stránke sa ukáže adresa, `https://pavolpastorcak-lab.github.io/lietadlova-hra/`. Otvor ju na počítači a over, že hra beží.
 
 ## B. Hra do tabletu (raz)
 
