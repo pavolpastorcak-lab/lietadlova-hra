@@ -81,6 +81,7 @@ export function addUpgradePanel(scene, input, { kind, plane, counter, state, onB
     fx.press(scene, up);
     state.busy = true;
     economy.buyUpgrade(plane, kind);
+    if (kind === 'range') economy.fillTank(plane);   // darček: nádrž na nový maximálny objem
     counter.set(save.get().coins);
     counter.tick();
     confetti(scene, ux, uy);

@@ -20,6 +20,17 @@ export function reachable(from, to, range) {
   return to === HOME || km(from, to) <= range;
 }
 
+// Najbližšie mesto od `from` (iné než `from`); pri rovnosti prvé v dátach.
+export function nearest(from) {
+  let best = null, bd = Infinity;
+  data.get('destinations').forEach((d) => {
+    if (d.id === from) return;
+    const k = km(from, d.id);
+    if (k < bd) { bd = k; best = d.id; }
+  });
+  return best;
+}
+
 // Parametre letu v tvare, aký čaká Flight: base + stupeň podľa km + počasie cieľa + from, to, km.
 // engine = násobič času letu z motora (1 = základ). Časy (durationSec, every, stormCloudEvery, wind.every a
 // wind.durationSec, faces.recoverSec) sa vynásobia, speed vydelí: počet prekážok a hviezd na let ostane rovnaký.

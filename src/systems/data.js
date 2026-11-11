@@ -150,6 +150,8 @@ export function collect(scene) {
   checkWeather(store.destinations, store.sprites, errors);
   checkWind(store.destinations, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
+  const fu = store.economy && store.economy.fuel;
+  if (!fu || !(fu.kmPerCoin > 0) || !(fu.fillSec > 0) || !fu.tank) errors.push('economy.fuel: chýba kmPerCoin, fillSec alebo tank');
   const qz = store.economy && store.economy.quiz;
   ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'tapAfterMs'].forEach((f) => {
     if (!qz || typeof qz[f] !== 'number') errors.push(`economy.quiz: chýba "${f}"`);

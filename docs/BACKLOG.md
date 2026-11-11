@@ -58,7 +58,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2c | Počasie aj pri pristávaní | hotovo, **PO: tablet** (R1a–R2c) |
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
-| R3b | Palivo a tankovanie | otázky zodpovedané 2026-11-11; **PO: tablet** (R3a–R3b) |
+| R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety) | – |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
@@ -614,7 +614,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R3b: Palivo a tankovanie
+## [x] R3b: Palivo a tankovanie
 **Cieľ:** Lietadlo má nádrž. Let spotrebuje palivo podľa km, tankuje sa za mince. Mapa ukáže, kam sa s aktuálnym palivom dá doletieť.
 
 **Rozhodnutia Paľa (2026-11-11):** tankuje sa ťukom na nádrž na mape; cena 1 minca za 50 km; Bratislava je dosiahnuteľná vždy (aj bez paliva a mincí). Ceny R3a ostávajú, tempo overí na tablete.

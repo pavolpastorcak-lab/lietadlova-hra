@@ -1,4 +1,5 @@
 { "startCoins": 0, "basePerPassenger": 5, "tipPerStar": 1,
   "tipPerSmile": 1, "replayForStars": true,
+  "fuel": { "kmPerCoin": 50, "fillSec": 0.8, "lowFrac": 0.33, "tank": { "x": 1190, "y": 715, "hit": 130, "h": 90, "barW": 26, "barH": 90 }, "drop": { "size": 34 } },
   "quiz": { "options": 4, "tipFirstTry": 5, "extraFlags": ["flag_at", "flag_cz", "flag_pl", "flag_hu"],
     "flagW": 220, "gap": 50, "y": 430, "gapMs": 300, "maxWaitMs": 5000, "idleMs": 8000, "tapAfterMs": 800 } }

@@ -50,5 +50,50 @@ export function planeRange(plane) {
 // Dolet sa meria od miesta, kde lietadlo stojí; Bratislava je dosiahnuteľná vždy.
 export const inRange = (dest, plane) => routes.reachable(save.get().location, dest.id, planeRange(plane));
 
+// Palivo: nádrž = dolet lietadla, `save.fuel` v km. Bratislava a najbližšie mesto sú vždy zadarmo.
+const fuelCfg = () => data.get('economy').fuel;
+
+export function fuelInfo(plane) {
+  const max = planeRange(plane);
+  const fuel = Math.min(save.get().fuel, max);
+  const missing = max - fuel;
+  return { fuel, max, missing, coinsToFill: Math.ceil(missing / fuelCfg().kmPerCoin) };
+}
+
+// Natankuje za mince: toľko celých mincí, koľko stačí (alebo koľko má); posledná minca doplní do plna, zvyšok prepadne.
+// Vráti { coins, km } (km = o koľko stúplo palivo).
+export function refuel(plane) {
+  const i = fuelInfo(plane);
+  const n = Math.min(save.get().coins, i.coinsToFill);
+  if (n <= 0) return { coins: 0, km: 0 };
+  const km = Math.min(i.missing, n * fuelCfg().kmPerCoin);
+  save.addCoins(-n);
+  save.get().fuel = i.fuel + km;
+  save.save();
+  return { coins: n, km };
+}
+
+// Plná nádrž zadarmo (kúpa vyššieho doletu).
+export function fillTank(plane) {
+  save.get().fuel = planeRange(plane);
+  save.save();
+}
+
+// Let `from` → `to`: palivo klesne o km (min. 0). Mince sa nemenia.
+export function consumeFuel(from, to) {
+  const s = save.get();
+  s.fuel = Math.max(0, (s.fuel || 0) - routes.km(from, to));
+  save.save();
+}
+
+// Stav špendlíka: 'open' (ako dnes), 'needFuel' (treba natankovať), 'locked' (mimo doletu).
+export function pinState(dest, plane) {
+  const here = save.get().location;
+  if (dest.id === here || dest.id === routes.HOME || dest.id === routes.nearest(here)) return 'open';
+  const k = routes.km(here, dest.id);
+  if (k <= fuelInfo(plane).fuel) return 'open';
+  return k <= planeRange(plane) ? 'needFuel' : 'locked';
+}
+
 export const capacityInfo = (plane) => upgradeInfo(plane, 'capacity');
 export const buyCapacity = (plane) => buyUpgrade(plane, 'capacity');

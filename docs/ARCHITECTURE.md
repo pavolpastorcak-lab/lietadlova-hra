@@ -119,11 +119,11 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 
 ### Save (localStorage, kľúč `lietadla.save`)
 ```json
-{ "saveVersion": 3, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0, "engine": 0 } },
-  "location": "bts", "unlocked": ["bts", "lon"], "bestStars": { "bts-lon": 0 } }
+{ "saveVersion": 4, "coins": 0, "planes": { "zelene": { "capacity": 0, "range": 0, "engine": 0 } },
+  "location": "bts", "fuel": 900, "unlocked": ["bts", "lon"], "bestStars": { "bts-lon": 0 } }
 ```
 - `save.js` drží pole migrácií `migrations[n]` (n → n+1). Pri načítaní sa postupne aplikujú, kým nie je `saveVersion` aktuálna.
-- `location` = kde lietadlo stojí (zapisuje sa v `Landing` pri vstupe; neznáme id → `bts`). `bestStars` kľúče `from-to`, nové páry vznikajú pri prvom rekorde. `unlocked` o otvorení mesta už nerozhoduje. Migrácia 1 → 2 doplní `location`, 2 → 3 `engine = 0` a posunie index `range` o 3 (nový rad doletu od 900 km). `load` doplní chýbajúce kľúče upgradov a orezá indexy.
+- `location` = kde lietadlo stojí (zapisuje sa v `Landing` pri vstupe; neznáme id → `bts`). `bestStars` kľúče `from-to`, nové páry vznikajú pri prvom rekorde. `unlocked` o otvorení mesta už nerozhoduje. Migrácia 3 → 4 pridá `fuel` (plná nádrž), `load` ho orežáva na 0..dolet; palivo ubúda v `Landing` (`economy.consumeFuel`), tankuje sa ťukom na nádrž na mape (`scenes/map/fuel.js`, `economy.refuel`, 1 minca = `economy.fuel.kmPerCoin` km), kúpa doletu nádrž doplní. Stavy špendlíka: `economy.pinState` (open / needFuel / locked; Bratislava a `routes.nearest` vždy open). Migrácia 1 → 2 doplní `location`, 2 → 3 `engine = 0` a posunie index `range` o 3 (nový rad doletu od 900 km). `load` doplní chýbajúce kľúče upgradov a orezá indexy.
 - Poškodený save sa nezmaže, odloží sa do `lietadla.save.bak` a hra začne odznova.
 
 ### Sprity v dátach (úloha 3d)

@@ -14,6 +14,8 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `st_apron.mp3` | Uvoľni cestu. Ťukni na auto, ktoré môže odísť. |
 | `st_boarding.mp3` | Pritiahni schody k lietadlu. |
 | `st_gate.mp3` | Otvor bránu. |
+| `st_fuel_need.mp3` | Natankuj lietadlo. (ťuk na špendlík, na ktorý treba natankovať) |
+| `st_fuel_full.mp3` | Nádrž je plná. (ťuk na plnú nádrž) |
 | `st_takeoff.mp3` | Potiahni páku hore. |
 | `st_brake.mp3` | Potiahni páku dole. |
 | `st_stand.mp3` | Nájdi stojisko číslo. |
@@ -60,6 +62,7 @@ Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.jso
 | `cruise.mp3` | slučka počas celého letu (motory veľkého lietadla), výška tónu sleduje pohyb do strán |
 | `star.mp3` | zber hviezdičky v lete |
 | `coins.mp3` | ťuk na kôpku mincí pri výplate |
+| `fuel.mp3` | **CHÝBA**; čerpanie paliva ~1 s (`sfx_fuel`, hlasitosť 0,8), hrá pri tankovaní na mape; do dodania je ticho |
 | `upgrade.mp3` | úspešná kúpa upgradu v hangári (pneumatický uťahovák) |
 | `airport.mp3` | slučka, šum haly počas celej scény Letisko (potichu) |
 | `belt.mp3` | slučka, kým je aktívna stanica batožiny (pás) |

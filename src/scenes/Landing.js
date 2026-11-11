@@ -1,6 +1,7 @@
 import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
+import * as economy from '../systems/economy.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
@@ -19,7 +20,7 @@ export default class Landing extends Phaser.Scene {
 
   create(args) {
     const dest = data.destination(args && args.to);
-    if (dest) { save.get().location = dest.id; save.save(); }   // lietadlo pristálo: odtiaľto sa letí ďalej
+    if (dest) { economy.consumeFuel(save.get().location, dest.id); save.get().location = dest.id; save.save(); }   // lietadlo pristálo: odtiaľto sa letí ďalej
     const weather = dest && dest.weather;
     this.cameras.main.setBackgroundColor(WEATHER_BG[weather] || '#cccccc');
     const bg = addSprite(this, role('bgLanding'), 640, 400, { w: 1280 });

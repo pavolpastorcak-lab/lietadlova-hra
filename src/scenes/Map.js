@@ -5,6 +5,9 @@ import * as economy from '../systems/economy.js';
 import * as save from '../systems/save.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 import * as fx from '../ui/fx.js';
+import * as audio from '../systems/audio.js';
+import { addCoinCounter } from '../ui/coins.js';
+import { addFuelTank } from './map/fuel.js';
 
 const PIN_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };       // zástupka za vlajku
 
@@ -39,14 +42,17 @@ export default class MapScene extends Phaser.Scene {
         pin.add(this.add.circle(0, 0, 34, PIN_COLORS[d.country] || 0x999999));
         if (d.id === here) pin.add(this.add.circle(0, 0, 10, 0xffffff));
       }
-      const open = d.id === here || economy.inRange(d, plane);
       if (d.id === here) this.addHere(pin);
-      if (!open) pin.setAlpha(0.45);              // zatiaľ nedostupná destinácia
       pin.setDepth(5 + d.map.y / 1000);           // nižšie na mape = vpredu
-      if (open) drops.push({ obj: pin, y: d.map.y });
       const cy = d.map.y - (pinSpr ? 70 : 0);
-      zones.push({ d, pin, open, cx: d.map.x, cy, rect: input.hitZone(d.map.x, cy, 110, pinSpr ? 190 : 120) });
+      const z = { d, pin, state: 'open', dropY: pinSpr ? -150 : -56, cx: d.map.x, cy, rect: input.hitZone(d.map.x, cy, 110, pinSpr ? 190 : 120) };
+      this.applyState(z, plane);
+      zones.push(z);
+      if (z.state === 'open') drops.push({ obj: pin, y: d.map.y });
     });
+    this.zones = zones;
+    const counter = addCoinCounter(this, save.get().coins);
+    const tank = addFuelTank(this, input, plane, counter, () => zones.forEach((z) => this.applyState(z, plane)));
 
     // Jeden ťuk = najbližší špendlík so zásahovou plochou pod prstom (susedné plochy sa môžu dotýkať).
     input.on('tap', (pt) => {
@@ -54,7 +60,8 @@ export default class MapScene extends Phaser.Scene {
         .sort((p, q) => Phaser.Math.Distance.Between(pt.x, pt.y, p.cx, p.cy) - Phaser.Math.Distance.Between(pt.x, pt.y, q.cx, q.cy))[0];
       if (!hit) return;
       const { d, pin } = hit;
-      if (!hit.open) return this.lockedPin(hit);
+      if (hit.state === 'needFuel') return this.needFuelPin(hit, tank);
+      if (hit.state === 'locked') return this.lockedPin(hit);
       if (d.id === here) {
         this.tweens.add({ targets: pin, scale: 1.2, duration: 120, yoyo: true });
         return;
@@ -63,6 +70,25 @@ export default class MapScene extends Phaser.Scene {
       fx.go(this, 'Airport', { from: here, to: d.id });
     });
     fx.dropPins(this, drops);
+  }
+
+  // Stav špendlíka podľa paliva: open = ako dnes, needFuel = priesvitný + oranžová kvapka, locked = priesvitnejší.
+  applyState(z, plane) {
+    z.state = economy.pinState(z.d, plane);
+    z.pin.setAlpha(z.state === 'open' ? 1 : z.state === 'needFuel' ? 0.6 : 0.45);
+    if (z.drop) { z.drop.destroy(); z.drop = null; }
+    if (z.state !== 'needFuel') return;
+    const s = data.get('economy').fuel.drop.size;
+    z.drop = this.add.container(z.d.map.x + 62, z.d.map.y + z.dropY).setDepth(30);   // mimo špendlíka, aby ho priesvitnosť nezoslabila
+    z.drop.add([this.add.triangle(0, -s * 0.28, -s * 0.4, s * 0.2, s * 0.4, s * 0.2, 0, -s * 0.6, 0xff9800).setStrokeStyle(3, 0xe65100),
+      this.add.circle(0, s * 0.2, s * 0.4, 0xff9800).setStrokeStyle(3, 0xe65100)]);
+  }
+
+  // Treba natankovať: špendlík zatrasie, nádrž sa rozbliká a hlas.
+  needFuelPin({ d, pin }, tank) {
+    this.tweens.add({ targets: pin, x: d.map.x + 10, duration: 60, yoyo: true, repeat: 3, onComplete: () => pin.setX(d.map.x) });
+    tank.blink();
+    audio.play('st_fuel_need');
   }
 
   // „Si tu": pulzujúci krúžok pri hrote a malé lietadlo zhora pod ním (záložný tvar: trojuholník), vlajku nezakrýva.
