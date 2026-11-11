@@ -384,7 +384,7 @@ Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.
 
 ---
 
-## [ ] 8b: Vietor počas letu (v1.5)
+## [x] 8b: Vietor počas letu (v1.5)
 **Cieľ:** Na dlhých trasách občas zafúka vietor a jemne tlačí lietadlo hore alebo dole; syn to vyrovnáva prstom.
 
 **Súbory:** `data/flights.json`, `src/scenes/flight/weather.js`, `src/scenes/Flight.js`, `data/voice.json`, `sw.js`, docs.

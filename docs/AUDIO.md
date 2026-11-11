@@ -64,6 +64,7 @@ Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.jso
 | `belt.mp3` | slučka, kým je aktívna stanica batožiny (pás) |
 | `gate.mp3` | otvorenie brány na letisku |
 | `rain.mp3` | **CHÝBA (dodá architekt)**; slučka, jemný dážď, hrá v búrke počas letu do daždivých miest (hlasitosť rastie so zatiahnutím, 0,5), zastaví sa pri odchode zo scény; do dodania je ticho |
+| `wind.mp3` | jednorazový poryv vetra ~2 s (`sfx_wind`, hlasitosť 0,6), hrá raz na začiatku varovania pred poryvom vetra počas letu (dub, mad, lis); súbor existuje |
 | `bin.mp3` | zakázaná vec padne do koša pri bezpečnostnej kontrole |
 | `drive.mp3` | vozidlo odchádza v hádanke Arrows (`sfx_drive`, hlasitosť 0,7) |
 | `honk.mp3` | ťuk na zablokované vozidlo v hádanke (`sfx_honk`, hlasitosť 0,6) |

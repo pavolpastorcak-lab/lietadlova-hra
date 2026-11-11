@@ -82,6 +82,20 @@ function checkWeather(flights, sprites, errors) {
   if (list.length && (!st || !st.rain || !(st.rampSec > 0))) errors.push('sprites.fx.storm: chýba blok (rampSec, rain)');
 }
 
+// Voliteľný vietor v lete: flights[].wind + sprites.fx.wind (ak ho niektorá trasa používa).
+function checkWind(flights, sprites, errors) {
+  const list = (flights || []).filter((f) => f.wind !== undefined);
+  list.forEach((f) => {
+    ['every', 'durationSec', 'push'].forEach((k) => {
+      if (!f.wind || !(f.wind[k] > 0)) errors.push(`flights ${f.to}: wind.${k} má byť > 0`);
+    });
+  });
+  const wc = sprites && sprites.fx && sprites.fx.wind;
+  if (list.length && (!wc || !(wc.warnSec > 0) || !(wc.rampSec > 0) || !(wc.lines > 0) || !Array.isArray(wc.len))) {
+    errors.push('sprites.fx.wind: chýba blok (warnSec, rampSec, lines, len)');
+  }
+}
+
 // Prevezme dáta z Phaser cache, overí ich a vráti zoznam chýb (prázdny = OK).
 export function collect(scene) {
   KEYS.forEach((k) => { store[k] = scene.cache.json.get(k); });
@@ -106,6 +120,7 @@ export function collect(scene) {
   });
   checkPuzzles(store.puzzles, store.flights, errors);
   checkWeather(store.flights, store.sprites, errors);
+  checkWind(store.flights, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   const qz = store.economy && store.economy.quiz;
   ['options', 'tipFirstTry', 'flagW', 'gap', 'y', 'gapMs', 'maxWaitMs', 'idleMs', 'doneMs'].forEach((f) => {

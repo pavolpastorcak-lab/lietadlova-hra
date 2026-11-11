@@ -6,6 +6,7 @@ import * as fx from '../ui/fx.js';
 import { createCruise } from './flight/cruise.js';
 import { createSpawner } from './flight/spawner.js';
 import { createWeather } from './flight/weather.js';
+import { createWind } from './flight/wind.js';
 import { makePlane, makeCloud, makeStormCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
 const MAKERS = { cloud: makeCloud, stormCloud: makeStormCloud, bird: makeBird, star: makeStar };
@@ -42,6 +43,7 @@ export default class Flight extends Phaser.Scene {
     this.far = fx.farClouds(this);
     this.trail = fx.trail(this);
     this.weather = createWeather(this, this.flight, this.spawner, this.far);
+    this.wind = createWind(this, this.flight, this.spawner, this.speed, { minY: cfg.minY, maxY: cfg.maxY });
     this.events.once('shutdown', () => { this.far.destroy(); this.trail.destroy(); });
 
     const input = createInput(this);
@@ -56,7 +58,7 @@ export default class Flight extends Phaser.Scene {
     addHome(this, input);
 
     audio.init(data.get('voice'));
-    audio.preload(['sfx_bump', 'sfx_star', 'sfx_cruise', 'sfx_rain']);
+    audio.preload(['sfx_bump', 'sfx_star', 'sfx_cruise', 'sfx_rain', 'sfx_wind']);
     this.cruise = createCruise(this);
     const dest = data.destination(this.args.to);
     if (dest) audio.play(dest.voice);
@@ -76,6 +78,7 @@ export default class Flight extends Phaser.Scene {
     this.far.update(dt, this.speed);
     this.trail.update(dt, this.plane.x, this.plane.y);
     this.weather.update(dt, this.elapsed);
+    this.wind.update(dt, this.elapsed);
 
     if (!this.returning) {
       this.spawner.tick(dt).forEach((s) => {
@@ -100,7 +103,8 @@ export default class Flight extends Phaser.Scene {
   stepFollow(delta) {
     const cfg = this.cfg;
     this.plane.x += (this.targetX - this.plane.x) * (1 - Math.exp(-delta / cfg.followXMs));
-    this.plane.y += (this.targetY - this.plane.y) * (1 - Math.exp(-delta / cfg.followMs));
+    const ty = Phaser.Math.Clamp(this.targetY + this.wind.offset, cfg.minY, cfg.maxY);   // vietor posúva len cieľ, nie prst
+    this.plane.y += (ty - this.plane.y) * (1 - Math.exp(-delta / cfg.followMs));
   }
 
   startReturn() {
@@ -153,6 +157,7 @@ export default class Flight extends Phaser.Scene {
     this.ended = true;
     this.cruise.stop();
     this.weather.stop();
+    this.wind.stop();
     this.plane.angle = 0;
     const { to, passengers, smiles } = this.args;
     fx.go(this, 'Touchdown', { ...this.args, to, passengers, smiles, stars: this.stars }, { fade: false });
