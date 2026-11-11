@@ -529,7 +529,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2b: Paralaxa pri pristátí
+## [x] R2b: Paralaxa pri pristátí
 **Cieľ:** Pri pristávaní sa panoráma mesta (skyline) posúva pomalšie ako dráha a stromy, aby scéna pôsobila hlbšie.
 
 **Súbory:** `src/scenes/Touchdown.js`, `src/scenes/touchdown/scenery.js`, `data/airport.json`, `sw.js`, docs.

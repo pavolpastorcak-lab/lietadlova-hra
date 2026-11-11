@@ -35,7 +35,7 @@ export default class Touchdown extends Phaser.Scene {
       this.add.rectangle(640, RUNWAY_Y + 50, 1280, 100, 0x5f6b73),
     ]);
     const dest = data.destination(this.args.to);
-    this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8);
+    this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8, this.cfg.parallax);
     addVeil(this, 'landing', 2);                  // modrastý závoj: pôsobí to vzdialene
     this.marks = [];
     for (let i = 0; i < 8; i++) {
@@ -92,6 +92,7 @@ export default class Touchdown extends Phaser.Scene {
       const target = this.state === 'descend' ? 1 : this.brake;
       this.speed += (target - this.speed) * (1 - Math.exp(-dt / this.cfg.brakeTauSec));
       this.engine.setRate(0.7 + this.speed * 0.9);
+      this.scenery.scroll(this.speed * MARK_SPEED * dt);
       [...this.marks, ...this.scenery.lights].forEach((m) => {
         m.x -= this.speed * MARK_SPEED * dt;
         if (m.x < -80) m.x += 8 * MARK_GAP;
