@@ -59,9 +59,15 @@ function checkSecurity(sec, errors) {
 }
 
 // Hádanky: tvar levelu a riešiteľnosť (slepá ulička = chyba dát).
-function checkPuzzles(list, errors) {
+function checkPuzzles(list, flights, errors) {
   if (!Array.isArray(list) || !list.length) { errors.push('puzzles: očakávam neprázdne pole'); return; }
   list.forEach((lv, i) => validateLevel(lv).forEach((e) => errors.push(`puzzles[${i}] ${lv && lv.id}: ${e}`)));
+  const ids = new Set(list.map((lv) => lv && lv.id));
+  (flights || []).forEach((f) => {
+    if (f.puzzles === undefined) return;
+    if (!Array.isArray(f.puzzles)) { errors.push(`flights ${f.to}: "puzzles" má byť pole`); return; }
+    f.puzzles.forEach((id) => { if (!ids.has(id)) errors.push(`flights ${f.to}: neznáma hádanka "${id}"`); });
+  });
 }
 
 // Prevezme dáta z Phaser cache, overí ich a vráti zoznam chýb (prázdny = OK).
@@ -86,7 +92,7 @@ export function collect(scene) {
       if (!hp || !hp[k] || hp[k][f] === undefined) errors.push(`sprites.hangarPanels.${k}: chýba "${f}"`);
     });
   });
-  checkPuzzles(store.puzzles, errors);
+  checkPuzzles(store.puzzles, store.flights, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);
   errors.forEach((e) => console.error('[data]', e));
   return errors;

@@ -292,7 +292,7 @@ Povinné pri každej úlohe:
 
 ---
 
-## [ ] 6b: Hádanka Arrows, 8 levelov a zapojenie do slučky (v1.3)
+## [x] 6b: Hádanka Arrows, 8 levelov a zapojenie do slučky (v1.3)
 **Cieľ:** Hádanka je súčasťou letu: Airport → **Apron** → Takeoff. Náročnosť rastie so vzdialenosťou cieľa.
 
 **Súbory:** `data/puzzles.json`, `data/flights.json`, `src/scenes/Airport.js` alebo `airport/gate.js` (kam ide po bráne), `src/scenes/Apron.js`, `sw.js`, docs.

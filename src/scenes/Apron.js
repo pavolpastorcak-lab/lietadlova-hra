@@ -7,6 +7,7 @@ import { confetti } from '../ui/fx-particles.js';
 import { addSprite, role } from '../systems/sprites.js';
 import { createBoard, canMove, blocker, remove, isClear, movable, DIRS } from './apron/board.js';
 import { makeVehicle } from './apron/shapes.js';
+import { markDone } from './apron/pick.js';
 
 const ANGLE = { right: 0, down: 90, left: 180, up: 270 };
 
@@ -115,6 +116,9 @@ export default class Apron extends Phaser.Scene {
 
   finish() {
     this.done = true;
+    const a = this.args;
+    if (a && a.to) markDone(a.to);   // do počítadla až po vyčistení (nie pri odchode domov)
+    if (this.mistakes === 0 && a && typeof a.smiles === 'number') this.args = { ...a, smiles: a.smiles + 1 };
     confetti(this, 640, 400);
     this.time.delayedCall(this.cfg.doneMs, () => fx.go(this, this.next, this.args));
   }

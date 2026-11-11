@@ -10,6 +10,7 @@ import { checkin } from './airport/checkin.js';
 import { bags } from './airport/bags.js';
 import { stairs } from './airport/stairs.js';
 import { gate } from './airport/gate.js';
+import { pickLevel } from './apron/pick.js';
 import { security } from './airport/security.js';
 import { addPlane, addSprite, role, personKey } from '../systems/sprites.js';
 import { makePerson, makeScanner, PERSON_COLORS } from './airport/shapes.js';
@@ -85,7 +86,10 @@ export default class Airport extends Phaser.Scene {
     this.events.once('shutdown', () => hall.stop());
 
     runFlow(ctx, stations, RUNNERS, () => {
-      fx.go(this, 'Takeoff', { ...args, passengers: n, smiles: ctx.smiles });
+      const next = { ...args, passengers: n, smiles: ctx.smiles };
+      const level = pickLevel(args && args.to);   // trasa bez hádanky ide rovno do Takeoff
+      if (level) fx.go(this, 'Apron', { level, next: 'Takeoff', args: next });
+      else fx.go(this, 'Takeoff', next);
     });
   }
 }
