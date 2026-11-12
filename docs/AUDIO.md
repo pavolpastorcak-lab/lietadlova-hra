@@ -198,3 +198,4 @@ Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, k
 - **Dávka 5 (2026-11-11, pripomienky Paľa):** `sfx/drive.mp3` (bol piskľavý) a `sfx/upgrade.mp3` (vysoký tón) pregenerované s dôrazom na nízky, realistický zvuk (2 s každý).
 - **Dávka 6 (2026-11-11):** `land_bts.mp3` (hlas, `eleven_v4`, 6 kreditov) pre pristátie v Bratislave (úloha R1b).
 - **Dávka 7 (2026-11-11):** `st_fuel_need.mp3`, `st_fuel_full.mp3` (hlas, `eleven_v4`, 8 kreditov) a `sfx/fuel.mp3` (čerpanie paliva, 1 s, 5 kreditov) pre úlohu R3b.
+- **Dávka 8 (2026-11-12):** 66 pokynov staníc v 11 jazykoch pre R4a (`voice/<lang>/st_*.mp3`, `eleven_v4`, ~410 kreditov). Hlasy rodených hovoriacich: en Ava Jordan (29), de Heike Lindemann (1288), fr Claire Laval (147), it Elisa Fontana (84), es Casilda Quintana (1367), pt Tomás Oliveira (616, lisabonská výslovnosť), nl Anouk Janssen (139), sv Lina Sundström (123), el Niki Papadopoulos (109), tr Elif Kaya (203), fi Jukka Virtanen (803).
