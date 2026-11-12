@@ -60,7 +60,8 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
 | R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
-| R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
+| R3c1 | Aktívne lietadlo v save (= 9a) | – |
+| R3c2 | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
 
@@ -665,8 +666,28 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R3c: Nové lietadlá (= 9a + 9b)
-Briefy 9a a 9b vyššie platia, s doplnením: lietadlá majú vlastné stupne motora (R3a) a nádrž (R3b). Čísla doladí architekt po R3b. **STOP pred:** dávka Magnific, 6 spritov.
+## R3c: Nové lietadlá (= 9a + 9b), rozdelené na R3c1 a R3c2
+**Rozhodnutia Paľa (2026-11-12):** obrázky cez Magnific v štýle syna (z kresby zeleného lietadla); modré 1500, červené 3500 mincí; nové lietadlá sú väčšie, s väčším doletom a rýchlejším motorom; upgrady pre každé lietadlo zvlášť.
+
+### [ ] R3c1: Aktívne lietadlo v save (= 9a, bez viditeľnej zmeny)
+Brief **9a vyššie platí** (activePlane, owned, `economy.activePlane()`, žiadne `planes')[0]` ani natvrdo `zelene` v kóde, boarding sprite z aktívneho lietadla, doplnenie chýbajúcich lietadiel do `save.planes`), s týmito zmenami:
+- Save ide na **v5** (dnes v4), migrácia 4 → 5 doplní `activePlane: "zelene"`, `owned: ["zelene"]`.
+- Kľúče upgradov sú `capacity`, `range`, `engine` (R3a); poistka v `load` ich už dopĺňa, rozšír ju na všetky lietadlá z `planes.json`.
+- Palivo (R3b) ostáva spoločné `save.fuel`; nádrž = dolet **aktívneho** lietadla. Všetky volania `planeRange`, `engineValue`, `fuelInfo`, `pinState` berú aktívne lietadlo.
+- Test: dočasne pridaj do `planes.json` druhé lietadlo, over načítanie starého save v4 a prepnutie `activePlane` v konzole (dolet, nádrž, motor, kapacita sa zmenia podľa lietadla), potom ho odober.
+
+### [ ] R3c2: Kúpa a výber lietadla v hangári (= 9b)
+Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nevlastnené zašednuté s cenou, kúpa = odpočet raz + výber, upgrady pre vybrané lietadlo, sedadlá pri kapacite nad 8, `checkin.maxTaps: 6`), s týmito číslami namiesto pôvodných:
+- `modre` (`cost` 1500): kapacita 6 (0) → 8 (300) → 10 (700); dolet 1500 (0) → 2000 (400) → 2600 (700); motor 0,9 (0) → 0,8 (500).
+- `cervene` (`cost` 3500): kapacita 10 (0) → 12 (600) → 14 (1200); dolet 2000 (0) → 2600 (600) → 3200 (1000); motor 0,8 (0) → 0,7 (900).
+- `zelene`: `cost` 0, čísla z R3a bez zmeny.
+- Kúpa nového lietadla nádrž naplní (nový maximálny objem). Prepnutie na lietadlo s menšou nádržou palivo oreže na jeho maximum, na väčšiu nádrž ho nechá.
+- Tváre cestujúcich (R2e) pri 10–14 cestujúcich: zmenšia sa (`maxRow`), nesmú zakryť počítadlo hviezdičiek ani trasu.
+- Sprity `plane_modre_*`, `plane_cervene_*` (`side`, `air`, `top`) dodá architekt cez Magnific pred zadaním; do `planes.json`, `sprites.json` a `sw.js` PRECACHE ich zapíše R3c2. Chýbajúci sprite = záložný tvar vo farbe lietadla.
+
+**Akceptačné kritériá:** ako 9b; navyše let s červeným lietadlom (motor 0,7) je hrateľný (prekážky sa dajú obletieť) a nádrž sa správa podľa pravidiel vyššie.
+
+**STOP pred R3c2:** dávka Magnific 6 spritov (zoznam a odhad kreditov architekt pošle Paľovi). **STOP po R3c2: tablet** (ceny lietadiel, rýchlosť červeného, mierka nových lietadiel voči schodom a stojisku).
 
 ---
 
