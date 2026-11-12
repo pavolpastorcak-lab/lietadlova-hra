@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v48';
+const CACHE_VERSION = 'v49';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -159,6 +159,7 @@ const PRECACHE = [
   './src/scenes/flight/wind.js',
   './src/scenes/flight/shapes.js',
   './src/scenes/flight/spawner.js',
+  './src/ui/audioDebug.js',
   './src/ui/fx.js',
   './src/ui/fx-particles.js',
   './src/ui/haze.js',
@@ -193,9 +194,12 @@ const PRECACHE = [
 function cacheVoice(c) {
   return c.match('./data/voice.json')
     .then((r) => r.json())
-    .then((v) => Promise.allSettled(
-      Object.values(v).map((x) => c.add(`./assets/audio/${x.file}`))
-    ))
+    .then(async (v) => {   // po dávkach (nie ~150 naraz): slabý signál nezhodí časť súborov
+      const files = Object.values(v).map((x) => `./assets/audio/${x.file}`);
+      for (let i = 0; i < files.length; i += 8) {
+        await Promise.allSettled(files.slice(i, i + 8).map((f) => c.add(f)));
+      }
+    })
     .catch(() => {});
 }
 

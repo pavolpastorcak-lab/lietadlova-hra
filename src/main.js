@@ -25,6 +25,11 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch((e) => console.warn('[sw] registrácia zlyhala', e));
 }
 
+// Ladiaci log zvuku len na požiadanie (?debug=audio).
+if (new URLSearchParams(location.search).get('debug') === 'audio') {
+  import('./ui/audioDebug.js').then((m) => m.enable());
+}
+
 // Samotest logiky hádanky len na požiadanie (?test=1), v bežnej hre sa nenačíta.
 if (new URLSearchParams(location.search).get('test') === '1') {
   import('./scenes/apron/board.js').then((m) => m.selfTest());

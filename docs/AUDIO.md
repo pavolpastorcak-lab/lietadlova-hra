@@ -213,6 +213,10 @@ Alternatíva: nahraj sa sám/sama mobilom (Diktafón) a súbor potom previď na 
 4. Ak hlas nehrá: v Chrome stlač F12 → záložka Network → pozri, či `st_checkin.mp3` má stav 200 (červený 404 = zlý názov alebo priečinok).
 5. Na tablete: po novom nasadení otvor hru, nechaj ju chvíľu načítať, potom zapni režim lietadlo a overíš, či hlas stále hrá (súbory sa uložia do cache automaticky).
 
+### Ladiaci log zvuku (?debug=audio)
+Keď hlas nehrá, otvor hru s `?debug=audio` v adrese (napr. `http://localhost:8080/?debug=audio`). Vpravo dole nad nádržou sa zobrazí malý polopriehľadný text s posledných 8 udalostí: čas, kľúč a stav (`ok` = načítané, `zlyhal, skúšam znova` = jeden automatický opakovaný pokus, `CHYBA` = nenačítalo sa, ďalší pokus príde pri najbližšom prehratí, `hrá` = zvuk sa spustil, `uvoľnené` = hlas vyhodený z pamäte, `nový AudioContext`) a v hranatých zátvorkách stav zvukového kontextu (`running` = v poriadku, `suspended`/`interrupted` = pozastavený). Bez parametra sa nič nezobrazí. Nie je pre syna.
+Postup: 5 letov za sebou (aj zo zahraničia). Pri každom lete má log ukázať `dest_<mesto> ok` + `hrá dest_<mesto>` a pri pokynoch staníc aj `..._<jazyk>`. Riadok `CHYBA` alebo `suspended` pri ticho hrajúcom hlase = zapíš kľúč a stav a pošli architektovi.
+
 ## 6. Zástupky z Magnificu (stav 2026-11-10)
 Všetky kľúče z `data/voice.json` majú súbor. Hlasové zástupky sú TTS, kým ich Paľo nenahradí vlastnými nahrávkami (rovnaký názov súboru, potom zvýšiť `CACHE_VERSION`).
 - **Hlas:** Magnific → Voiceover, hlas „Katarína Horváthová" (ElevenLabs), model `eleven_v3`, rýchlosť 0,9, stabilita 0,5. Ďalšie hlasy generuj s tým istým nastavením.

@@ -66,7 +66,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R4b1 | Glóbus, dve mapy a 12 nových miest | [x] hotové (v47), **PO: tablet + dávka Magnific R4b2** |
 | R4b2 | Vlajky a hlasy nových miest | [x] hotové (v48), **PO: tablet** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
-| R5a | Oprava: hlasy prestanú hrať po prvom lete | test v48 na mobile |
+| R5a | Oprava: hlasy prestanú hrať po prvom lete | [x] hotové (v49), **PO: tablet s `?debug=audio`** |
 | R5b | Veľká mapa: priblíženie 2× a posun jedným prstom | po R5a (Paľo rozhodol 2026-11-12) |
 
 ## Spoločné pravidlá (súčasť každého briefu)
@@ -786,7 +786,7 @@ Architekt vygeneruje cez Magnific (po Paľovom schválení): 11 vlajok `flag_<k�
 ## Opravy po teste v48 na mobile (Paľo, 2026-11-12)
 Test: zmena dňa (západ slnka) funguje; počasie v severnej Afrike slnečné (podľa dát). Chyby nižšie.
 
-### [ ] R5a: Hlasy prestanú hrať po prvom lete (oprava)
+### [x] R5a: Hlasy prestanú hrať po prvom lete (oprava)
 **Chyba (mobil, v48):** prvý let prehral slovenské aj cudzie pokyny staníc. Potom už hrali len slovenské pokyny staníc; neprehrávali sa cudzie pokyny ani „Letíme do…" (`dest_*` vo `Flight`). Hlásenia pri pristátí (`land_*`, napr. „V Bratislave svieti slnko.") hrali ďalej.
 
 **Súbory:** `src/systems/audio.js`, `src/systems/voiceLocal.js`, prípadne `sw.js` (fetch), `src/scenes/Flight.js` (r. ~73), `docs/AUDIO.md`.
