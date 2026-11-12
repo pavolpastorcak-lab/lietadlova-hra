@@ -5,6 +5,7 @@ import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { addPlane } from '../systems/sprites.js';
 import { makeLever } from './takeoff/lever.js';
+import * as daytime from '../ui/daytime.js';
 
 const RUNWAY_Y = 660;          // horný okraj dráhy
 const START_X = 200, END_X = 300, END_Y = 400;   // END_* = štart lietadla vo Flight
@@ -22,6 +23,8 @@ export default class Takeoff extends Phaser.Scene {
     this.throttle = 0;
     this.state = 'roll';    // roll → lift → (Flight)
     this.cameras.main.setBackgroundColor('#87ceeb');
+    const routeTime = daytime.timeOf(this.args.from, this.args.to), t = daytime.startTime(routeTime);   // štartuje o stupeň skôr
+    daytime.createSky(this, { t0: t, t1: t, k: 1, veil: false });
 
     // Svet (zem, dráha, čiary) sa pri stúpaní posunie dole.
     this.world = this.add.container(0, 0).setDepth(1);
@@ -29,9 +32,10 @@ export default class Takeoff extends Phaser.Scene {
       this.add.rectangle(640, 760, 1280, 240, 0x6aa84f),
       this.add.rectangle(640, RUNWAY_Y + 50, 1280, 100, 0x5f6b73),
     ]);
+    daytime.addGroundVeil(this, this.world, t, { x: 640, y: 760, w: 1280, h: 240 });
     this.marks = [];
     for (let i = 0; i < 8; i++) {
-      const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, 0xffffff);
+      const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, daytime.dim(0xffffff, t));
       this.marks.push(m);
       this.world.add(m);
     }
@@ -46,6 +50,7 @@ export default class Takeoff extends Phaser.Scene {
     this.groundY = RUNWAY_Y + 10 - side.displayHeight / 2;
     this.plane = this.add.container(START_X, this.groundY).setDepth(20);
     this.plane.add(air ? [side, air] : [side]);
+    daytime.wingLight(this, this.plane, routeTime);
 
     const input = createInput(this);
     addHome(this, input);

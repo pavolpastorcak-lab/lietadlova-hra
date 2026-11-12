@@ -7,6 +7,7 @@ import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { addSprite, role } from '../systems/sprites.js';
 import { desaturate, addVeil } from '../ui/haze.js';
+import * as daytime from '../ui/daytime.js';
 import { startQuiz, quizCfg } from './landing/quiz.js';
 import { showCountryName, belowY } from './landing/countryName.js';
 
@@ -22,10 +23,11 @@ export default class Landing extends Phaser.Scene {
     const dest = data.destination(args && args.to);
     if (dest) { economy.consumeFuel(save.get().location, dest.id); save.get().location = dest.id; save.save(); }   // lietadlo pristálo: odtiaľto sa letí ďalej
     const weather = dest && dest.weather;
-    this.cameras.main.setBackgroundColor(WEATHER_BG[weather] || '#cccccc');
+    const time = daytime.timeOf(args && args.from, args && args.to);   // čas trasy (R2d): len pozadie a závoj
+    this.cameras.main.setBackgroundColor(time === 'day' ? (WEATHER_BG[weather] || '#cccccc') : daytime.skyHex(time));
     const bg = addSprite(this, role('bgLanding'), 640, 400, { w: 1280 });
     desaturate(bg, 'landing');
-    addVeil(this, 'landing', 1);
+    if (time === 'day') addVeil(this, 'landing', 1); else daytime.addScreenVeil(this, time, 1);
     if (!bg) this.add.rectangle(640, 700, 1280, 200, 0x6e7b82);   // dráha
 
     if (weather === 'sun') {

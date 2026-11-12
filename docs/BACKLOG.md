@@ -59,7 +59,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
 | R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
-| R2d | Noc (večerné lety, podľa vzdialenosti) | brief doplnený 2026-11-12 |
+| R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
@@ -642,7 +642,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 
 ---
 
-## [ ] R2d: Noc (schválený nápad 11b)
+## [x] R2d: Noc (schválený nápad 11b)
 **Cieľ:** Dlhé lety sú večer alebo v noci: tmavomodrá obloha, hviezdy, svetlá dráhy, svietiace okná mesta. Pri vzlete aj pristátí.
 
 **Rozhodnutia Paľa (2026-11-12):** čas dňa podľa vzdialenosti letu (noc je odmena za dlhé lety); bez nových zvukov a hlasov (žiadny Magnific).

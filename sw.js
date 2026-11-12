@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v42';
+const CACHE_VERSION = 'v43';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -143,6 +143,7 @@ const PRECACHE = [
   './src/ui/fx.js',
   './src/ui/fx-particles.js',
   './src/ui/haze.js',
+  './src/ui/daytime.js',
   './src/ui/home.js',
   './src/scenes/Boot.js',
   './src/scenes/Preload.js',

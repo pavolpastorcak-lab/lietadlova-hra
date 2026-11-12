@@ -12,6 +12,8 @@ const REQUIRED = {
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
 };
 
+const TIMES = ['day', 'dusk', 'night'];
+
 const FLIGHT_DEFAULTS = {
   minX: 160, maxX: 900, minY: 140, maxY: 700, followMs: 120, followXMs: 220, speed: 420,
   invulnMs: 1200, fingerOffsetX: -140, returnMs: 800, returnX: 300, returnY: 400,
@@ -72,6 +74,7 @@ function checkFlights(fl, dests, errors) {
     if (last && t.upTo !== undefined) errors.push('flights.byKm: posledný stupeň nemá mať "upTo"');
     if (!last && !(t.upTo > 0)) errors.push(`flights.byKm[${i}]: chýba "upTo"`);
     if (!last && i > 0 && !(t.upTo > fl.byKm[i - 1].upTo)) errors.push(`flights.byKm[${i}]: "upTo" musí rásť`);
+    if (t.time !== undefined && !TIMES.includes(t.time)) errors.push(`flights.byKm[${i}]: "time" má byť day, dusk alebo night`);
   });
   (dests || []).forEach((d) => {
     const g = d.geo;
@@ -101,8 +104,22 @@ function checkWeather(dests, sprites, errors) {
     if (!w || typeof w.stormFrom !== 'number' || w.stormFrom < 0 || w.stormFrom >= 1) errors.push(`destinations ${d.id}: flightWeather.stormFrom má byť číslo 0–1`);
     if (!w || !(w.stormCloudEvery > 0)) errors.push(`destinations ${d.id}: flightWeather.stormCloudEvery má byť > 0`);
   });
+  checkTime(sprites, errors);
   const st = sprites && sprites.fx && sprites.fx.storm;
   if (list.length && (!st || !st.rain || !(st.rampSec > 0))) errors.push('sprites.fx.storm: chýba blok (rampSec, rain)');
+}
+
+// Čas dňa (R2d): sprites.fx.time má farby pre day/dusk/night, hviezdy, okná a svetielko krídla.
+function checkTime(sprites, errors) {
+  const tm = sprites && sprites.fx && sprites.fx.time;
+  if (!tm) { errors.push('sprites.fx.time: chýba blok'); return; }
+  TIMES.forEach((k) => { if (!tm[k] || typeof tm[k].sky !== 'string') errors.push(`sprites.fx.time.${k}: chýba "sky"`); });
+  ['dusk', 'night'].forEach((k) => {
+    if (tm[k] && (tm[k].veil === undefined || !(tm[k].veilAlpha >= 0) || tm[k].tint === undefined)) errors.push(`sprites.fx.time.${k}: chýba veil, veilAlpha alebo tint`);
+  });
+  if (!tm.stars || !(tm.stars.count > 0) || !Array.isArray(tm.stars.size)) errors.push('sprites.fx.time.stars: chýba count alebo size');
+  if (!tm.windows || !(tm.windows.perTile > 0)) errors.push('sprites.fx.time.windows: chýba perTile');
+  if (!tm.wing || !(tm.wing.blinkMs > 0)) errors.push('sprites.fx.time.wing: chýba blinkMs');
 }
 
 // Voliteľný vietor v lete: destinations[].wind + sprites.fx.wind (ak ho niektoré mesto používa).

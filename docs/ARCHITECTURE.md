@@ -104,6 +104,7 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
   "byKm": [{ "upTo": 600, "durationSec": 35, "speed": 420, "payMult": 1, "puzzles": ["p1", "p3"] },
            { "durationSec": 65, "speed": 600, "payMult": 2, "puzzles": ["p6", "p7", "p8"] }] }
 ```
+Stupeň `byKm` má aj `time` (`day` | `dusk` | `night`, bez poľa = `day`): `routes.flight` ho prenesie do objektu letu. `src/ui/daytime.js` (`timeOf(from, to)`, `startTime`, `createSky`, `addGroundVeil`, `addWindows`, `wingLight`) skladá čas dňa z `sprites.json` → `fx.time` (farby oblohy/závoja/tintu, hviezdy, okná, svetielko krídla). Takeoff štartuje o stupeň skôr, Flight plynulo prechádza (od 30 % do 80 % letu), Touchdown a Landing majú čas trasy; letisko, hádanka a mapa ostávajú cez deň.
 `routes.js`: `km(a, b)` (haversine z `geo`, na 10 km), `reachable(from, to, range)` (Bratislava vždy), `flight(from, to)`. Búrka (`flightWeather`) a vietor (`wind`) patria cieľu v `destinations.json`. Dolet sa meria od `save.location`.
 
 `economy.json`

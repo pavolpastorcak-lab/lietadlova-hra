@@ -9,6 +9,7 @@ import { makeStands } from './touchdown/stands.js';
 import { addScenery } from './touchdown/scenery.js';
 import { addVeil } from '../ui/haze.js';
 import { createLandingRain } from './touchdown/rain.js';
+import * as daytime from '../ui/daytime.js';
 
 const RUNWAY_Y = 540;                         // horný okraj dráhy
 const STAND_Y = 735;                          // stred stojísk pod dráhou
@@ -29,19 +30,25 @@ export default class Touchdown extends Phaser.Scene {
     this.brake = 1;               // poloha páky 1 (hore) → 0 (dole)
     this.state = 'descend';
     this.cameras.main.setBackgroundColor('#87ceeb');
+    const dest = data.destination(this.args.to);
+    const t = daytime.timeOf(this.args.from, this.args.to);        // čas trasy (R2d), letisko ostáva cez deň
+    const raining = !!dest && dest.weather === 'rain';
+    this.sky = daytime.createSky(this, { t0: t, t1: t, k: 1, veil: false, noStars: raining, starsY: [20, 330], starsDepth: 0.5 });
 
     this.world = this.add.container(0, 520).setDepth(1);
     this.world.add([
       this.add.rectangle(640, 760, 1280, 560, 0x6aa84f),
       this.add.rectangle(640, RUNWAY_Y + 50, 1280, 100, 0x5f6b73),
     ]);
-    const dest = data.destination(this.args.to);
-    this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8, this.cfg.parallax);
-    addVeil(this, 'landing', 2);                  // modrastý závoj: pôsobí to vzdialene
+    const rainA = raining && this.cfg.rain ? this.cfg.rain.veilAlpha : 0;      // dážď má vlastný závoj: neprikrývame dvakrát
+    daytime.addGroundVeil(this, this.world, t, { x: 640, y: 767, w: 1280, h: 546 }, rainA);
+    this.scenery = addScenery(this, this.world, dest, 480, RUNWAY_Y, this.cfg.lights, MARK_GAP, 8, this.cfg.parallax, t);
+    if (t === 'night') this.scenery.setLit(true);   // v noci svietia svetlá dráhy od začiatku
+    if (t === 'day') addVeil(this, 'landing', 2);                  // modrastý závoj: pôsobí to vzdialene
     this.rain = createLandingRain(this, dest);    // null, ak v cieli nie je dážď
     this.marks = [];
     for (let i = 0; i < 8; i++) {
-      const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, 0xffffff);
+      const m = this.add.rectangle(i * MARK_GAP, RUNWAY_Y + 50, 110, 14, daytime.dim(0xffffff, t, rainA));
       this.marks.push(m);
       this.world.add(m);
     }
@@ -90,6 +97,7 @@ export default class Touchdown extends Phaser.Scene {
   update(time, delta) {
     const dt = delta / 1000;
     if (this.rain) this.rain.update(dt);
+    this.sky.update(dt);
     if (this.state === 'descend' || this.state === 'brake') {
       // Rýchlosť dobieha polohu páky (nikdy skokom, žiadny trest).
       const target = this.state === 'descend' ? 1 : this.brake;

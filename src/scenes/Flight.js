@@ -10,6 +10,7 @@ import { createSpawner } from './flight/spawner.js';
 import { createWeather } from './flight/weather.js';
 import { createWind } from './flight/wind.js';
 import { createFaces } from './flight/faces.js';
+import { startTime, createSky, wingLight } from '../ui/daytime.js';
 import { makePlane, makeCloud, makeStormCloud, makeBird, makeStar, makeHud } from './flight/shapes.js';
 
 const MAKERS = { cloud: makeCloud, stormCloud: makeStormCloud, bird: makeBird, star: makeStar };
@@ -47,6 +48,11 @@ export default class Flight extends Phaser.Scene {
     this.trail = fx.trail(this);
     this.weather = createWeather(this, this.flight, this.spawner, this.far);
     this.wind = createWind(this, this.flight, this.spawner, this.speed, { minY: cfg.minY, maxY: cfg.maxY });
+    const time = this.flight.time || 'day', tc = fx.fxCfg().time || {}, storm = fx.fxCfg().storm;
+    this.blend = [tc.blendFrom ?? 0.3, tc.blendTo ?? 0.8];
+    this.sky = createSky(this, { t0: startTime(time), t1: time, k: 0, far: this.far, noStars: !!this.flight.weather,
+      storm: this.flight.weather && storm ? { alpha: storm.veilAlpha, farTint: storm.farTint } : null });
+    wingLight(this, this.plane, time);
     this.events.once('shutdown', () => { this.far.destroy(); this.trail.destroy(); });
 
     const input = createInput(this);
@@ -81,6 +87,8 @@ export default class Flight extends Phaser.Scene {
     this.far.update(dt, this.speed);
     this.trail.update(dt, this.plane.x, this.plane.y);
     this.weather.update(dt, this.elapsed);
+    this.sky.setK(Phaser.Math.Clamp((this.elapsed / this.flight.durationSec - this.blend[0]) / (this.blend[1] - this.blend[0]), 0, 1), this.weather.t);
+    this.sky.update(dt);
     this.wind.update(dt, this.elapsed);
     this.faces.update(dt);
 
