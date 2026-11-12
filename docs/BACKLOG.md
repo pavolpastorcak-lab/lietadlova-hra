@@ -64,7 +64,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | [x] hotové (v46) |
 | R4b1 | Glóbus, dve mapy a 12 nových miest | [x] hotové (v47), **PO: tablet + dávka Magnific R4b2** |
-| R4b2 | Vlajky a hlasy nových miest | **PRED: schválenie Magnific** |
+| R4b2 | Vlajky a hlasy nových miest | [x] hotové (v48), **PO: tablet** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
 
 ## Spoločné pravidlá (súčasť každého briefu)
@@ -773,7 +773,7 @@ Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nev
 
 **STOP po R4b1:** dávka Magnific R4b2 na schválenie Paľovi.
 
-### [ ] R4b2: Vlajky a hlasy nových miest (architekt + malá Sonnet úloha)
+### [x] R4b2: Vlajky a hlasy nových miest (architekt + malá Sonnet úloha)
 Architekt vygeneruje cez Magnific (po Paľovom schválení): 11 vlajok `flag_<kód>` (štýl synových vlajok, 128×96) a 24 slovenských hlasov `dest_<id>`, `land_<id>` (Katarína, `eleven_v4`). Sonnet ich zapíše do PRECACHE, `CACHE_VERSION` +1, a vráti kvíz s vlajkami pre nové mestá.
 
 ### [ ] R4b3: Pokyny staníc v jazykoch nových miest (ako R4a)
