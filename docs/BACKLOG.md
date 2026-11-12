@@ -59,7 +59,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2e | Tváre cestujúcich v lete (nárazy znižujú prepitné) | hotovo, **PO: tablet** |
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
 | R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
-| R2d | Noc (večerné lety) | – |
+| R2d | Noc (večerné lety, podľa vzdialenosti) | brief doplnený 2026-11-12 |
 | R3c | Nové lietadlá (= 9a + 9b) | **PRED: dávka Magnific** (6 spritov) |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
@@ -645,9 +645,23 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 ## [ ] R2d: Noc (schválený nápad 11b)
 **Cieľ:** Dlhé lety sú večer alebo v noci: tmavomodrá obloha, hviezdy, svetlá dráhy, svietiace okná mesta. Pri vzlete aj pristátí.
 
-**Návrh zadania:** stupne `byKm` vo `flights.json` dostanú `time: day | dusk | night` (napr. do 1150 deň, do 2000 západ slnka, ďalej noc). Farby oblohy a závojov v dátach. V noci: hviezdy na oblohe (kódom), svetlá dráhy svietia, okná skyline žlté (prekrytie kódom), lietadlo má blikajúce svetlo na krídle. Hviezdičky na zbieranie musia ostať dobre viditeľné.
+**Rozhodnutia Paľa (2026-11-12):** čas dňa podľa vzdialenosti letu (noc je odmena za dlhé lety); bez nových zvukov a hlasov (žiadny Magnific).
 
-**Nesmie sa zmeniť:** počasie (v daždi v noci bez hviezd na oblohe), obtiažnosť.
+**Súbory:** `data/flights.json` (`byKm[].time`), `data/sprites.json` (`fx.time`), `src/systems/routes.js` (prenesie `time`), nový `src/ui/daytime.js` (farby, závoj, hviezdy na oblohe, okná), `src/scenes/Takeoff.js`, `src/scenes/Flight.js` (+ `flight/shapes.js` pre svetlo na krídle), `src/scenes/Touchdown.js`, `src/scenes/touchdown/scenery.js`, `src/scenes/Landing.js`, `src/systems/data.js`, `sw.js`, docs.
+
+**Zadanie:**
+- `byKm[].time`: stupne do 1150 km = `day`, do 1450 a do 2000 km = `dusk`, posledný stupeň = `night`. Bez `time` = `day`. `routes.flight` ho prenesie do objektu letu a ten ide v `args` cez Takeoff → Flight → Touchdown → Landing.
+- Priebeh: lietadlo štartuje o stupeň skôr a pristáva v čase trasy. `dusk`: vzlet cez deň, počas letu sa obloha od 30 % do 80 % letu plynulo zmení na západ slnka. `night`: vzlet pri západe slnka, počas letu prechod do noci. Touchdown a Landing majú čas trasy. Letisko (stanice), hádanka a mapa ostávajú cez deň (čitateľnosť miniher).
+- `fx.time` v `sprites.json`: pre `day`, `dusk`, `night` farba oblohy (pozadie kamery) a závoj (farba, alfa) nad kulisami; `dusk` teplá oranžovo-ružová, `night` tmavomodrá. Žiadne farby v kóde.
+- Noc: hviezdy na oblohe kódom (40–60 malých bodiek ≤ 3 px, jemné blikanie, alfa ≤ 0,7), nesmú sa podobať na zberateľné hviezdičky, tie ostávajú plne viditeľné a nad závojom. Svetlá dráhy pri pristátí svietia od začiatku (`setLit(true)`). Skyline stmavne (tint) a pribudne 10–20 malých teplých okien (žlté obdĺžniky kódom, poloha náhodná so seedom podľa mesta v hornej polovici skyline). Lietadlo v lete aj pri vzlete má blikajúce svetielko na špičke krídla (červené, 1 s cyklus).
+- `dusk`: bez hviezd a okien, len farby; svetlá dráhy sa zapnú ako dnes.
+- Počasie: ak v cieli prší alebo je búrka, v noci nie sú hviezdy na oblohe; závoj búrky a noci sa nesčítajú do čiernej (použi tmavší z nich, nie súčet), tváre cestujúcich a hviezdičky ostanú čitateľné.
+
+**Akceptačné kritériá:** let Bratislava → Berlín celý cez deň ako dnes (bez zmeny vzhľadu); Bratislava → Londýn (1320 km) pristáva pri západe slnka; Bratislava → Lisabon (2350 km) štartuje pri západe slnka a pristáva v noci s hviezdami, oknami a svietiacimi svetlami dráhy; Londýn v noci/západe s dažďom bez hviezd a stále čitateľný; plynulosť: hviezdy aj okná sú jeden `Graphics` objekt, nie desiatky spritov; po odchode zo scény nič nebeží.
+
+**Nesmie sa zmeniť:** obtiažnosť, počet prekážok, počasie, letisko a minihry, mapa, výplata.
+
+**Plán:** mení dáta a viac ako 3 súbory, najprv plán architektovi.
 
 ---
 
