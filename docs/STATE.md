@@ -4,7 +4,7 @@ Aktualizované 2026-11-11. Architekt (Opus/Fable) riadi, Sonnet implementuje (CL
 
 ## Kde sme
 - Vetva `claude/architect-orchestrator-setup-7d8f3d` (worktree `.claude/worktrees/architect-orchestrator-setup-7d8f3d`). Hlavný priečinok projektu je na `master`.
-- `master` = c0fa2c9 (CACHE_VERSION v46, R1a–R4a), pushnutý 2026-11-11 na GitHub `pavolpastorcak-lab/lietadlova-hra`, Pages beží: https://pavolpastorcak-lab.github.io/lietadlova-hra/ (overené v46).
+- `master` = 236a4fe (CACHE_VERSION v48, R1a–R4b2), pushnutý 2026-11-11 na GitHub `pavolpastorcak-lab/lietadlova-hra`, Pages beží: https://pavolpastorcak-lab.github.io/lietadlova-hra/ (overené v48).
 - Vetva je oproti master navyše len o zápisy v STATE.md.
 - Hotové úlohy 3g–8b (BACKLOG [x]). Neurobené z BACKLOG: 9a, 9b, 10, 11a–11d.
 - Obsah: 14 destinácií (bts, lon, ber, rim, par, dub, mad, lis, zur, ams, sto, ath, ist, fin), 8 hádaniek, počasie (par, lon, dub, ams, sto, fin), vietor (dub, mad, lis), doletové stupne 1500/2000/2600.
