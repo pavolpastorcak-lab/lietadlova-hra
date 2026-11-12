@@ -62,7 +62,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
 | R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
 | R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
-| R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
+| R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | brief doplnený, hlasy schválené 2026-11-12 |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
 
 ## Spoločné pravidlá (súčasť každého briefu)
@@ -694,7 +694,41 @@ Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nev
 ## [ ] R4a: Hlásenia v miestnom jazyku pri odlete zo zahraničia
 **Cieľ:** Keď lietadlo štartuje zo zahraničia, hlásenia na letisku zaznejú najprv po slovensky a potom v jazyku krajiny (en, de, fr, it, es, pt, nl, sv, el, tr, fi).
 
-**Návrh zadania:** ~6 hlásení (check-in, kontrola, brána, nástup, vzlet, privítanie). `destinations.json` → `lang`. Kľúče `ann_<id>_<lang>` vo `voice.json`, prehrá sa slovenská veta a hneď po nej miestna. V Bratislave len slovenská. Chýbajúci mp3 = len slovenská. **STOP pred:** dávka Magnific ~66 hlasov (výber hlasov pre každý jazyk schváli Paľo).
+**Rozhodnutia Paľa (2026-11-12):** pokyny všetkých 6 staníc aj v miestnom jazyku; rodení hovoriaci (hlas pre každý jazyk vyberie architekt); jeden jazyk na mesto.
+
+**Súbory:** `data/destinations.json` (`lang`), `data/voice.json` (66 nových kľúčov), `src/systems/audio.js` (alebo malý pomocník `src/systems/voiceLocal.js`), miesta, kde stanice púšťajú svoj pokyn (`src/scenes/airport/flow.js`, `security.js`, `Takeoff.js`; nájdi grepom `st_checkin`, `st_bags`, `st_security`, `st_gate`, `st_boarding`, `st_takeoff`), `src/systems/data.js`, `docs/AUDIO.md`, `sw.js`, docs.
+
+**Zadanie:**
+- `destinations.json` → `lang`: bts `sk`; lon, dub `en`; ber, zur `de`; par `fr`; rim `it`; mad `es`; lis `pt`; ams `nl`; sto `sv`; ath `el`; ist `tr`; fin `fi`.
+- `voice.json`: pre 6 pokynov (`st_checkin`, `st_bags`, `st_security`, `st_gate`, `st_boarding`, `st_takeoff`) × 11 jazykov kľúč `<pokyn>_<lang>` → `voice/<lang>/<pokyn>.mp3`, `text` z tabuľky nižšie. Riadky do `AUDIO.md` (jedna tabuľka na jazyk alebo spoločná). mp3 dodá architekt, chýbajúci súbor = zaznie len slovenská veta.
+- Prehrávanie: keď je `save.location` mimo Bratislavy, pri **prvom** pokyne stanice zaznie slovenská veta a hneď po nej (pauza 400 ms, v dátach) veta v jazyku mesta, odkiaľ sa letí (`lang` polohy). Nápoveda po nečinnosti opakuje len slovenskú vetu. Ťuk počas hlásenia nič neblokuje (minihra ide ďalej, cudzia veta môže dohrať). V Bratislave bez zmeny.
+- Hlasy sa cachujú ako ostatné kľúče z `voice.json` (over, že `sw.js` berie aj podpriečinky `voice/<lang>/`).
+
+| pokyn | en | de | fr | it | es | pt |
+|---|---|---|---|---|---|---|
+| checkin | Show your ticket. | Zeig dein Ticket. | Montre ton billet. | Mostra il tuo biglietto. | Enseña tu billete. | Mostra o teu bilhete. |
+| bags | Put the suitcases on the belt. | Leg die Koffer auf das Band. | Mets les valises sur le tapis. | Metti le valigie sul nastro. | Pon las maletas en la cinta. | Põe as malas no tapete. |
+| security | What doesn't belong on the plane? Put it in the bin. | Was gehört nicht ins Flugzeug? Wirf es in den Korb. | Qu'est-ce qui ne va pas dans l'avion ? Mets-le dans la poubelle. | Cosa non va sull'aereo? Mettilo nel cestino. | ¿Qué no va en el avión? Ponlo en la papelera. | O que não pode ir no avião? Põe no cesto. |
+| gate | Open the gate. | Öffne das Tor. | Ouvre la porte. | Apri il cancello. | Abre la puerta. | Abre o portão. |
+| boarding | Pull the stairs to the plane. | Zieh die Treppe zum Flugzeug. | Approche l'escalier de l'avion. | Avvicina la scala all'aereo. | Acerca la escalera al avión. | Puxa a escada até ao avião. |
+| takeoff | Pull the lever up. | Zieh den Hebel nach oben. | Tire le levier vers le haut. | Tira la leva in alto. | Tira de la palanca hacia arriba. | Puxa a alavanca para cima. |
+
+| pokyn | nl | sv | el | tr | fi |
+|---|---|---|---|---|---|
+| checkin | Laat je ticket zien. | Visa din biljett. | Δείξε το εισιτήριό σου. | Biletini göster. | Näytä lippusi. |
+| bags | Zet de koffers op de band. | Lägg väskorna på bandet. | Βάλε τις βαλίτσες στον ιμάντα. | Bavulları banda koy. | Laita matkalaukut hihnalle. |
+| security | Wat hoort niet in het vliegtuig? Gooi het in de bak. | Vad får inte följa med på planet? Lägg det i korgen. | Τι δεν επιτρέπεται στο αεροπλάνο; Βάλ' το στο καλάθι. | Uçağa ne giremez? Onu sepete at. | Mikä ei kuulu lentokoneeseen? Laita se koriin. |
+| gate | Open de poort. | Öppna grinden. | Άνοιξε την πύλη. | Kapıyı aç. | Avaa portti. |
+| boarding | Trek de trap naar het vliegtuig. | Dra trappan till planet. | Τράβηξε τη σκάλα στο αεροπλάνο. | Merdiveni uçağa çek. | Vedä portaat koneen luo. |
+| takeoff | Trek de hendel omhoog. | Dra spaken uppåt. | Τράβηξε τον μοχλό προς τα πάνω. | Kolu yukarı çek. | Vedä vipu ylös. |
+
+**Akceptačné kritériá:** z Bratislavy bez zmeny; z Paríža pri check-ine „Ukáž letenku." a potom „Montre ton billet." (s mp3; bez mp3 len slovensky, bez chyby); nápoveda len slovensky; po odchode zo scény cudzia veta nezačne; všetkých 66 kľúčov v `voice.json` a `AUDIO.md`.
+
+**Nesmie sa zmeniť:** slovenské pokyny, minihry, poradie staníc.
+
+**Plán:** mení dáta a viac ako 3 súbory, najprv plán architektovi.
+
+**Hlasy:** architekt vygeneruje 66 mp3 (Magnific, rodení hovoriaci, ~450–530 kreditov schválených Paľom 2026-11-12) do `assets/audio/voice/<lang>/<pokyn>.mp3`.
 
 ---
 
