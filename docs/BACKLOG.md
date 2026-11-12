@@ -67,7 +67,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R4b2 | Vlajky a hlasy nových miest | [x] hotové (v48), **PO: tablet** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
 | R5a | Oprava: hlasy prestanú hrať po prvom lete | test v48 na mobile |
-| R5b | Veľká mapa: priblíženie a posun | **PRED: rozhodnutie Paľa** |
+| R5b | Veľká mapa: priblíženie 2× a posun jedným prstom | po R5a (Paľo rozhodol 2026-11-12) |
 
 ## Spoločné pravidlá (súčasť každého briefu)
 Si implementátor v režime orchestrátora. Prečítaj `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/design-notes.md` a z `docs/PROGRESS.md` len posledné 2 úlohy. Výnimky z `CLAUDE.md`:
@@ -803,7 +803,24 @@ Test: zmena dňa (západ slnka) funguje; počasie v severnej Afrike slnečné (p
 **Nesmie sa zmeniť:** hlasitosti, kanály (hlas preruší hlas, `sfx` nie), pravidlá R4a (nápoveda len slovensky).
 
 ### [ ] R5b: Veľká mapa sa dá priblížiť a posúvať
-Brief sa dopíše po rozhodnutí Paľa (spôsob priblíženia, pravidlo jedného prsta).
+**Chyba (mobil, v48):** na veľkej mape (`svet`) sú špendlíky príliš husto, funguje to, ale nie je to prehľadné.
+
+**Rozhodnutie Paľa (2026-11-12):** veľká mapa sa otvorí **priblížená 2×** okolo polohy lietadla a posúva sa **ťahaním jedným prstom** (pravidlo jedného prsta ostáva). Európska mapa bez zmeny.
+
+**Súbory:** `src/scenes/Map.js`, `src/scenes/map/globe.js`, `src/scenes/map/fuel.js` (len ak treba HUD pripnúť), nový `src/scenes/map/pan.js`, `data/sprites.json` (`mapZoom`), `src/systems/input.js` (len ak treba rozlíšiť ťuk a ťah), `sw.js`, docs.
+
+**Zadanie:**
+- `sprites.json` → `mapZoom: { "svet": 2 }` (európska mapa 1 = bez zmeny). Pozadie mapy sa zväčší `zoom`-krát, **súradnice** špendlíkov sa násobia `zoom`, ale **veľkosť** špendlíkov ostáva ako dnes (európske mestá na veľkej mape 60 %). Vďaka tomu sú špendlíky na obrazovke 2× ďalej od seba. Nepoužívaj jednoduchý `camera.zoom`, ten by zväčšil aj špendlíky.
+- Posun: ťah jedným prstom posúva kameru (`scrollX/Y`), obmedzený na okraje mapy (nikdy nevidno prázdno za mapou). Jemná zotrvačnosť po pustení je voliteľná (max. 300 ms). Ťah nesmie spustiť ťuk na špendlík; ťuk (bez pohybu nad prahom, napr. 12 px) funguje ako dnes.
+- Pri otvorení veľkej mapy je kamera vycentrovaná na polohu lietadla („Si tu"), orezaná na okraje.
+- HUD (glóbus, nádrž, mince, ikona domov, ak je) ostáva pripnutý k obrazovke (`setScrollFactor(0)`), zásahové plochy sedia aj po posune.
+- Zásahové plochy špendlíkov počítaj v súradniciach sveta (po posune kamery), nie obrazovky.
+
+**Akceptačné kritériá:** veľká mapa sa otvorí priblížená okolo polohy; ťah posúva mapu do všetkých strán po okraj; ťuk na špendlík po posune vyberie správne mesto; ťah cez špendlík ho nevyberie; glóbus, nádrž a mince ostávajú na mieste a fungujú; tankovanie a stavy špendlíkov (otvorené / treba natankovať / mimo doletu) ako predtým; európska mapa bez zmeny.
+
+**Nesmie sa zmeniť:** pravidlá doletu a paliva, súradnice miest v dátach (len sa násobia), európska mapa.
+
+**Plán:** mení viac ako 3 súbory, najprv plán architektovi.
 
 ---
 
