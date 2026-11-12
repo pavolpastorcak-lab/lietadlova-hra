@@ -66,6 +66,8 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R4b1 | Glóbus, dve mapy a 12 nových miest | [x] hotové (v47), **PO: tablet + dávka Magnific R4b2** |
 | R4b2 | Vlajky a hlasy nových miest | [x] hotové (v48), **PO: tablet** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
+| R5a | Oprava: hlasy prestanú hrať po prvom lete | test v48 na mobile |
+| R5b | Veľká mapa: priblíženie a posun | **PRED: rozhodnutie Paľa** |
 
 ## Spoločné pravidlá (súčasť každého briefu)
 Si implementátor v režime orchestrátora. Prečítaj `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/design-notes.md` a z `docs/PROGRESS.md` len posledné 2 úlohy. Výnimky z `CLAUDE.md`:
@@ -778,6 +780,30 @@ Architekt vygeneruje cez Magnific (po Paľovom schválení): 11 vlajok `flag_<k�
 
 ### [ ] R4b3: Pokyny staníc v jazykoch nových miest (ako R4a)
 6 pokynov × 6 jazykov (ru, kk, mn, ar, ka, az) = 36 hlasov rodených hovoriacich (Magnific po schválení, ~230 kreditov). Kód R4a už pokryje nové jazyky cez `lang`, úloha pridá len kľúče do `voice.json` a riadky do `AUDIO.md` (preklady dodá architekt v briefe).
+
+---
+
+## Opravy po teste v48 na mobile (Paľo, 2026-11-12)
+Test: zmena dňa (západ slnka) funguje; počasie v severnej Afrike slnečné (podľa dát). Chyby nižšie.
+
+### [ ] R5a: Hlasy prestanú hrať po prvom lete (oprava)
+**Chyba (mobil, v48):** prvý let prehral slovenské aj cudzie pokyny staníc. Potom už hrali len slovenské pokyny staníc; neprehrávali sa cudzie pokyny ani „Letíme do…" (`dest_*` vo `Flight`). Hlásenia pri pristátí (`land_*`, napr. „V Bratislave svieti slnko.") hrali ďalej.
+
+**Súbory:** `src/systems/audio.js`, `src/systems/voiceLocal.js`, prípadne `sw.js` (fetch), `src/scenes/Flight.js` (r. ~73), `docs/AUDIO.md`.
+
+**Podozrenia architekta (over a oprav všetko, čo platí):**
+1. `buffer()` si natrvalo pamätá aj **neúspech** (`bufs[key] = …catch(() => null)`). Jedno zlyhanie fetch/dekódovania (napr. počas sťahovania 66 hlasov service workerom, slabý signál, prerušenie) = kľúč je ticho až do reštartu hry. Oprava: neúspech nekešovať (pri ďalšom `play` skús znova).
+2. **Pamäť:** dekódované buffre sa nikdy neuvoľňujú (dnes ~150 hlasov a zvukov; na mobile môže `decodeAudioData` začať zlyhávať). Oprava: hlasy (nie `sfx_*` slučky) držať v malej LRU (napr. 40 posledných), staré vyhodiť; `sfx_*` ponechať.
+3. **AudioContext** na mobile môže byť po prepnutí aplikácie / zhasnutí obrazovky `suspended` alebo `interrupted`; `resume()` sa volá, ale `play` sa nečaká. Oprava: pred štartom hlasu počkať na `ctx.resume()` (s časovým limitom), stav `interrupted` riešiť ako `suspended`; ak kontext zlyhá úplne, vytvoriť nový.
+4. Over, že sa `dest_*` hlas vo `Flight` volá aj pri lete zo zahraničia (nie len z Bratislavy) a že ho neprebije iný hlas (napr. dohrávajúca cudzia veta `st_takeoff_<lang>` z `Takeoff` – tá nesmie začať po prechode do `Flight`, overiť `alive`/`seq`).
+- **Diagnostika na tablete:** `?debug=audio` v adrese zobrazí v rohu malý textový log posledných 8 udalostí zvuku (kľúč, ok / chýba / chyba dekódovania / kontext stav). Bez parametra sa nič nezobrazí. Log je jediná výnimka z pravidla „bez textu" a nie je pre syna. Postup zapíš do `AUDIO.md`.
+
+**Akceptačné kritériá:** v Node teste s mockom: zlyhaný fetch sa pri ďalšom `play` skúsi znova; LRU drží max. N hlasov; `play` po `suspended` kontexte počká na resume. V prehliadači (ak sa dá): 5 letov za sebou (aj zo zahraničia) s `?debug=audio` – každý let prehrá `dest_*`, slovenský aj cudzí pokyn. Žiadny zvuk nehrá po odchode zo scény.
+
+**Nesmie sa zmeniť:** hlasitosti, kanály (hlas preruší hlas, `sfx` nie), pravidlá R4a (nápoveda len slovensky).
+
+### [ ] R5b: Veľká mapa sa dá priblížiť a posúvať
+Brief sa dopíše po rozhodnutí Paľa (spôsob priblíženia, pravidlo jedného prsta).
 
 ---
 
