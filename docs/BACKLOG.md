@@ -67,7 +67,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R4b2 | Vlajky a hlasy nových miest | [x] hotové (v48), **PO: tablet** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
 | R5a | Oprava: hlasy prestanú hrať po prvom lete | [x] hotové (v49), **PO: tablet s `?debug=audio`** |
-| R5b | Veľká mapa: priblíženie 2× a posun jedným prstom | po R5a (Paľo rozhodol 2026-11-12) |
+| R5b | Veľká mapa: priblíženie 2× a posun jedným prstom | [x] hotové (v50), **PO: tablet** |
 
 ## Spoločné pravidlá (súčasť každého briefu)
 Si implementátor v režime orchestrátora. Prečítaj `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/design-notes.md` a z `docs/PROGRESS.md` len posledné 2 úlohy. Výnimky z `CLAUDE.md`:
@@ -802,7 +802,7 @@ Test: zmena dňa (západ slnka) funguje; počasie v severnej Afrike slnečné (p
 
 **Nesmie sa zmeniť:** hlasitosti, kanály (hlas preruší hlas, `sfx` nie), pravidlá R4a (nápoveda len slovensky).
 
-### [ ] R5b: Veľká mapa sa dá priblížiť a posúvať
+### [x] R5b: Veľká mapa sa dá priblížiť a posúvať
 **Chyba (mobil, v48):** na veľkej mape (`svet`) sú špendlíky príliš husto, funguje to, ale nie je to prehľadné.
 
 **Rozhodnutie Paľa (2026-11-12):** veľká mapa sa otvorí **priblížená 2×** okolo polohy lietadla a posúva sa **ťahaním jedným prstom** (pravidlo jedného prsta ostáva). Európska mapa bez zmeny.

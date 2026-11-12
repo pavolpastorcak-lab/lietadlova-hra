@@ -2,6 +2,7 @@
   "ext": { "map": "jpg" },
   "scale": { "person": 0.7, "bag": 0.6 },
   "maps": { "europa": { "layer": "map_01_europa" }, "svet": { "layer": "map_03_europa_azia_afrika", "pinScale": 0.6 } },
+  "mapZoom": { "svet": 2 },
   "globe": { "x": 80, "y": 80, "hit": 130, "r": 46, "fadeMs": 150 },
   "flagFallback": {
     "ru": { "dir": "h", "colors": ["#ffffff", "#1c57a5", "#d52b1e"] },

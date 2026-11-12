@@ -7,7 +7,7 @@ export function nextView(view) {
   return keys[(keys.indexOf(view) + 1) % keys.length];
 }
 
-// Vráti { zone } (zásahová plocha, aby ju špendlíky pod ňou ignorovali).
+// Vráti { zone, box } (zásahová plocha v súradniciach obrazovky, aby ju špendlíky pod ňou ignorovali; box = kontajner na pripnutie k obrazovke).
 export function addGlobe(scene, input, view) {
   const g = data.get('sprites').globe;
   const box = scene.add.container(g.x, g.y).setDepth(100);
@@ -24,5 +24,5 @@ export function addGlobe(scene, input, view) {
     scene.cameras.main.once('camerafadeoutcomplete', () => scene.scene.restart({ view: nextView(view), switched: true }));
     scene.cameras.main.fadeOut(g.fadeMs, 74, 163, 223);
   });
-  return { zone };
+  return { zone, box };
 }

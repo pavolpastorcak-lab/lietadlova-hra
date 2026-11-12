@@ -10,11 +10,14 @@ import { addCoinCounter } from '../ui/coins.js';
 import { addFuelTank } from './map/fuel.js';
 import { addGlobe } from './map/globe.js';
 import { flagShape } from '../ui/flagShape.js';
+import { addPan, centerOn } from './map/pan.js';
 
 const PIN_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };       // zástupka za vlajku
 
 // Mapa zhora: špendlíky destinácií, ťuk na cieľ → letisko.
 // Pozadie = vrstva zvolenej mapy (sprites.json → maps), špendlík ui_pin s vlajkou nad ním; polohy v destinations.json → maps[view].
+// Veľká mapa (sprites.json → mapZoom) je zväčšená v súradniciach (pozadie aj polohy ×zoom, špendlíky nie) a posúva sa jedným prstom (map/pan.js).
+// Špendlíky žijú vo svete (zásahová plocha = svet), HUD (glóbus, nádrž, mince, závoj, tiene) je pripnutý k obrazovke (scrollFactor 0).
 // Glóbus (map/globe.js) prepína europa ↔ svet. Mapa sa otvorí tá, na ktorej stojí lietadlo.
 export default class MapScene extends Phaser.Scene {
   constructor() { super('Map'); }
@@ -27,18 +30,21 @@ export default class MapScene extends Phaser.Scene {
     this.viewName = view;
     if (args && args.switched) this.cameras.main.fadeIn(data.get('sprites').globe.fadeMs, 74, 163, 223);
     const mapCfg = data.get('sprites').maps[view];
-    const layer = addSprite(this, mapCfg.layer, 640, 400, { w: 1280 });
-    if (!layer) this.add.ellipse(560, 380, 760, 520, 0x7cc36b);      // pevnina
+    const zoom = (data.get('sprites').mapZoom || {})[view] || 1;
+    const W = 1280 * zoom, H = 800 * zoom;
+    const layer = addSprite(this, mapCfg.layer, W / 2, H / 2, { w: W });
+    if (!layer) this.add.ellipse(560 * zoom, 380 * zoom, 760 * zoom, 520 * zoom, 0x7cc36b);      // pevnina
     desaturate(layer, 'map');
-    addVeil(this, 'map', 1);
+    const veil = addVeil(this, 'map', 1);
+    if (veil) veil.setScrollFactor(0);
     const plane = economy.activePlane();
     const input = createInput(this);
 
-    fx.mapShadows(this, 4);
+    fx.mapShadows(this, 4).forEach((o) => o.setScrollFactor(0));
     const drops = [];
     const zones = [];
     dests.forEach((d) => {
-      const at = d.maps[view];
+      const at = { ...d.maps[view], x: d.maps[view].x * zoom, y: d.maps[view].y * zoom };   // súradnice sveta
       const k = at.k ?? (d.maps.europa && mapCfg.pinScale ? mapCfg.pinScale : 1);   // európske mestá na veľkej mape sú menšie, husté zhluky (Zálivy, Kaukaz) tiež (maps.svet.k)
       const pin = this.add.container(at.x, at.y).setScale(k);
       const pinSpr = addSprite(this, role('pin'), 0, 0, { h: 100, origin: [0.5, 1] });   // hrot na súradnici
@@ -63,12 +69,21 @@ export default class MapScene extends Phaser.Scene {
     const globe = addGlobe(this, input, view);
     const counter = addCoinCounter(this, save.get().coins);
     const tank = addFuelTank(this, input, plane, counter, () => zones.forEach((z) => this.applyState(z, plane)));
+    [globe.box, tank.box, ...counter.objs].forEach((o) => o.setScrollFactor(0));   // HUD stojí na mieste
+    const hud = [globe.zone, tank.zone, counter.zone];
+    const hereZ = zones.find((z) => z.d.id === here);
+    const c0 = hereZ ? { x: hereZ.cx, y: hereZ.cy } : { x: W / 2, y: H / 2 };
+    const s0 = centerOn(c0.x, c0.y, W, H);
+    addPan(this, input, W, H);
+    this.cameras.main.setScroll(s0.x, s0.y);
 
     // Jeden ťuk = najbližší špendlík so zásahovou plochou pod prstom (susedné plochy sa môžu dotýkať).
     input.on('tap', (pt) => {
-      const hit = zones.filter((z) => z.rect.contains(pt.x, pt.y))
-        .sort((p, q) => Phaser.Math.Distance.Between(pt.x, pt.y, p.cx, p.cy) - Phaser.Math.Distance.Between(pt.x, pt.y, q.cx, q.cy))[0];
-      if (!hit || globe.zone.contains(pt.x, pt.y)) return;
+      if (hud.some((h) => h.contains(pt.x, pt.y))) return;       // ťuk do HUD (obrazovka) nejde na špendlík pod ním
+      const cam = this.cameras.main, wx = pt.x + cam.scrollX, wy = pt.y + cam.scrollY;   // ťuk (obrazovka) → svet
+      const hit = zones.filter((z) => z.rect.contains(wx, wy))
+        .sort((p, q) => Phaser.Math.Distance.Between(wx, wy, p.cx, p.cy) - Phaser.Math.Distance.Between(wx, wy, q.cx, q.cy))[0];
+      if (!hit) return;
       const { d, pin } = hit;
       if (hit.state === 'needFuel') return this.needFuelPin(hit, tank);
       if (hit.state === 'locked') return this.lockedPin(hit);

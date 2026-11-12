@@ -11,13 +11,13 @@ export function makeCoin(scene, x, y, r = 22) {
   return c;
 }
 
-// Počítadlo vpravo hore. set(n) zmení zobrazené číslo.
+// Počítadlo vpravo hore (objs = prvky na pripnutie k obrazovke, zone = jeho plocha). set(n) zmení zobrazené číslo.
 export function addCoinCounter(scene, value) {
   const x = 1130, y = 70;
-  scene.add.rectangle(x + 40, y, 200, 70, 0xffffff, 0.9).setDepth(100).setStrokeStyle(4, 0xb8860b);
+  const back = scene.add.rectangle(x + 40, y, 200, 70, 0xffffff, 0.9).setDepth(100).setStrokeStyle(4, 0xb8860b);
   const icon = makeCoin(scene, x - 30, y, 26).setDepth(101);
   const txt = scene.add.text(x + 90, y, String(value), {
     fontFamily: 'Arial', fontSize: '44px', fontStyle: 'bold', color: '#333333',
   }).setOrigin(1, 0.5).setDepth(101);
-  return { icon, set: (n) => txt.setText(String(n)), tick: () => counterBounce(scene, txt, fxCfg().tick) };
+  return { icon, objs: [back, icon, txt], zone: new Phaser.Geom.Rectangle(x - 60, y - 35, 200, 70), set: (n) => txt.setText(String(n)), tick: () => counterBounce(scene, txt, fxCfg().tick) };
 }

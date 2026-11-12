@@ -173,8 +173,8 @@ export function dropPins(scene, pins, cfg = fxCfg().pins) {
 
 // Dva jemné tiene mrakov pomaly prechádzajú cez mapu (pod špendlíkmi).
 export function mapShadows(scene, depth, cfg = fxCfg().mapShadows) {
-  if (!cfg) return;
-  cfg.ys.forEach((y, i) => {
+  if (!cfg) return [];
+  return cfg.ys.map((y, i) => {
     const spr = addSprite(scene, (role('cloud') || [])[0], 0, y, { w: cfg.w });
     let s = spr;
     if (spr && spr.setTint) spr.setTint(0x1d3557);
@@ -182,5 +182,6 @@ export function mapShadows(scene, depth, cfg = fxCfg().mapShadows) {
     s.setAlpha(cfg.alpha).setDepth(depth);
     s.x = -cfg.w;
     scene.tweens.add({ targets: s, x: 1280 + cfg.w, duration: cfg.ms, repeat: -1, delay: i * cfg.phaseMs });
+    return s;
   });
 }

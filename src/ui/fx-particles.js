@@ -9,7 +9,7 @@ export function coinFly(scene, x, y, target, amount, onCoin, onDone, cfg = fxCfg
   if (!n) { onDone(); return 0; }
   let arrived = 0;
   for (let i = 0; i < n; i++) {
-    const c = makeCoin(scene, x, y, cfg.size / 2.2).setDepth(150).setVisible(false);
+    const c = makeCoin(scene, x, y, cfg.size / 2.2).setDepth(150).setScrollFactor(0).setVisible(false);
     const p = { t: 0 };
     scene.tweens.add({ targets: p, t: 1, duration: cfg.ms, delay: i * cfg.gapMs, ease: 'Sine.inOut',
       onStart: () => c.setVisible(true),

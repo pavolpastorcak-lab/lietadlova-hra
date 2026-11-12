@@ -9,7 +9,7 @@ import { coinFly } from '../../ui/fx-particles.js';
 
 const GREEN = 0x4caf50, ORANGE = 0xff9800;
 
-// Vráti { blink, level }. onChange() sa zavolá hneď po zmene paliva (prekreslenie špendlíkov).
+// Vráti { blink, zone, box }. onChange() sa zavolá hneď po zmene paliva (prekreslenie špendlíkov).
 export function addFuelTank(scene, input, plane, counter, onChange) {
   const cfg = data.get('economy').fuel;
   const t = cfg.tank;
@@ -50,5 +50,5 @@ export function addFuelTank(scene, input, plane, counter, onChange) {
     coinFly(scene, counter.icon.x, counter.icon.y, { x: t.x, y: t.y }, res.coins,
       (i, n) => counter.set(coins0 - Math.round((res.coins * (i + 1)) / n)), done);
   });
-  return { blink };
+  return { blink, zone, box };
 }
