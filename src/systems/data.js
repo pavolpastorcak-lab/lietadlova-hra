@@ -6,7 +6,7 @@ const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice'
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
   destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice', 'geo'],
-  planes: ['id', 'sprites', 'capacity', 'range', 'engine'],
+  planes: ['id', 'sprites', 'capacity', 'range', 'engine', 'cost', 'scale'],
   tiers: ['durationSec', 'speed', 'payMult'],
   stations: ['id', 'x', 'voice'],
   economy: ['startCoins', 'basePerPassenger', 'tipPerStar', 'tipPerSmile'],
@@ -154,6 +154,11 @@ export function collect(scene) {
   });
   checkSecurity(store.airport && store.airport.security, errors);
   if (!store.sprites || typeof store.sprites.fx !== 'object') errors.push('sprites.fx: chýba blok');
+  (store.planes || []).forEach((p) => {
+    if (typeof p.cost !== 'number' || typeof p.scale !== 'number' || p.scale <= 0) errors.push(`planes.${p.id}: cost a scale musia byť čísla`);
+  });
+  const ck = store.airport && store.airport.checkin;
+  if (!ck || typeof ck.maxTaps !== 'number' || ck.maxTaps < 1) errors.push('airport.checkin.maxTaps: chýba číslo');
   const hp = store.sprites && store.sprites.hangarPanels;
   ['capacity', 'range', 'engine'].forEach((k) => {
     (store.planes || []).forEach((p) => {

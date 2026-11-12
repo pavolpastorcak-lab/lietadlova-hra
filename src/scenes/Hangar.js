@@ -7,6 +7,7 @@ import * as fx from '../ui/fx.js';
 import { addPlane, addSprite, role } from '../systems/sprites.js';
 import { addCoinCounter } from '../ui/coins.js';
 import { addUpgradePanel } from './hangar/upgradePanel.js';
+import { addPlanePicker } from './hangar/planePicker.js';
 
 // Hangár: lietadlo so sedadlami, upgrade kapacity za mince a brána na odchod.
 export default class Hangar extends Phaser.Scene {
@@ -24,17 +25,20 @@ export default class Hangar extends Phaser.Scene {
     const info = economy.capacityInfo(plane);
 
     // Lietadlo, sedadlá = bodky (nové sú zvýraznené).
-    const py = 618;  // stred lietadla, spodok stojí na podlahe hangára (y≈790)
-    if (!addPlane(this, 'side', 480, py, 560)) {
-      this.add.rectangle(480, py + 20, 520, 160, 0xffffff).setStrokeStyle(8, 0x2e7d32);
-      this.add.triangle(250, py - 60, 0, 80, 80, 80, 0, 0, 0x2e7d32);
+    let py = 618;  // stred lietadla, spodok stojí na podlahe hangára (y≈790)
+    const body = addPlane(this, 'side', 480, py, 560, { scaled: true });
+    if (body) { py = 790 - body.displayHeight / 2; body.setY(py); }
+    else {
+      this.add.rectangle(480, py + 20, 520, 160, 0xffffff).setStrokeStyle(8, Number(plane.color) || 0x2e7d32);
+      this.add.triangle(250, py - 60, 0, 80, 80, 80, 0, 0, Number(plane.color) || 0x2e7d32);
     }
     const total = info.next || info.current;
+    const cols = Math.ceil(total / 2), step = Math.min(70, 400 / cols), sr = Math.min(22, step * 0.4);
     const seats = [];
-    for (let i = 0; i < total; i++) {
-      const x = 340 + (i % 4) * 70, y = i < 4 ? py - 10 : py + 50;
+    for (let i = 0; i < total; i++) {   // 2 rady; pri veľkej kapacite užší krok a menšie bodky
+      const x = 445 - ((cols - 1) * step) / 2 + (i % cols) * step, y = i < cols ? py - 10 : py + 50;
       const isNew = i >= info.current;
-      seats.push(this.add.circle(x, y, 22, isNew ? 0xbdbdbd : 0x3498db).setAlpha(isNew ? 0.5 : 1));
+      seats.push(this.add.circle(x, y, sr, isNew ? 0xbdbdbd : 0x3498db).setAlpha(isNew ? 0.5 : 1));
     }
 
     // Upgrade: ikona + sedadlá, cena s mincou. Bez mincí zašednutý.
@@ -56,6 +60,7 @@ export default class Hangar extends Phaser.Scene {
       pulse(symbol);
       leave();
     } });
+    addPlanePicker(this, input, { counter, state });
     const busy = () => state.busy;
 
     // Brána hangára: odchod na mapu bez kúpy.

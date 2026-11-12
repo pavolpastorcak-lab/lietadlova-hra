@@ -53,9 +53,9 @@ export default class Touchdown extends Phaser.Scene {
       this.world.add(m);
     }
 
-    const side = addPlane(this, 'side', 0, 0, 260)
+    const side = addPlane(this, 'side', 0, 0, 260, { scaled: true })
       || this.add.rectangle(0, 0, 260, 90, 0xffffff).setStrokeStyle(6, 0x2e7d32);
-    const air = addPlane(this, 'air', 0, 0, 230);
+    const air = addPlane(this, 'air', 0, 0, 230, { scaled: true });
     if (air) side.setAlpha(0);
     this.sideImg = side; this.airImg = air;
     this.groundY = RUNWAY_Y + 10 - side.displayHeight / 2;

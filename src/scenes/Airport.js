@@ -40,11 +40,13 @@ export default class Airport extends Phaser.Scene {
 
     stations.forEach((s) => {
       if (s.id === 'boarding') {
-        ctx.buildings[s.id] = addPlane(this, 'side', s.x + 10, 450, s.w)
+        const k = economy.activePlane().scale || 1;   // väčšie lietadlo rastie doľava, pravý okraj ostáva
+        const cx = s.x + 10 - Math.round(s.w * (k - 1) / 2);
+        ctx.buildings[s.id] = addPlane(this, 'side', cx, 450, s.w, { scaled: true })
           || this.add.rectangle(s.x, 470, 380, 120, 0xeeeeee).setStrokeStyle(6, 0x555555);
         ctx.plane = {
-          door: { x: s.x - Math.round(120 * s.w / 380), y: 540 },
-          stairsStart: { x: s.x - 280, y: 700 },
+          door: { x: cx - Math.round(143 * k), y: 540 },
+          stairsStart: { x: cx - Math.round(143 * k) - 147, y: 700 },
         };
         return;
       }

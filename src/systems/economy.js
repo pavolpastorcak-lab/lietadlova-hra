@@ -26,7 +26,19 @@ export function setActivePlane(id) {
   const s = save.get();
   s.activePlane = id;
   if (!s.owned.includes(id)) s.owned.push(id);
+  s.fuel = Math.min(s.fuel, planeRange(activePlane()));   // menšia nádrž palivo oreže, väčšia ho nechá
   save.save();
+  return true;
+}
+
+// Kúpi lietadlo za mince (len raz), vyberie ho a naplní jeho nádrž. Vráti true pri úspechu.
+export function buyPlane(id) {
+  const p = data.get('planes').find((x) => x.id === id);
+  const s = save.get();
+  if (!p || s.owned.includes(id) || s.coins < p.cost) return false;
+  save.addCoins(-p.cost);
+  setActivePlane(id);
+  fillTank(p);
   return true;
 }
 

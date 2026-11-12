@@ -1,7 +1,15 @@
 [
-  { "id": "zelene", "sprites": { "side": "plane_zelene_side", "air": "plane_zelene_air", "top": "plane_zelene_top" },
+  { "id": "zelene", "cost": 0, "scale": 1, "color": "0x2e7d32", "sprites": { "side": "plane_zelene_side", "air": "plane_zelene_air", "top": "plane_zelene_top" },
     "capacity": [{ "value": 4, "cost": 0 }, { "value": 6, "cost": 200 }, { "value": 8, "cost": 500 }],
     "range": [{ "value": 900, "cost": 0 }, { "value": 1100, "cost": 100 }, { "value": 1300, "cost": 200 },
               { "value": 1500, "cost": 300 }, { "value": 2000, "cost": 450 }, { "value": 2600, "cost": 650 }],
-    "engine": [{ "value": 1, "cost": 0 }, { "value": 0.9, "cost": 300 }, { "value": 0.8, "cost": 600 }] }
+    "engine": [{ "value": 1, "cost": 0 }, { "value": 0.9, "cost": 300 }, { "value": 0.8, "cost": 600 }] },
+  { "id": "modre", "cost": 1500, "scale": 1.1, "color": "0x2980b9", "sprites": { "side": "plane_modre_side", "air": "plane_modre_air", "top": "plane_modre_top" },
+    "capacity": [{ "value": 6, "cost": 0 }, { "value": 8, "cost": 300 }, { "value": 10, "cost": 700 }],
+    "range": [{ "value": 1500, "cost": 0 }, { "value": 2000, "cost": 400 }, { "value": 2600, "cost": 700 }],
+    "engine": [{ "value": 0.9, "cost": 0 }, { "value": 0.8, "cost": 500 }] },
+  { "id": "cervene", "cost": 3500, "scale": 1.2, "color": "0xc0392b", "sprites": { "side": "plane_cervene_side", "air": "plane_cervene_air", "top": "plane_cervene_top" },
+    "capacity": [{ "value": 10, "cost": 0 }, { "value": 12, "cost": 600 }, { "value": 14, "cost": 1200 }],
+    "range": [{ "value": 2000, "cost": 0 }, { "value": 2600, "cost": 600 }, { "value": 3200, "cost": 1000 }],
+    "engine": [{ "value": 0.8, "cost": 0 }, { "value": 0.7, "cost": 900 }] }
 ]

@@ -38,7 +38,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 8a | Búrkové mraky a dážď počas letu | v1.5 | – |
 | 8b | Vietor počas letu | v1.5 | **PO: tablet** (sila vetra) |
 | 9a | Aktívne lietadlo v save (bez viditeľnej zmeny; hotovo cez R3c1) | v1.6 | **PRED 9b:** dávka Magnific (6 spritov lietadiel) na jedno schválenie |
-| 9b | Kúpa a výber lietadla v hangári | v1.6 | **PO: tablet** |
+| 9b | Kúpa a výber lietadla v hangári (hotovo cez R3c2) | v1.6 | **PO: tablet** |
 | 10 | Budovanie letiska | v1.7 | **PRED: dizajnové otázky Paľovi**, brief sa dopíše až potom |
 | 11a | Prstence na oblohe | nápad | zaradí sa po 8b (stavia na lete do strán a počasí) |
 | 11b | Deň, západ slnka, noc | nápad | po 11a |
@@ -61,7 +61,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
 | R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
-| R3c2 | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
+| R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
 
@@ -439,7 +439,7 @@ Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.
 
 ---
 
-## [ ] 9b: Kúpa a výber lietadla v hangári (v1.6)
+## [x] 9b: Kúpa a výber lietadla v hangári (v1.6), cez R3c2
 **Cieľ:** V hangári sa dajú kúpiť 2 ďalšie lietadlá a prepínať medzi nimi.
 
 **Súbory:** `data/planes.json`, `src/scenes/Hangar.js` (+ nový `src/scenes/hangar/planePicker.js`), `src/systems/economy.js`, `sw.js`, docs.
@@ -676,7 +676,7 @@ Brief **9a vyššie platí** (activePlane, owned, `economy.activePlane()`, žiad
 - Palivo (R3b) ostáva spoločné `save.fuel`; nádrž = dolet **aktívneho** lietadla. Všetky volania `planeRange`, `engineValue`, `fuelInfo`, `pinState` berú aktívne lietadlo.
 - Test: dočasne pridaj do `planes.json` druhé lietadlo, over načítanie starého save v4 a prepnutie `activePlane` v konzole (dolet, nádrž, motor, kapacita sa zmenia podľa lietadla), potom ho odober.
 
-### [ ] R3c2: Kúpa a výber lietadla v hangári (= 9b)
+### [x] R3c2: Kúpa a výber lietadla v hangári (= 9b)
 Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nevlastnené zašednuté s cenou, kúpa = odpočet raz + výber, upgrady pre vybrané lietadlo, sedadlá pri kapacite nad 8, `checkin.maxTaps: 6`), s týmito číslami namiesto pôvodných:
 - `modre` (`cost` 1500): kapacita 6 (0) → 8 (300) → 10 (700); dolet 1500 (0) → 2000 (400) → 2600 (700); motor 0,9 (0) → 0,8 (500).
 - `cervene` (`cost` 3500): kapacita 10 (0) → 12 (600) → 14 (1200); dolet 2000 (0) → 2600 (600) → 3200 (1000); motor 0,8 (0) → 0,7 (900).

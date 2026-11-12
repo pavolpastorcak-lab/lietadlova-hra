@@ -41,9 +41,9 @@ export default class Takeoff extends Phaser.Scene {
     }
 
     // Lietadlo: sprite so zemou a sprite vo vzduchu (prekríži sa pri odlepení).
-    const side = addPlane(this, 'side', 0, 0, 260)
+    const side = addPlane(this, 'side', 0, 0, 260, { scaled: true })
       || this.add.rectangle(0, 0, 260, 90, 0xffffff).setStrokeStyle(6, 0x2e7d32);
-    const air = addPlane(this, 'air', 0, 0, 230);
+    const air = addPlane(this, 'air', 0, 0, 230, { scaled: true });
     if (air) air.setAlpha(0);
     this.sideImg = side;
     this.airImg = air;

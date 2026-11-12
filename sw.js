@@ -1,7 +1,7 @@
 // Service worker: offline-first. Všetky cesty relatívne k umiestneniu sw.js (podpriečinok na GitHub Pages).
 // CACHE_VERSION zvýš pri KAŽDEJ zmene cachovaného súboru. Nový asset doplň do PRECACHE.
 
-const CACHE_VERSION = 'v44';
+const CACHE_VERSION = 'v45';
 const CACHE_NAME = `lietadla-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -22,6 +22,12 @@ const PRECACHE = [
   './assets/sprites/plane/plane_zelene_side.png',
   './assets/sprites/plane/plane_zelene_air.png',
   './assets/sprites/plane/plane_zelene_top.png',
+  './assets/sprites/plane/plane_modre_side.png',
+  './assets/sprites/plane/plane_modre_air.png',
+  './assets/sprites/plane/plane_modre_top.png',
+  './assets/sprites/plane/plane_cervene_side.png',
+  './assets/sprites/plane/plane_cervene_air.png',
+  './assets/sprites/plane/plane_cervene_top.png',
   // Sprity z data/sprites.json, airport.json a destinations.json (generované z dát, pri novom spriteovi doplň):
   './assets/sprites/bag/bag_maly_cerveny.png',
   './assets/sprites/bag/bag_maly_fialovy.png',
@@ -157,6 +163,7 @@ const PRECACHE = [
   './src/scenes/Payout.js',
   './src/scenes/Hangar.js',
   './src/scenes/hangar/upgradePanel.js',
+  './src/scenes/hangar/planePicker.js',
   './data/destinations.json',
   './data/planes.json',
   './data/airport.json',

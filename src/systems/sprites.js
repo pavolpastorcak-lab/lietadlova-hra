@@ -65,8 +65,9 @@ export function queuePlaneSprites(scene, planes) {
 }
 
 // kind: 'side' | 'air' | 'top'. Kreslí aktívne lietadlo. Šírka v px, výška podľa pomeru strán.
-export function addPlane(scene, kind, x, y, width) {
-  const plane = economy.activePlane();
+// opts.plane = iné lietadlo (miniatúry v hangári), opts.scaled = šírka × `scale` lietadla (hangár, letisko, vzlet, pristátie; let nie).
+export function addPlane(scene, kind, x, y, width, opts = {}) {
+  const plane = opts.plane || economy.activePlane();
   const key = plane && plane.sprites[kind];
-  return addSprite(scene, key, x, y, { w: width });
+  return addSprite(scene, key, x, y, { w: opts.scaled ? width * (plane.scale || 1) : width });
 }
