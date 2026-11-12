@@ -5,7 +5,7 @@ const KEYS = ['destinations', 'planes', 'airport', 'flights', 'economy', 'voice'
 
 // Povinné polia pre položky (pole = zoznam položiek, objekt = priamo).
 const REQUIRED = {
-  destinations: ['id', 'country', 'flag', 'map', 'weather', 'voice', 'geo'],
+  destinations: ['id', 'country', 'flag', 'maps', 'weather', 'voice', 'geo'],
   planes: ['id', 'sprites', 'capacity', 'range', 'engine', 'cost', 'scale'],
   tiers: ['durationSec', 'speed', 'payMult'],
   stations: ['id', 'x', 'voice'],
@@ -23,6 +23,7 @@ const FLIGHT_DEFAULTS = {
 const CRUISE_DEFAULTS = { rateMin: 0.85, rateMax: 1.25, vxForMax: 500, smoothMs: 250 };
 
 const store = {};
+const warnedLang = new Set();
 
 export function queueLoad(scene) {
   KEYS.forEach((k) => scene.load.json(k, `./data/${k}.json`));
@@ -97,6 +98,21 @@ function checkPuzzles(list, flights, errors) {
 }
 
 // Voliteľná búrka v lete: destinations[].flightWeather + sprites.fx.storm (ak ju niektoré mesto používa).
+// Mapy: každé mesto má aspoň jednu mapu z sprites.json → maps, s číselným x, y.
+function checkMaps(dests, sprites, errors) {
+  const known = (sprites && sprites.maps) || {};
+  if (!Object.keys(known).length) errors.push('sprites: chýba "maps"');
+  (dests || []).forEach((d) => {
+    const ks = d.maps && typeof d.maps === 'object' ? Object.keys(d.maps) : [];
+    if (!ks.length) errors.push(`destinations ${d.id}: "maps" musí mať aspoň jednu mapu`);
+    ks.forEach((m) => {
+      const p = d.maps[m];
+      if (!known[m]) errors.push(`destinations ${d.id}: mapa "${m}" nie je v sprites.json → maps`);
+      if (!p || typeof p.x !== 'number' || typeof p.y !== 'number') errors.push(`destinations ${d.id}: maps.${m} potrebuje čísla x, y`);
+    });
+  });
+}
+
 function checkWeather(dests, sprites, errors) {
   const list = (dests || []).filter((d) => d.flightWeather !== undefined);
   list.forEach((d) => {
@@ -145,7 +161,10 @@ export function collect(scene) {
   checkItems('planes', store.planes, REQUIRED.planes, errors);
   (store.destinations || []).forEach((d) => {
     if (typeof d.lang !== 'string' || !d.lang) errors.push(`destinations ${d.id}: chýba "lang" (jazyk hlásení)`);
-    else if (d.lang !== 'sk' && store.voice && !store.voice[`st_checkin_${d.lang}`]) errors.push(`voice: chýba st_checkin_${d.lang} pre jazyk ${d.lang}`);
+    else if (d.lang !== 'sk' && store.voice && !store.voice[`st_checkin_${d.lang}`] && !warnedLang.has(d.lang)) {
+      warnedLang.add(d.lang);   // len varovanie: jazyky nových miest (ru, kk, mn, ar, ka, az) dodá R4b3, dovtedy sú len slovenské pokyny
+      console.warn(`[data] voice: chýba st_checkin_${d.lang} (pokyny v jazyku ${d.lang} zatiaľ nie sú)`);
+    }
   });
   if (store.airport && !(store.airport.localVoicePauseMs >= 0)) errors.push('airport.localVoicePauseMs: má byť číslo >= 0');
   checkFlights(store.flights, store.destinations, errors);
@@ -176,6 +195,7 @@ export function collect(scene) {
     });
   });
   checkPuzzles(store.puzzles, store.flights, errors);
+  checkMaps(store.destinations, store.sprites, errors);
   checkWeather(store.destinations, store.sprites, errors);
   checkWind(store.destinations, store.sprites, errors);
   checkItems('economy', [store.economy], REQUIRED.economy, errors);

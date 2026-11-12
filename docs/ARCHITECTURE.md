@@ -75,10 +75,10 @@ Ceny a čísla sú len príklad, doladia sa v 2d.
 `destinations.json`
 ```json
 [{ "id": "bts", "name": "Bratislava", "country": "sk", "flag": "flag_sk",
-   "map": { "x": 640, "y": 420 }, "weather": "sun", "geo": { "lat": 48.17, "lon": 17.21 },
+   "maps": { "europa": { "x": 698, "y": 490 }, "svet": { "x": 311, "y": 227 } }, "weather": "sun", "geo": { "lat": 48.17, "lon": 17.21 },
    "unlockCost": 0, "voice": "dest_bts" },
  { "id": "lon", "name": "Londýn", "country": "gb", "flag": "flag_gb",
-   "map": { "x": 420, "y": 300 }, "weather": "rain", "geo": { "lat": 51.47, "lon": -0.45 },
+   "maps": { "europa": { "x": 335, "y": 365 }, "svet": { "x": 222, "y": 160 } }, "weather": "rain", "geo": { "lat": 51.47, "lon": -0.45 },
    "flightWeather": { "stormFrom": 0.55, "stormCloudEvery": 1.6, "rain": true },
    "unlockCost": 0, "voice": "dest_lon" }]
 ```
@@ -108,6 +108,8 @@ Lietadlo má aj `cost` (cena kúpy, 0 = začiatočné), `scale` (veľkosť v han
 Stupeň `byKm` má aj `time` (`day` | `dusk` | `night`, bez poľa = `day`): `routes.flight` ho prenesie do objektu letu. `src/ui/daytime.js` (`timeOf(from, to)`, `startTime`, `createSky`, `addGroundVeil`, `addWindows`, `wingLight`) skladá čas dňa z `sprites.json` → `fx.time` (farby oblohy/závoja/tintu, hviezdy, okná, svetielko krídla). Takeoff štartuje o stupeň skôr, Flight plynulo prechádza (od 30 % do 80 % letu), Touchdown a Landing majú čas trasy; letisko, hádanka a mapa ostávajú cez deň.
 `routes.js`: `km(a, b)` (haversine z `geo`, na 10 km), `reachable(from, to, range)` (Bratislava vždy), `flight(from, to)`. Búrka (`flightWeather`) a vietor (`wind`) patria cieľu v `destinations.json`. Dolet sa meria od `save.location`.
 
+**Mapy (R4b1):** `sprites.json` → `maps` (`europa` = `map_01_europa`, `svet` = `map_03_europa_azia_afrika`, `svet.pinScale` 0,6 pre mestá, ktoré majú aj `europa`), `globe` (poloha a veľkosť glóbusu), `flagFallback` (farby záložných vlajok). Mesto s `maps.europa` aj `maps.svet` je na oboch mapách, nové len na `svet`. `Map.js` otvorí mapu podľa polohy lietadla (`pickView`), glóbus (`scenes/map/globe.js`) prepína `scene.restart({view})`. Bez sprite vlajky: `ui/flagShape.js`, Landing ide bez kvízu.
+
 `destinations.json` → `lang` (jazyk hlásení mesta: sk, en, de, fr, it, es, pt, nl, sv, el, tr, fi). Pri odlete zo zahraničia `systems/voiceLocal.js` (`playStation(scene, key, from)`) po prvom pokyne stanice (flow.js, Takeoff) po pauze `airport.json` → `localVoicePauseMs` zahrá kľúč `<pokyn>_<lang>` z `voice.json` (`voice/<lang>/<pokyn>.mp3`); chýbajúci mp3 = len slovenská veta, po odchode zo scény alebo pri ďalšom pokyne cudzia veta nezačne, nápoveda je len slovenská.
 
 `economy.json`
@@ -134,7 +136,7 @@ Stupeň `byKm` má aj `time` (`day` | `dusk` | `night`, bez poľa = `day`): `rou
 ### Sprity v dátach (úloha 3d)
 - `data/sprites.json`: `dir`, `ext` (mapy `jpg`), `scale` (postavy, kufre), `roles` (ikony a pozadia podľa úlohy, napr. `home`, `coin`, `cloud[]`), `people[]`, `bags` (veľkosti × farby). Kód pýta `role('home')`, nie názov súboru.
 - `airport.json`: staniciam pribudlo `y`, `w`, `spriteOpen`; `backdrop[]` (terminál, veža); `landing.lights` (svetlá dráhy).
-- `destinations.json`: `mapLayer` (vrstva mapy), `scenery` (skyline, stromy s polohou), `flag`.
+- `destinations.json`: `maps` (poloha špendlíka na každej mape: `europa`, `svet`; `svet.k` = vlastná mierka špendlíka), `scenery` (skyline, stromy s polohou), `flag`.
 - Preload načíta všetky mená z dát (`allKeys`). Do `sw.js` PRECACHE sa sprity dopisujú ručne (zoznam sa dá vygenerovať z týchto dát).
 
 ## 4. PWA, offline a nasadenie

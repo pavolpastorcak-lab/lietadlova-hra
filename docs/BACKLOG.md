@@ -63,7 +63,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
 | R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | [x] hotové (v46) |
-| R4b1 | Glóbus, dve mapy a 12 nových miest | **PO: dávka Magnific R4b2** |
+| R4b1 | Glóbus, dve mapy a 12 nových miest | [x] hotové (v47), **PO: tablet + dávka Magnific R4b2** |
 | R4b2 | Vlajky a hlasy nových miest | **PRED: schválenie Magnific** |
 | R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
 
@@ -737,7 +737,7 @@ Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nev
 ## R4b: Veľká mapa (Rusko, Ázia, Blízky východ, sever Afriky), rozdelená na R4b1–R4b3
 **Rozhodnutia Paľa (2026-11-12):** použije sa existujúca mapa `map_03_europa_azia_afrika` (bez Magnificu na mapu); prepína sa **ikonou glóbusu**; 12 miest: Moskva, Astana (medzipristátie na ceste do Mongolska), Ulanbátar, Káhira, Dubaj, Maskat, Salála (Omán), Tunis, Alžír, Marakéš, Tbilisi, Baku; miestne jazyky v samostatnej úlohe R4b3. Odomknutie: žiadne nové pravidlo, mestá sa dosahujú skokmi podľa doletu od polohy (R1b) a paliva (R3b); s doletom 2000–2600 km je každé mesto dosiahnuteľné cez susedov.
 
-### [ ] R4b1: Glóbus, dve mapy a 12 nových miest (so záložnými vlajkami, bez nových hlasov)
+### [x] R4b1: Glóbus, dve mapy a 12 nových miest (so záložnými vlajkami, bez nových hlasov)
 **Súbory:** `data/destinations.json`, `data/sprites.json` (pozícia glóbusu, vrstvy máp), `src/scenes/Map.js` (+ nový `src/scenes/map/globe.js`, ak Map prerastie), `src/systems/data.js`, `src/systems/save.js` (len ak treba uložiť zvolenú mapu), `sw.js` (`map_03` do PRECACHE), `docs/ARCHITECTURE.md`, docs.
 
 **Zadanie:**

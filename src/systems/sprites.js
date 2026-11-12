@@ -23,6 +23,7 @@ export function allKeys() {
   const c = cfg(), keys = new Set();
   const add = (k) => { if (typeof k === 'string' && k) keys.add(k); };
   Object.values(c.roles).forEach((v) => (Array.isArray(v) ? v.forEach(add) : add(v)));
+  Object.values(c.maps || {}).forEach((m) => add(m.layer));
   c.people.forEach(add);
   c.bags.sizes.forEach((s) => c.bags.colors.forEach((col) => add(`bag_${s}_${col}`)));
   const ap = data.get('airport') || {};
@@ -31,7 +32,7 @@ export function allKeys() {
   (ap.backdrop || []).forEach((b) => add(b.sprite));
   if (ap.landing && ap.landing.lights) Object.values(ap.landing.lights).forEach(add);
   (data.get('destinations') || []).forEach((d) => {
-    add(d.flag); add(d.mapLayer);
+    add(d.flag);
     if (d.scenery) { add(d.scenery.skyline); (d.scenery.trees || []).forEach((t) => add(t.sprite)); }
   });
   (((data.get('economy') || {}).quiz || {}).extraFlags || []).forEach(add);   // kvíz: doplnkové vlajky

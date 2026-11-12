@@ -47,7 +47,33 @@ Každý riadok = jeden mp3 súbor. **Názov súboru musí byť presne ako v tabu
 | `land_ist.mp3` | V Istanbule svieti slnko. |
 | `dest_fin.mp3` | Letíme do Helsínk. |
 | `land_fin.mp3` | V Helsinkách prší. |
+| `dest_mos.mp3` | Letíme do Moskvy. |
+| `land_mos.mp3` | V Moskve prší. |
+| `dest_ast.mp3` | Letíme do Astany. |
+| `land_ast.mp3` | V Astane svieti slnko. |
+| `dest_uln.mp3` | Letíme do Ulanbátaru. |
+| `land_uln.mp3` | V Ulanbátare svieti slnko. |
+| `dest_cai.mp3` | Letíme do Káhiry. |
+| `land_cai.mp3` | V Káhire svieti slnko. |
+| `dest_dxb.mp3` | Letíme do Dubaja. |
+| `land_dxb.mp3` | V Dubaji svieti slnko. |
+| `dest_mct.mp3` | Letíme do Maskatu. |
+| `land_mct.mp3` | V Maskate svieti slnko. |
+| `dest_sll.mp3` | Letíme do Salály. |
+| `land_sll.mp3` | V Salále prší. |
+| `dest_tun.mp3` | Letíme do Tunisu. |
+| `land_tun.mp3` | V Tunise svieti slnko. |
+| `dest_alg.mp3` | Letíme do Alžíru. |
+| `land_alg.mp3` | V Alžíri svieti slnko. |
+| `dest_rak.mp3` | Letíme do Marakéša. |
+| `land_rak.mp3` | V Marakéši svieti slnko. |
+| `dest_tbs.mp3` | Letíme do Tbilisi. |
+| `land_tbs.mp3` | V Tbilisi svieti slnko. |
+| `dest_gyd.mp3` | Letíme do Baku. |
+| `land_gyd.mp3` | V Baku svieti slnko. |
 | `quiz_flag.mp3` | Ktorá vlajka sem patrí? (kvíz po pristátí, zaznie po `land_*`) |
+
+*(R4b1) Hlasy nových miest `dest_mos` … `land_gyd` (24 riadkov vyššie): mp3 dodá architekt v R4b2, dovtedy ticho.*
 
 Navyše jeden **zvuk** (nie hlas): `assets/audio/sfx/bump.mp3`, krátke jemné „bum-bum" (do ~0,5 s) pri náraze do mraku alebo vtáka počas letu. Nie je to hlas, tak ho nedávaj do priečinka `voice/sk`, ale do `assets/audio/sfx/`.
 

@@ -9,14 +9,14 @@ import { showCountryName } from './countryName.js';
 export const quizCfg = () => (data.get('economy') || {}).quiz;
 
 // Čisté zloženie možností: správna + (options-1) rôznych iných vlajok, zamiešané.
-export function buildOptions(dest, dests, quiz, rng = Math.random) {
+export function buildOptions(dest, dests, quiz, rng = Math.random, has = () => true) {
   const right = dest.flag;
   const pool = [];
-  const add = (k) => { if (k && k !== right && !pool.includes(k)) pool.push(k); };
+  const add = (k) => { if (k && k !== right && has(k) && !pool.includes(k)) pool.push(k); };   // vlajka bez sprite sa neponúka
   (dests || []).forEach((d) => add(d.flag));
   const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const extra = [];
-  (quiz.extraFlags || []).forEach((k) => { if (k !== right && !pool.includes(k) && !extra.includes(k)) extra.push(k); });
+  (quiz.extraFlags || []).forEach((k) => { if (k !== right && has(k) && !pool.includes(k) && !extra.includes(k)) extra.push(k); });
   const need = Math.max(1, quiz.options) - 1;
   const wrong = shuffle(pool).slice(0, need);
   if (wrong.length < need) wrong.push(...shuffle(extra).slice(0, need - wrong.length));
@@ -28,7 +28,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // Spustí kvíz. onDone(firstTry) sa zavolá po oslave správnej odpovede.
 export function startQuiz(scene, input, dest, onDone) {
   const q = quizCfg();
-  const keys = buildOptions(dest, data.get('destinations'), q);
+  const keys = buildOptions(dest, data.get('destinations'), q, Math.random, (k) => scene.textures.exists(k));
   let alive = true, ready = false, done = false, firstTry = true, idle = null;
   const items = [];
   scene.events.once('shutdown', () => { alive = false; audio.stopVoice(); if (idle) idle.remove(false); });

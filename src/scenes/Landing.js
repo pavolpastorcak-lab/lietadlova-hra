@@ -10,6 +10,7 @@ import { desaturate, addVeil } from '../ui/haze.js';
 import * as daytime from '../ui/daytime.js';
 import { startQuiz, quizCfg } from './landing/quiz.js';
 import { showCountryName, belowY } from './landing/countryName.js';
+import { flagShape } from '../ui/flagShape.js';
 
 const WEATHER_BG = { sun: '#ffd54f', rain: '#7f9cb3' };
 const FLAG_COLORS = { sk: 0x2b5fd6, gb: 0xd62b2b };
@@ -46,14 +47,14 @@ export default class Landing extends Phaser.Scene {
     const input = createInput(this);
     addHome(this, input);
     audio.init(data.get('voice'));
-    if (dest && dest.id !== 'bts' && quizCfg()) {
+    if (dest && dest.id !== 'bts' && quizCfg() && this.textures.exists(dest.flag)) {   // chýba sprite vlajky → bez kvízu (ako Bratislava)
       startQuiz(this, input, dest, (quizFirstTry) => fx.go(this, 'Payout', { ...args, quizFirstTry }));
       return;
     }
 
     const color = (dest && FLAG_COLORS[dest.country]) || 0x999999;
     const flagSpr = addSprite(this, dest && dest.flag, 640, 380, { w: 256 });
-    const flag = flagSpr || this.add.rectangle(640, 380, 256, 192, color).setStrokeStyle(8, 0xffffff);
+    const flag = flagSpr || (dest && flagShape(this, dest.country, 640, 380, 256)) || this.add.rectangle(640, 380, 256, 192, color).setStrokeStyle(8, 0xffffff);
     const base = flag.scale;
     this.tweens.add({ targets: flag, scale: base * 1.08, duration: 700, yoyo: true, repeat: -1 });
     const gap = ((data.get('airport').landing || {}).countryText || {}).gap || 24;
