@@ -785,6 +785,7 @@ Architekt vygeneruje cez Magnific (po Paľovom schválení): 11 vlajok `flag_<k�
 
 ## Opravy po teste v48 na mobile (Paľo, 2026-11-12)
 Test: zmena dňa (západ slnka) funguje; počasie v severnej Afrike slnečné (podľa dát). Chyby nižšie.
+**Stav (2026-11-12):** R5a hotová (d99fc2a, v49, overená Node testom), R5b hotová (be60129, v50, overená v Browser paneli myšou). Obe čakajú na test na mobile/tablete (R5a s `?debug=audio`). Potom R4b3.
 
 ### [x] R5a: Hlasy prestanú hrať po prvom lete (oprava)
 **Chyba (mobil, v48):** prvý let prehral slovenské aj cudzie pokyny staníc. Potom už hrali len slovenské pokyny staníc; neprehrávali sa cudzie pokyny ani „Letíme do…" (`dest_*` vo `Flight`). Hlásenia pri pristátí (`land_*`, napr. „V Bratislave svieti slnko.") hrali ďalej.
