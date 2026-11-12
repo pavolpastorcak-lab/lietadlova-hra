@@ -149,3 +149,6 @@ Spoločný štýl ako vyššie. Orezané na obsah a zmenšené (dlhšia strana):
 ## Dávka 2026-11-12: nové lietadlá pre R3c2 (Magnific, Nano Banana 2.1, 1k + remove_background, 318 kreditov)
 Spoločný štýl ako vyššie + referencia `plane_zelene_<pohľad>` (rovnaký pohľad ako synova kresba). Orezané na obsah a zmenšené na šírku 512 (skript `trim` v PowerShelli, System.Drawing):
 `plane_modre_side` 512×308, `plane_modre_air` 512×225, `plane_modre_top` 512×382, `plane_cervene_side` 512×326, `plane_cervene_air` 512×243, `plane_cervene_top` 512×386. Veľkosti 160–290 KB (ako zelené). Zapojí úloha R3c2 (planes.json, sw.js PRECACHE).
+
+## Dávka 2026-11-12: vlajky nových krajín pre R4b (Magnific, Nano Banana 2.1, 1k + remove_background)
+Referencia `flag_tr` (synov štýl: vlajka veje na zelenej žrdi vľavo). Orezané na obsah a zmenšené na šírku 128 (výška 108–109, staré vlajky sú 128×96, kód mierkuje podľa šírky): `flag_ru`, `flag_kz`, `flag_mn`, `flag_eg`, `flag_ae`, `flag_om`, `flag_tn`, `flag_dz`, `flag_ma`, `flag_ge`, `flag_az`. Zapojí úloha R4b2 (PRECACHE, kvíz).
