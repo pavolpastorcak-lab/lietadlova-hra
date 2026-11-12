@@ -63,7 +63,9 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
 | R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | [x] hotové (v46) |
-| R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
+| R4b1 | Glóbus, dve mapy a 12 nových miest | **PO: dávka Magnific R4b2** |
+| R4b2 | Vlajky a hlasy nových miest | **PRED: schválenie Magnific** |
+| R4b3 | Pokyny v jazykoch nových miest | **PRED: schválenie Magnific** (~36 hlasov) |
 
 ## Spoločné pravidlá (súčasť každého briefu)
 Si implementátor v režime orchestrátora. Prečítaj `CLAUDE.md`, `docs/ARCHITECTURE.md`, `docs/design-notes.md` a z `docs/PROGRESS.md` len posledné 2 úlohy. Výnimky z `CLAUDE.md`:
@@ -732,8 +734,50 @@ Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nev
 
 ---
 
-## [ ] R4b: Nová mapa (brief zatiaľ nie je)
-Rusko, bývalé ZSSR, Blízky východ, sever Afriky (Omán, SAE, Egypt, Mongolsko…). Rozdelí sa na 2–3 úlohy, prvá so 6–8 mestami. **PRED: otázky Paľovi** (ktoré mestá, prepínanie máp, kresba mapy, odomknutie novej mapy) a dávka Magnific (mapa, vlajky, skyline, hlasy).
+## R4b: Veľká mapa (Rusko, Ázia, Blízky východ, sever Afriky), rozdelená na R4b1–R4b3
+**Rozhodnutia Paľa (2026-11-12):** použije sa existujúca mapa `map_03_europa_azia_afrika` (bez Magnificu na mapu); prepína sa **ikonou glóbusu**; 12 miest: Moskva, Astana (medzipristátie na ceste do Mongolska), Ulanbátar, Káhira, Dubaj, Maskat, Salála (Omán), Tunis, Alžír, Marakéš, Tbilisi, Baku; miestne jazyky v samostatnej úlohe R4b3. Odomknutie: žiadne nové pravidlo, mestá sa dosahujú skokmi podľa doletu od polohy (R1b) a paliva (R3b); s doletom 2000–2600 km je každé mesto dosiahnuteľné cez susedov.
+
+### [ ] R4b1: Glóbus, dve mapy a 12 nových miest (so záložnými vlajkami, bez nových hlasov)
+**Súbory:** `data/destinations.json`, `data/sprites.json` (pozícia glóbusu, vrstvy máp), `src/scenes/Map.js` (+ nový `src/scenes/map/globe.js`, ak Map prerastie), `src/systems/data.js`, `src/systems/save.js` (len ak treba uložiť zvolenú mapu), `sw.js` (`map_03` do PRECACHE), `docs/ARCHITECTURE.md`, docs.
+
+**Zadanie:**
+- Mapy: `europa` = `map_01_europa`, `svet` = `map_03_europa_azia_afrika`. Destinácia dostane `maps: { "europa": {x,y}, "svet": {x,y} }` namiesto `map` + `mapLayer` (prenes dnešné súradnice do `maps.europa`). Európske mestá dostanú aj `maps.svet` (na veľkej mape sú malé, ale klikateľné, aby sa dalo odletieť z Ríma do Tunisu). Nové mestá majú len `maps.svet`.
+- Glóbus: ikona kreslená kódom (modrý kruh s pevninou, záložný tvar; sprite neskôr), zásahová plocha ≥ 120 px, miesto, kde nezakryje špendlík ani nádrž/mince/domov na žiadnej z máp (navrhni, napr. dole uprostred). Ťuk = prepne mapu (jemný prechod 300 ms, `sfx` netreba). Mapa sa pri vstupe otvorí tá, na ktorej je poloha lietadla (nové mesto → `svet`, európske → `europa`).
+- Na mape `svet` sa kreslia všetky mestá s `maps.svet`; európske menšie (špendlík 60 %), nové v plnej veľkosti. Pravidlá otvorené / treba natankovať / mimo doletu a „Si tu" platia rovnako na oboch mapách.
+- 12 miest (`id`, slovenský `name`, `country`, `flag`, `lang`, `geo`, `countryName`, `weather`, `scenery`, `voice`):
+
+| id | názov | krajina | lang | countryName intl / local | weather | skyline |
+|---|---|---|---|---|---|---|
+| mos | Moskva | ru | ru | Russia / Россия | rain | mrakodrapy |
+| ast | Astana | kz | kk | Kazakhstan / Қазақстан | sun | mrakodrapy |
+| uln | Ulanbátar | mn | mn | Mongolia / Монгол Улс | sun | pustatina |
+| cai | Káhira | eg | ar | Egypt / مصر | sun | pustatina |
+| dxb | Dubaj | ae | ar | United Arab Emirates / الإمارات | sun | mrakodrapy |
+| mct | Maskat | om | ar | Oman / عُمان | sun | pustatina |
+| sll | Salála | om | ar | Oman / عُمان | rain | pustatina |
+| tun | Tunis | tn | ar | Tunisia / تونس | sun | historicke |
+| alg | Alžír | dz | ar | Algeria / الجزائر | sun | historicke |
+| rak | Marakéš | ma | ar | Morocco / المغرب | sun | pustatina |
+| tbs | Tbilisi | ge | ka | Georgia / საქართველო | sun | historicke |
+| gyd | Baku | az | az | Azerbaijan / Azərbaycan | sun | mrakodrapy |
+
+  Stromy: palmy pre cai, dxb, mct, sll, tun, alg, rak; ihličnaté pre mos, ast, uln; listnaté pre tbs, gyd. Skutočné súradnice letísk do `geo` (2 desatinné). Súradnice na `map_03` (1280×800) odhadni z obrázka (orientačne: Moskva ~455,175; Astana ~590,190; Ulanbátar ~840,215; Tbilisi ~480,250; Baku ~505,255; Káhira ~395,365; Dubaj ~545,385; Maskat ~575,395; Salála ~540,430; Tunis ~300,290; Alžír ~250,285; Marakéš ~150,320) a over screenshotom, že špendlík stojí na správnej krajine.
+- Vlajky `flag_ru`, `flag_kz`, `flag_mn`, `flag_eg`, `flag_ae`, `flag_om`, `flag_tn`, `flag_dz`, `flag_ma`, `flag_ge`, `flag_az` zatiaľ nie sú: záložný tvar (obdĺžnik vo farbách vlajky kódom alebo jednofarebný s kódom krajiny bez textu). Kvíz s vlajkami pri nových mestách nesmie spadnúť (ak chýba sprite vlajky, kvíz sa pre to mesto preskočí). Kľúče `dest_<id>`, `land_<id>` do `voice.json` + `AUDIO.md` (texty „Letíme do Moskvy.", „V Moskve prší." atď.), mp3 dodá architekt v R4b2.
+- Validácia: `maps` s aspoň jednou mapou, `lang`, `countryName`, `geo` pre všetky mestá.
+
+**Akceptačné kritériá:** európska mapa vyzerá ako dnes (+ glóbus); ťuk na glóbus prepne na veľkú mapu so všetkými mestami; z Ríma je na veľkej mape otvorený Tunis (≈ 600 km) a let Rím → Tunis prejde celou slučkou (pristátie v Tunise s kulisami, bez pádu na chýbajúcej vlajke/hlase); po pristátí v Tunise sa mapa otvorí ako `svet` so „Si tu" pri Tunise; Bratislava je dosiahnuteľná z každého nového mesta; starý save (v5) sa načíta s polohou a palivom.
+
+**Nesmie sa zmeniť:** pravidlá doletu a paliva, európske mestá a ich súradnice na európskej mape, letisko, let, výplata.
+
+**Plán:** mení dáta a viac ako 3 súbory, najprv plán architektovi.
+
+**STOP po R4b1:** dávka Magnific R4b2 na schválenie Paľovi.
+
+### [ ] R4b2: Vlajky a hlasy nových miest (architekt + malá Sonnet úloha)
+Architekt vygeneruje cez Magnific (po Paľovom schválení): 11 vlajok `flag_<kód>` (štýl synových vlajok, 128×96) a 24 slovenských hlasov `dest_<id>`, `land_<id>` (Katarína, `eleven_v4`). Sonnet ich zapíše do PRECACHE, `CACHE_VERSION` +1, a vráti kvíz s vlajkami pre nové mestá.
+
+### [ ] R4b3: Pokyny staníc v jazykoch nových miest (ako R4a)
+6 pokynov × 6 jazykov (ru, kk, mn, ar, ka, az) = 36 hlasov rodených hovoriacich (Magnific po schválení, ~230 kreditov). Kód R4a už pokryje nové jazyky cez `lang`, úloha pridá len kľúče do `voice.json` a riadky do `AUDIO.md` (preklady dodá architekt v briefe).
 
 ---
 
