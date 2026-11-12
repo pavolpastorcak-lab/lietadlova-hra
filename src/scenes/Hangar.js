@@ -17,7 +17,7 @@ export default class Hangar extends Phaser.Scene {
     const bg = addSprite(this, role('bgHangar'), 640, 400, { w: 1280 });
     if (bg) bg.setDepth(-10);
     else this.add.rectangle(640, 680, 1280, 240, 0x5d4037);  // podlaha
-    const plane = data.get('planes')[0];
+    const plane = economy.activePlane();
     const input = createInput(this);
     addHome(this, input);
     const counter = addCoinCounter(this, save.get().coins);

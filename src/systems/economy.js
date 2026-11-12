@@ -14,6 +14,22 @@ export function payout(passengers, smiles, stars, mult = 1, quizFirstTry = false
   return { base, tip, total: base + tip };
 }
 
+// Aktívne lietadlo podľa save (neznáme id = prvé lietadlo z planes.json).
+export function activePlane() {
+  const list = data.get('planes');
+  return list.find((p) => p.id === save.get().activePlane) || list[0];
+}
+
+// Prepne aktívne lietadlo (len zápis save; palivo oreže fuelInfo/load).
+export function setActivePlane(id) {
+  if (!data.get('planes').some((p) => p.id === id)) return false;
+  const s = save.get();
+  s.activePlane = id;
+  if (!s.owned.includes(id)) s.owned.push(id);
+  save.save();
+  return true;
+}
+
 // Stav upgradu (kind = 'capacity' | 'range'): aktuálna hodnota, ďalšia hodnota, cena, či sa dá kúpiť.
 export function upgradeInfo(plane, kind) {
   const idx = save.get().planes[plane.id][kind] || 0;

@@ -37,7 +37,7 @@ Architekt zadáva úlohy **po jednej**, každú samostatnej Sonnet session (kont
 | 4d | Viac Európy na mape (6 miest) | v1.4 | **PO: tablet**; dávka Magnific (12 hlasov) na jedno schválenie |
 | 8a | Búrkové mraky a dážď počas letu | v1.5 | – |
 | 8b | Vietor počas letu | v1.5 | **PO: tablet** (sila vetra) |
-| 9a | Aktívne lietadlo v save (bez viditeľnej zmeny) | v1.6 | **PRED 9b:** dávka Magnific (6 spritov lietadiel) na jedno schválenie |
+| 9a | Aktívne lietadlo v save (bez viditeľnej zmeny; hotovo cez R3c1) | v1.6 | **PRED 9b:** dávka Magnific (6 spritov lietadiel) na jedno schválenie |
 | 9b | Kúpa a výber lietadla v hangári | v1.6 | **PO: tablet** |
 | 10 | Budovanie letiska | v1.7 | **PRED: dizajnové otázky Paľovi**, brief sa dopíše až potom |
 | 11a | Prstence na oblohe | nápad | zaradí sa po 8b (stavia na lete do strán a počasí) |
@@ -60,7 +60,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R3a | Hangár: Motor, viac stupňov doletu, drahšie upgrady | hotovo, **PO: tablet** (R3a–R3b) |
 | R3b | Palivo a tankovanie | hotovo, **PO: dávka Magnific + tablet** (R3a–R3b) |
 | R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
-| R3c1 | Aktívne lietadlo v save (= 9a) | – |
+| R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
 | R3c2 | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
 | R4a | Hlásenia v miestnom jazyku pri odlete zo zahraničia | **PRED: dávka Magnific** (~66 hlasov) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
@@ -421,7 +421,7 @@ Prekážky a hviezdičky ako ostatné trasy (`cloud` 2.4, `bird` 4.5, `stars` 2.
 
 ---
 
-## [ ] 9a: Aktívne lietadlo v save (v1.6, bez viditeľnej zmeny)
+## [x] 9a: Aktívne lietadlo v save (v1.6, bez viditeľnej zmeny) (hotovo cez R3c1)
 **Cieľ:** Kód prestane predpokladať jediné lietadlo (`data.get('planes')[0]`), aby 9b mohla pridať ďalšie.
 
 **Súbory:** `src/systems/save.js`, `src/systems/economy.js`, `src/systems/sprites.js`, scény, ktoré volajú `planes[0]` alebo `addPlane` (nájdi grepom), `data/airport.json` (stanica boarding má natvrdo `plane_zelene_side`), `sw.js`, docs.
@@ -669,7 +669,7 @@ Najväčšia položka roadmapy a jediná bez dizajnu. Brief sa nepíše naslepo.
 ## R3c: Nové lietadlá (= 9a + 9b), rozdelené na R3c1 a R3c2
 **Rozhodnutia Paľa (2026-11-12):** obrázky cez Magnific v štýle syna (z kresby zeleného lietadla); modré 1500, červené 3500 mincí; nové lietadlá sú väčšie, s väčším doletom a rýchlejším motorom; upgrady pre každé lietadlo zvlášť.
 
-### [ ] R3c1: Aktívne lietadlo v save (= 9a, bez viditeľnej zmeny)
+### [x] R3c1: Aktívne lietadlo v save (= 9a, bez viditeľnej zmeny)
 Brief **9a vyššie platí** (activePlane, owned, `economy.activePlane()`, žiadne `planes')[0]` ani natvrdo `zelene` v kóde, boarding sprite z aktívneho lietadla, doplnenie chýbajúcich lietadiel do `save.planes`), s týmito zmenami:
 - Save ide na **v5** (dnes v4), migrácia 4 → 5 doplní `activePlane: "zelene"`, `owned: ["zelene"]`.
 - Kľúče upgradov sú `capacity`, `range`, `engine` (R3a); poistka v `load` ich už dopĺňa, rozšír ju na všetky lietadlá z `planes.json`.

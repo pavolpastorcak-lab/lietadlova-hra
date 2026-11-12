@@ -1,6 +1,7 @@
 // Sprity z kresieb syna. Všetky mená a mierky sú v data/ (sprites.json, airport.json, destinations.json).
 // Chýbajúci sprite = addSprite vráti null a scéna nakreslí pôvodný záložný tvar.
 import * as data from './data.js';
+import * as economy from './economy.js';   // economy neimportuje sprites.js (bez kruhu)
 
 const cfg = () => data.get('sprites') || { dir: './assets/sprites/', roles: {}, scale: {}, people: [], bags: { sizes: [], colors: [] } };
 const catOf = (key) => key.split('_')[0];
@@ -25,7 +26,7 @@ export function allKeys() {
   c.people.forEach(add);
   c.bags.sizes.forEach((s) => c.bags.colors.forEach((col) => add(`bag_${s}_${col}`)));
   const ap = data.get('airport') || {};
-  (ap.stations || []).forEach((s) => { if (s.sprite && !s.sprite.startsWith('plane_')) add(s.sprite); add(s.spriteOpen); });
+  (ap.stations || []).forEach((s) => { if (s.sprite && !s.sprite.startsWith('$')) add(s.sprite); add(s.spriteOpen); });
   ((ap.security && ap.security.items) || []).forEach((i) => add(i.sprite));   // sprite veci je voliteľný
   (ap.backdrop || []).forEach((b) => add(b.sprite));
   if (ap.landing && ap.landing.lights) Object.values(ap.landing.lights).forEach(add);
@@ -63,9 +64,9 @@ export function queuePlaneSprites(scene, planes) {
   });
 }
 
-// kind: 'side' | 'air' | 'top'. Šírka v px, výška podľa pomeru strán.
-export function addPlane(scene, kind, x, y, width, planeIndex = 0) {
-  const plane = data.get('planes')[planeIndex];
+// kind: 'side' | 'air' | 'top'. Kreslí aktívne lietadlo. Šírka v px, výška podľa pomeru strán.
+export function addPlane(scene, kind, x, y, width) {
+  const plane = economy.activePlane();
   const key = plane && plane.sprites[kind];
   return addSprite(scene, key, x, y, { w: width });
 }

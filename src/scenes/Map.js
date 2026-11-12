@@ -24,7 +24,7 @@ export default class MapScene extends Phaser.Scene {
     desaturate(layer, 'map');
     addVeil(this, 'map', 1);
     const here = save.get().location;                 // tu lietadlo stojí, odtiaľ sa letí
-    const plane = data.get('planes')[0];
+    const plane = economy.activePlane();
     const input = createInput(this);
 
     fx.mapShadows(this, 4);

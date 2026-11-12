@@ -145,6 +145,8 @@ export function collect(scene) {
   checkItems('planes', store.planes, REQUIRED.planes, errors);
   checkFlights(store.flights, store.destinations, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
+  const bs = ((store.airport && store.airport.stations) || []).find((s) => s.id === 'boarding');
+  if (bs && bs.sprite !== '$plane') errors.push('airport.stations.boarding: sprite má byť "$plane" (sprite aktívneho lietadla)');
   if (!store.airport || typeof store.airport.flight !== 'object') errors.push('airport.flight: chýba blok');
   const cr = store.airport && store.airport.audio && store.airport.audio.cruise;
   ['rateMin', 'rateMax', 'vxForMax', 'smoothMs'].forEach((f) => {

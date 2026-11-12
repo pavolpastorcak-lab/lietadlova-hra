@@ -1,6 +1,7 @@
 import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as save from '../systems/save.js';
+import * as economy from '../systems/economy.js';
 import * as audio from '../systems/audio.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
@@ -64,7 +65,7 @@ export default class Airport extends Phaser.Scene {
     });
 
     // Cestujúci: počet = kapacita lietadla zo save, v 2 radoch.
-    const plane = data.get('planes')[0];
+    const plane = economy.activePlane();
     const n = plane.capacity[save.get().planes[plane.id].capacity].value;
     const cols = Math.ceil(n / 2);
     ctx.people = [];

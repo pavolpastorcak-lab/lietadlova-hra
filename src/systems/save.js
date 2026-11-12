@@ -3,19 +3,21 @@
 
 const KEY = 'lietadla.save';
 const BAK = KEY + '.bak';
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 
 // migrations[n] prevedie save z verzie n na n+1.
 // 1 → 2: poloha lietadla (`location`), lety idú z miesta pristátia.
 // 2 → 3: motor (`engine` = 0) a nový rad doletu (900…2600): starý index 0/1/2 (1500/2000/2600) → 3/4/5.
 // 3 → 4: palivo (`fuel` v km); null = `load` doplní plnú nádrž podľa doletu.
+// 4 → 5: aktívne lietadlo (`activePlane`) a vlastnené lietadlá (`owned`).
 const migrations = [null, (s) => ({ ...s, location: 'bts' }), (s) => {
   const planes = {};
   Object.entries(s.planes || {}).forEach(([id, p]) => {
     planes[id] = { ...p, engine: 0, range: (p.range || 0) + 3 };
   });
   return { ...s, planes };
-}, (s) => ({ ...s, fuel: null })];
+}, (s) => ({ ...s, fuel: null }),
+(s) => ({ ...s, activePlane: 'zelene', owned: ['zelene'] })];
 
 let state = null;
 
@@ -27,15 +29,17 @@ function defaults(data) {
     saveVersion: SAVE_VERSION,
     coins: data.economy.startCoins,
     planes,
+    activePlane: data.planes[0].id,
+    owned: [data.planes[0].id],
     unlocked: data.destinations.filter((d) => d.unlockCost === 0).map((d) => d.id),
     location: 'bts',
-    fuel: maxFuel(data, planes),
+    fuel: maxFuel(data, planes, data.planes[0]),
     bestStars: {},   // kľúče `from-to`, nové páry vznikajú pri prvom rekorde
   };
 }
 
-// Plná nádrž = dolet prvého lietadla na jeho stupni.
-const maxFuel = (data, planes, p = data.planes[0]) => p.range[(planes[p.id] || {}).range | 0].value;
+// Plná nádrž = dolet daného lietadla na jeho stupni.
+const maxFuel = (data, planes, p) => p.range[(planes[p.id] || {}).range | 0].value;
 
 function migrate(s) {
   while (s.saveVersion < SAVE_VERSION) {
@@ -62,7 +66,11 @@ export function load(data) {
         const sp = state.planes[p.id] = { ...def.planes[p.id], ...(state.planes[p.id] || {}) };
         ['capacity', 'range', 'engine'].forEach((k) => { sp[k] = Math.min(Math.max(0, sp[k] | 0), p[k].length - 1); });
       });
-      const mx = maxFuel(data, state.planes);
+      const ids = data.planes.map((p) => p.id);
+      if (!ids.includes(state.activePlane)) state.activePlane = ids[0];
+      state.owned = (Array.isArray(state.owned) ? state.owned : []).filter((id) => ids.includes(id));
+      if (!state.owned.includes(state.activePlane)) state.owned.push(state.activePlane);
+      const mx = maxFuel(data, state.planes, data.planes.find((p) => p.id === state.activePlane));
       state.fuel = typeof state.fuel === 'number' ? Math.min(Math.max(0, state.fuel), mx) : mx;
       if (!data.destinations.some((d) => d.id === state.location)) state.location = 'bts';
       if (!state.bestStars || typeof state.bestStars !== 'object') state.bestStars = {};

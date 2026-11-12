@@ -24,7 +24,7 @@ export default class Flight extends Phaser.Scene {
 
   create(args) {
     this.args = args || {};
-    this.flight = routes.flight(this.args.from, this.args.to, economy.engineValue(data.get('planes')[0]));
+    this.flight = routes.flight(this.args.from, this.args.to, economy.engineValue(economy.activePlane()));
     this.cameras.main.setBackgroundColor('#87ceeb');
     const cfg = this.cfg = data.flightCfg();
     this.speed = this.flight.speed || cfg.speed;       // rýchlosť trasy (px/s), inak predvolená z airport.flight
