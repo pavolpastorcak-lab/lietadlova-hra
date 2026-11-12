@@ -1,4 +1,4 @@
-import * as audio from '../../systems/audio.js';
+import * as voiceLocal from '../../systems/voiceLocal.js';
 
 // Spúšťa stanice po poradí podľa airport.json. Naraz svieti (pulzuje) len aktuálna.
 // Každý runner: (ctx, done) a eventy registruje cez ctx.on (flow ich po dokončení odpojí).
@@ -22,7 +22,7 @@ export function runFlow(ctx, stations, runners, onDone) {
       targets: b, scaleX: bx * 1.04, scaleY: by * 1.04, duration: 500, yoyo: true, repeat: -1,
     });
     ctx.station = st;
-    audio.play(st.voice);
+    voiceLocal.playStation(ctx.scene, st.voice, ctx.from);
     runners[st.id](ctx, () => {
       clear();
       pulse.stop();

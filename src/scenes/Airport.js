@@ -7,6 +7,7 @@ import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { desaturate, addVeil } from '../ui/haze.js';
 import { runFlow } from './airport/flow.js';
+import * as voiceLocal from '../systems/voiceLocal.js';
 import { checkin } from './airport/checkin.js';
 import { bags } from './airport/bags.js';
 import { stairs } from './airport/stairs.js';
@@ -36,7 +37,7 @@ export default class Airport extends Phaser.Scene {
       const s = addSprite(this, b.sprite, b.x, b.y, { w: b.w, h: b.h, origin: [0.5, 1] });
       if (s) { s.setDepth(b.depth || -10); desaturate(s, 'airportBackdrop'); }
     });
-    const ctx = { scene: this, buildings: {}, smiles: 0 };
+    const ctx = { scene: this, buildings: {}, smiles: 0, from: args && args.from };
 
     stations.forEach((s) => {
       if (s.id === 'boarding') {
@@ -85,6 +86,7 @@ export default class Airport extends Phaser.Scene {
     addHome(this, ctx.input);
     audio.init(data.get('voice'));
     audio.preload([...stations.map((s) => s.voice), 'sfx_airport', 'sfx_belt', 'sfx_gate', 'sfx_bin']);
+    voiceLocal.preloadLocal(stations.map((s) => s.voice), ctx.from);
     const hall = audio.loop('sfx_airport');
     this.events.once('shutdown', () => hall.stop());
 

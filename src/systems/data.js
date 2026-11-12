@@ -143,6 +143,11 @@ export function collect(scene) {
   KEYS.forEach((k) => { if (store[k] == null) errors.push(`${k}.json sa nenačítal`); });
   checkItems('destinations', store.destinations, REQUIRED.destinations, errors);
   checkItems('planes', store.planes, REQUIRED.planes, errors);
+  (store.destinations || []).forEach((d) => {
+    if (typeof d.lang !== 'string' || !d.lang) errors.push(`destinations ${d.id}: chýba "lang" (jazyk hlásení)`);
+    else if (d.lang !== 'sk' && store.voice && !store.voice[`st_checkin_${d.lang}`]) errors.push(`voice: chýba st_checkin_${d.lang} pre jazyk ${d.lang}`);
+  });
+  if (store.airport && !(store.airport.localVoicePauseMs >= 0)) errors.push('airport.localVoicePauseMs: má byť číslo >= 0');
   checkFlights(store.flights, store.destinations, errors);
   checkItems('airport.stations', store.airport && store.airport.stations, REQUIRED.stations, errors);
   const bs = ((store.airport && store.airport.stations) || []).find((s) => s.id === 'boarding');

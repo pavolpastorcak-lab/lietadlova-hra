@@ -75,6 +75,78 @@ Zvuky v hre (4c), všetky v `assets/audio/sfx/`, hlasitosť je v `data/voice.jso
 
 Zdroj pravdy je `data/voice.json` (tam sú tie isté texty). Ak chceš text zmeniť, zmeň ho v oboch miestach, alebo napíš mne.
 
+### Pokyny v miestnom jazyku (R4a)
+Keď lietadlo štartuje zo zahraničia (`save.location` mimo Bratislavy), pokyny staníc zaznejú najprv po slovensky a po pauze 400 ms (`airport.json` → `localVoicePauseMs`) v jazyku mesta (`destinations.json` → `lang`). Kľúč `<pokyn>_<lang>` (napr. `st_checkin_fr`), súbor `voice/<lang>/<pokyn>.mp3`. Bez súboru zaznie len slovenská veta. Nápoveda po nečinnosti je len slovenská. Jazyky: en (Londýn, Dublin), de (Berlín, Zürich), fr (Paríž), it (Rím), es (Madrid), pt (Lisabon), nl (Amsterdam), sv (Štokholm), el (Atény), tr (Istanbul), fi (Helsinki).
+
+| Súbor (v `assets/audio/`) | Čo má hlas povedať |
+|---|---|
+| `voice/en/st_checkin.mp3` | Show your ticket. |
+| `voice/en/st_bags.mp3` | Put the suitcases on the belt. |
+| `voice/en/st_security.mp3` | What doesn't belong on the plane? Put it in the bin. |
+| `voice/en/st_gate.mp3` | Open the gate. |
+| `voice/en/st_boarding.mp3` | Pull the stairs to the plane. |
+| `voice/en/st_takeoff.mp3` | Pull the lever up. |
+| `voice/de/st_checkin.mp3` | Zeig dein Ticket. |
+| `voice/de/st_bags.mp3` | Leg die Koffer auf das Band. |
+| `voice/de/st_security.mp3` | Was gehört nicht ins Flugzeug? Wirf es in den Korb. |
+| `voice/de/st_gate.mp3` | Öffne das Tor. |
+| `voice/de/st_boarding.mp3` | Zieh die Treppe zum Flugzeug. |
+| `voice/de/st_takeoff.mp3` | Zieh den Hebel nach oben. |
+| `voice/fr/st_checkin.mp3` | Montre ton billet. |
+| `voice/fr/st_bags.mp3` | Mets les valises sur le tapis. |
+| `voice/fr/st_security.mp3` | Qu'est-ce qui ne va pas dans l'avion ? Mets-le dans la poubelle. |
+| `voice/fr/st_gate.mp3` | Ouvre la porte. |
+| `voice/fr/st_boarding.mp3` | Approche l'escalier de l'avion. |
+| `voice/fr/st_takeoff.mp3` | Tire le levier vers le haut. |
+| `voice/it/st_checkin.mp3` | Mostra il tuo biglietto. |
+| `voice/it/st_bags.mp3` | Metti le valigie sul nastro. |
+| `voice/it/st_security.mp3` | Cosa non va sull'aereo? Mettilo nel cestino. |
+| `voice/it/st_gate.mp3` | Apri il cancello. |
+| `voice/it/st_boarding.mp3` | Avvicina la scala all'aereo. |
+| `voice/it/st_takeoff.mp3` | Tira la leva in alto. |
+| `voice/es/st_checkin.mp3` | Enseña tu billete. |
+| `voice/es/st_bags.mp3` | Pon las maletas en la cinta. |
+| `voice/es/st_security.mp3` | ¿Qué no va en el avión? Ponlo en la papelera. |
+| `voice/es/st_gate.mp3` | Abre la puerta. |
+| `voice/es/st_boarding.mp3` | Acerca la escalera al avión. |
+| `voice/es/st_takeoff.mp3` | Tira de la palanca hacia arriba. |
+| `voice/pt/st_checkin.mp3` | Mostra o teu bilhete. |
+| `voice/pt/st_bags.mp3` | Põe as malas no tapete. |
+| `voice/pt/st_security.mp3` | O que não pode ir no avião? Põe no cesto. |
+| `voice/pt/st_gate.mp3` | Abre o portão. |
+| `voice/pt/st_boarding.mp3` | Puxa a escada até ao avião. |
+| `voice/pt/st_takeoff.mp3` | Puxa a alavanca para cima. |
+| `voice/nl/st_checkin.mp3` | Laat je ticket zien. |
+| `voice/nl/st_bags.mp3` | Zet de koffers op de band. |
+| `voice/nl/st_security.mp3` | Wat hoort niet in het vliegtuig? Gooi het in de bak. |
+| `voice/nl/st_gate.mp3` | Open de poort. |
+| `voice/nl/st_boarding.mp3` | Trek de trap naar het vliegtuig. |
+| `voice/nl/st_takeoff.mp3` | Trek de hendel omhoog. |
+| `voice/sv/st_checkin.mp3` | Visa din biljett. |
+| `voice/sv/st_bags.mp3` | Lägg väskorna på bandet. |
+| `voice/sv/st_security.mp3` | Vad får inte följa med på planet? Lägg det i korgen. |
+| `voice/sv/st_gate.mp3` | Öppna grinden. |
+| `voice/sv/st_boarding.mp3` | Dra trappan till planet. |
+| `voice/sv/st_takeoff.mp3` | Dra spaken uppåt. |
+| `voice/el/st_checkin.mp3` | Δείξε το εισιτήριό σου. |
+| `voice/el/st_bags.mp3` | Βάλε τις βαλίτσες στον ιμάντα. |
+| `voice/el/st_security.mp3` | Τι δεν επιτρέπεται στο αεροπλάνο; Βάλ' το στο καλάθι. |
+| `voice/el/st_gate.mp3` | Άνοιξε την πύλη. |
+| `voice/el/st_boarding.mp3` | Τράβηξε τη σκάλα στο αεροπλάνο. |
+| `voice/el/st_takeoff.mp3` | Τράβηξε τον μοχλό προς τα πάνω. |
+| `voice/tr/st_checkin.mp3` | Biletini göster. |
+| `voice/tr/st_bags.mp3` | Bavulları banda koy. |
+| `voice/tr/st_security.mp3` | Uçağa ne giremez? Onu sepete at. |
+| `voice/tr/st_gate.mp3` | Kapıyı aç. |
+| `voice/tr/st_boarding.mp3` | Merdiveni uçağa çek. |
+| `voice/tr/st_takeoff.mp3` | Kolu yukarı çek. |
+| `voice/fi/st_checkin.mp3` | Näytä lippusi. |
+| `voice/fi/st_bags.mp3` | Laita matkalaukut hihnalle. |
+| `voice/fi/st_security.mp3` | Mikä ei kuulu lentokoneeseen? Laita se koriin. |
+| `voice/fi/st_gate.mp3` | Avaa portti. |
+| `voice/fi/st_boarding.mp3` | Vedä portaat koneen luo. |
+| `voice/fi/st_takeoff.mp3` | Vedä vipu ylös. |
+
 ## 2. Prompt pre AI generátor hlasu
 
 Vlož do generátora (Magnific, ElevenLabs a pod.), jazyk **slovenčina**:

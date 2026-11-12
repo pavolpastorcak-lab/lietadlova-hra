@@ -1,6 +1,7 @@
 import { createInput } from '../systems/input.js';
 import * as data from '../systems/data.js';
 import * as audio from '../systems/audio.js';
+import * as voiceLocal from '../systems/voiceLocal.js';
 import { addHome } from '../ui/home.js';
 import * as fx from '../ui/fx.js';
 import { addPlane } from '../systems/sprites.js';
@@ -58,7 +59,8 @@ export default class Takeoff extends Phaser.Scene {
 
     audio.init(data.get('voice'));
     audio.preload([this.cfg.hintVoice, 'sfx_engine', 'sfx_takeoff']);
-    audio.play(this.cfg.hintVoice);
+    voiceLocal.preloadLocal([this.cfg.hintVoice], this.args.from);
+    voiceLocal.playStation(this, this.cfg.hintVoice, this.args.from);
     this.engine = audio.loop('sfx_engine');
     this.events.once('shutdown', () => this.engine.stop());
   }

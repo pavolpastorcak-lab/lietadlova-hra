@@ -62,7 +62,7 @@ Po prvom teste na tablete: hra sa rýchlo obohrá, chýba progres. Úlohy majú 
 | R2d | Noc (večerné lety, podľa vzdialenosti) | hotovo, **PO: tablet** |
 | R3c1 | Aktívne lietadlo v save (= 9a) | hotovo |
 | R3c2 ✅ | Kúpa a výber lietadla (= 9b) | **PRED: dávka Magnific** (6 spritov); **PO: tablet** |
-| R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | brief doplnený, hlasy schválené 2026-11-12 |
+| R4a | Pokyny staníc aj v miestnom jazyku pri odlete zo zahraničia | [x] hotové (v46) |
 | R4b | Nová mapa (Rusko, Blízky východ, sever Afriky…) | **PRED: dizajnové otázky Paľovi** |
 
 ## Spoločné pravidlá (súčasť každého briefu)
@@ -691,7 +691,7 @@ Brief **9b vyššie platí** (rad miniatúr ≥ 140 px, vlastnené farebné, nev
 
 ---
 
-## [ ] R4a: Hlásenia v miestnom jazyku pri odlete zo zahraničia
+## [x] R4a: Hlásenia v miestnom jazyku pri odlete zo zahraničia
 **Cieľ:** Keď lietadlo štartuje zo zahraničia, hlásenia na letisku zaznejú najprv po slovensky a potom v jazyku krajiny (en, de, fr, it, es, pt, nl, sv, el, tr, fi).
 
 **Rozhodnutia Paľa (2026-11-12):** pokyny všetkých 6 staníc aj v miestnom jazyku; rodení hovoriaci (hlas pre každý jazyk vyberie architekt); jeden jazyk na mesto.

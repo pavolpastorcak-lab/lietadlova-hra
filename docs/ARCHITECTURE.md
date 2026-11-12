@@ -108,6 +108,8 @@ Lietadlo má aj `cost` (cena kúpy, 0 = začiatočné), `scale` (veľkosť v han
 Stupeň `byKm` má aj `time` (`day` | `dusk` | `night`, bez poľa = `day`): `routes.flight` ho prenesie do objektu letu. `src/ui/daytime.js` (`timeOf(from, to)`, `startTime`, `createSky`, `addGroundVeil`, `addWindows`, `wingLight`) skladá čas dňa z `sprites.json` → `fx.time` (farby oblohy/závoja/tintu, hviezdy, okná, svetielko krídla). Takeoff štartuje o stupeň skôr, Flight plynulo prechádza (od 30 % do 80 % letu), Touchdown a Landing majú čas trasy; letisko, hádanka a mapa ostávajú cez deň.
 `routes.js`: `km(a, b)` (haversine z `geo`, na 10 km), `reachable(from, to, range)` (Bratislava vždy), `flight(from, to)`. Búrka (`flightWeather`) a vietor (`wind`) patria cieľu v `destinations.json`. Dolet sa meria od `save.location`.
 
+`destinations.json` → `lang` (jazyk hlásení mesta: sk, en, de, fr, it, es, pt, nl, sv, el, tr, fi). Pri odlete zo zahraničia `systems/voiceLocal.js` (`playStation(scene, key, from)`) po prvom pokyne stanice (flow.js, Takeoff) po pauze `airport.json` → `localVoicePauseMs` zahrá kľúč `<pokyn>_<lang>` z `voice.json` (`voice/<lang>/<pokyn>.mp3`); chýbajúci mp3 = len slovenská veta, po odchode zo scény alebo pri ďalšom pokyne cudzia veta nezačne, nápoveda je len slovenská.
+
 `economy.json`
 ```json
 { "startCoins": 0, "basePerPassenger": 5, "tipPerStar": 1,

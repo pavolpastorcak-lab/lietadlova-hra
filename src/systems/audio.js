@@ -107,3 +107,6 @@ export function loop(key, opts) {
 // Kontrola pre testy: počet aktívnych slučiek a všetkých bežiacich zdrojov.
 export function activeLoops() { return loops; }
 export function activeSources() { return sources.size; }
+
+// Splní sa true, ak sa mp3 pre kľúč dá prehrať (súbor existuje a dekódoval sa), inak false.
+export function has(key) { return buffer(key).then((b) => !!b); }
